@@ -4,9 +4,7 @@
       class="p-3 mb-3 d-flex justify-content-between align-items-center w-100 bg-light"
     >
       <div class="d-flex align-items-center">
-        <a href="#">
-          <input type="text" class="form-control" placeholder="請輸入關鍵字" />
-        </a>
+        <input type="text" class="form-control" placeholder="請輸入關鍵字" />
       </div>
       <div class="d-flex justify-content-between align-items-center">
         <div
@@ -31,21 +29,22 @@
           <a href="#"> <h5 class="m-0">&gt;</h5></a>
         </div>
       </div>
-      <div class="tools">
-        <select v-model="displayPeriodUom">
-          <option><div class="toggle">週</div></option>
-          <option><div class="toggle">月</div></option>
-        </select>
+
+      <div class="tools" @click.prevent="onSwitch($event)">
+        <a href=""><div id="month" class="toggle" name="month">月</div></a>
+         <a href=""><div id="week" class="toggle" name="week">週</div></a>
+        <!-- <a href=""><div class="toggle">週</div></a> -->
+        <!-- <a href=""><div class="toggle">月</div></a> -->
       </div>
     </div>
   </div>
 </template>
 <script>
-import CalendarView from "@/components/CalendarView"
-import CalendarViewHeader from "@/components/CalendarViewHeader"
+import CalendarView from "@/components/CalendarView";
+import CalendarViewHeader from "@/components/CalendarViewHeader";
 export default {
   name: "CalendarViewHeader",
-  components: {CalendarView, CalendarViewHeader},
+  components: { CalendarView, CalendarViewHeader },
   props: {
     headerProps: {
       type: Object,
@@ -55,6 +54,9 @@ export default {
   methods: {
     onInput(d) {
       this.$emit("input", d);
+    },
+    onSwitch: function (event) {
+      this.$emit("switch", event.target.id);
     },
   },
 };

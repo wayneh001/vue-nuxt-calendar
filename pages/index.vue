@@ -5,7 +5,7 @@
         <CTable />
       </div>
       <div class="col-9">
-        <CalendarView />
+        <CCalendar />
       </div>
     </div>
   </div>
@@ -13,9 +13,9 @@
 
 <script>
 import CTable from '@/components/CTable'
-import CalendarView from '@/components/CalendarView'
+import CCalendar from '@/components/CCalendar'
 export default {
-  name: 'IndexPage',
-  components: { CTable, CalendarView},
+  name: 'Index',
+  components: { CTable, CCalendar},
 }
 </script>

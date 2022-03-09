@@ -32,6 +32,7 @@
 </template>
 <script>
 export default {
+  name: "CForm",
   props: {
     meeting: {
       title: "",

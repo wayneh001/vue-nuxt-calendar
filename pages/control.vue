@@ -1,15 +1,20 @@
 <template>
-  <div class="container-fluid">
+  <div>
     <CTable />
   </div>
 </template>
 
 <script>
-import CTable from '@/components/CTable'
+import CTable from "@/components/CTable";
 export default {
-  name: 'Index',
+  name: "Index",
+  data() {
+    return {
+      meeting: {},
+    }
+  },
   components: {
     CTable,
-  }
-}
+  },
+};
 </script>

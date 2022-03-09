@@ -1,20 +1,21 @@
 <template>
   <div>
-    <CTable />
+    <Login />
   </div>
 </template>
 
 <script>
-import CTable from "@/components/CTable";
+import Login from "@/container/Login";
 export default {
   name: "Index",
+  layout: "layoutLogin",
   data() {
     return {
       meeting: {},
     }
   },
   components: {
-    CTable,
+    Login,
   },
 };
 </script>

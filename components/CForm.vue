@@ -144,8 +144,4 @@ export default {
 .notice {
   background-color: #e1e3fb;
 }
-.btn-main {
-  background-color: #686ce5;
-  color: #fff;
-}
 </style>

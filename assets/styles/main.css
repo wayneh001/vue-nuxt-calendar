@@ -4,3 +4,8 @@ html,
 body {
   font-family: "Ubuntu", sans-serif;
 }
+
+.btn-main {
+  background-color: #686ce5;
+  color: #fff;
+}

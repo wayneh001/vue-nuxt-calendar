@@ -6,7 +6,6 @@
       'locale-' + displayLocale,
       'y' + periodStart.getFullYear(),
       'm' + paddedMonth(periodStart),
-      'period-' + displayPeriodUom,
       'periodCount-' + displayPeriodCount,
       {
         past: isPastMonth(periodStart),
@@ -16,7 +15,11 @@
     ]"
   >
     <slot :header-props="headerProps" name="header">
-      <calendar-view-header :header-props="headerProps" @input="onChangeDate" @switch="onChangePeriod">
+      <calendar-view-header
+        :header-props="headerProps"
+        @input="onChangeDate"
+        @switch="onChangePeriod"
+      >
         <template slot="label">{{ periodLabel }}</template>
       </calendar-view-header>
     </slot>
@@ -43,34 +46,36 @@
           'ws' + isoYearMonthDay(weekStart),
         ]"
       >
-        <div
-          v-for="(day, dayIndex) in daysOfWeek(weekStart)"
-          :key="`${dayIndex}-day`"
-          :class="[
-            'cv-day',
-            'dow' + day.getDay(),
-            'd' + isoYearMonthDay(day),
-            'd' + isoMonthDay(day),
-            'd' + paddedDay(day),
-            'instance' + instanceOfMonth(day),
-            {
-              outsideOfMonth: !isSameMonth(day, defaultedShowDate),
-              today: isSameDate(day, today()),
-              past: isInPast(day),
-              future: isInFuture(day),
-              last: isLastDayOfMonth(day),
-              lastInstance: isLastInstanceOfMonth(day),
-            },
-            ...((dateClasses && dateClasses[isoYearMonthDay(day)]) || null),
-          ]"
-          @click="onClickDay(day)"
-          @drop.prevent="onDrop(day, $event)"
-          @dragover.prevent="onDragOver(day)"
-          @dragenter.prevent="onDragEnter(day, $event)"
-          @dragleave.prevent="onDragLeave(day, $event)"
-        >
-          <div class="cv-day-number">{{ day.getDate() }}</div>
-          <slot :day="day" name="dayContent" />
+        <div class="cv-weekdays">
+          <div
+            v-for="(day, dayIndex) in daysOfWeek(weekStart)"
+            :key="`${dayIndex}-day`"
+            :class="[
+              'cv-day',
+              'dow' + day.getDay(),
+              'd' + isoYearMonthDay(day),
+              'd' + isoMonthDay(day),
+              'd' + paddedDay(day),
+              'instance' + instanceOfMonth(day),
+              {
+                outsideOfMonth: !isSameMonth(day, defaultedShowDate),
+                today: isSameDate(day, today()),
+                past: isInPast(day),
+                future: isInFuture(day),
+                last: isLastDayOfMonth(day),
+                lastInstance: isLastInstanceOfMonth(day),
+              },
+              ...((dateClasses && dateClasses[isoYearMonthDay(day)]) || null),
+            ]"
+            @click="onClickDay(day)"
+            @drop.prevent="onDrop(day, $event)"
+            @dragover.prevent="onDragOver(day)"
+            @dragenter.prevent="onDragEnter(day, $event)"
+            @dragleave.prevent="onDragLeave(day, $event)"
+          >
+            <div class="cv-day-number">{{ day.getDate() }}</div>
+            <slot :day="day" name="dayContent" />
+          </div>
         </div>
         <template v-for="e in getWeekEvents(weekStart)">
           <slot
@@ -276,9 +281,9 @@ export default {
       this.$emit("show-date-change", d);
     },
 
-	onChangePeriod(p) {
-		this.displayPeriodUom = p;
-	},
+    onChangePeriod(p) {
+      this.displayPeriodUom = p;
+    },
 
     // ******************************
     // Date Periods
@@ -478,7 +483,7 @@ header are in the CalendarViewHeader component.
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  height: 100%;
+  height: 90vh;
   min-height: 100%;
   max-height: 100%;
   overflow-x: hidden;
@@ -499,7 +504,6 @@ header are in the CalendarViewHeader component.
   flex-basis: auto;
   flex-flow: row nowrap;
   border-width: 0 0 0 1px;
-  height: 3rem;
   background-color: #686ce5;
   color: #fff;
 }
@@ -538,7 +542,7 @@ header are in the CalendarViewHeader component.
   flex-shrink: 0;
   flex-basis: 0;
   flex-flow: row nowrap;
-  min-height: 10em;
+  min-height: 8rem;
   border-width: 0;
 
   /* Allow week events to scroll if they are too tall */
@@ -546,6 +550,21 @@ header are in the CalendarViewHeader component.
   width: 100%;
   overflow-y: auto;
   -ms-overflow-style: none;
+}
+
+.cv-weekdays {
+  display: flex;
+
+  /* Shorthand flex: 1 1 0 not supported by IE11 */
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 0;
+  flex-flow: row nowrap;
+
+  /* Days of the week go left to right even if user's language is RTL (#138) */
+  direction: ltr;
+  position: relative;
+  overflow-y: auto;
 }
 
 .cv-day {

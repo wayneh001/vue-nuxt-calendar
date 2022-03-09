@@ -9,3 +9,19 @@ body {
   background-color: #686ce5;
   color: #fff;
 }
+
+.bg-main {
+  background-color: #686ce5;
+  color: #fff;
+}
+
+.fa-trash-can {
+  color: #ff0000;
+}
+
+.fa-pencil {
+  color: #000;
+}
+.table-column:hover {
+  background-color: #E1E3FB;
+}

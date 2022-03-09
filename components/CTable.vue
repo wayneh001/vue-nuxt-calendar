@@ -14,64 +14,64 @@
     </div>
     <table class="table table-striped mb-3">
       <thead>
-        <tr>
-          <th scope="col">日期</th>
-          <th scope="col">時間</th>
-          <th scope="col">會議名稱</th>
-          <th scope="col">編輯</th>
+        <tr class="bg-main">
+          <th scope="col" >日期</th>
+          <th scope="col" >時間</th>
+          <th scope="col" >會議名稱</th>
+          <th scope="col" class="text-center">編輯</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="disabled">
-          <th scope="row">2022-03-02</th>
-          <td>14:00-16:00</td>
-          <td>總務處月會</td>
-          <td>
-            <div class="d-flex justify-content-between align-items-center">
-              <div>編輯</div>
-              <div>刪除</div>
-            </div>
-          </td>
-        </tr>
-        <tr class="disabled">
-          <th scope="row">2022-03-07</th>
-          <td>09:00-10:00</td>
-          <td>事務組週會</td>
-          <td>
-            <div class="d-flex justify-content-between align-items-center">
-              <div>編輯</div>
-              <div>刪除</div>
-            </div>
-          </td>
-        </tr>
-        <tr class="disabled">
-          <th scope="row">2022-03-14</th>
-          <td>09:00-10:00</td>
-          <td>事務組週會</td>
-          <td>
-            <div class="d-flex justify-content-between align-items-center">
-              <div>編輯</div>
-              <div>刪除</div>
-            </div>
+        <tr class="table-column" v-for="(item, index) in mettings" :key="index">
+          <td scope="row">{{ item.date }}</td>
+          <td>{{ item.startTime }} ~ {{ item.endTime }}</td>
+          <td>{{ item.title }}</td>
+          <td class="text-center">
+            <a href="#" @click="onEdit(index)"><i class="fa fas fa-pencil me-2"></i></a>
+            <a href="#" @click="onDelete(index)"><i class="fa fas fa-trash-can"></i></a>
           </td>
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-main w-100" type="button" @click.prevent="onAdd">新增會議</button>
+    <button class="btn btn-main w-100" type="button" @click.prevent="onAdd">
+      新增會議
+    </button>
   </div>
 </template>
 <script>
 export default {
-  props: {
-    meeting: {
-      title: "",
-    },
+  data() {
+    return {
+      mettings: [
+        {
+          title: '總務處月會',
+          date: '2022-03-02',
+          startTime: '14:00',
+          endTime: '16:00',
+        },
+        {
+          title: '事務組週會',
+          date: '2022-03-07',
+          startTime: '09:00',
+          endTime: '11:00',
+        },
+        {
+          title: '事務組週會',
+          date: '2022-03-14',
+          startTime: '09:00',
+          endTime: '11:00',
+        },
+      ]
+    }
   },
   methods: {
-    onAdd() {
-      this.$router.push("/meeting");
-    }
-  }
+    onEdit(uid) {
+      console.log(uid);
+    },
+    onDelete(uid) {
+      console.log(uid);
+    },
+  },
 };
 </script>
 <style scoped>
@@ -79,7 +79,7 @@ export default {
   background-color: #e1e3fb;
 }
 .btn-main {
-  background-color: #686CE5;
+  background-color: #686ce5;
   color: #fff;
 }
 </style>

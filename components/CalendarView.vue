@@ -504,6 +504,7 @@ header are in the CalendarViewHeader component.
   flex-basis: auto;
   flex-flow: row nowrap;
   border-width: 0 0 0 1px;
+  height: 3rem;
   background-color: #686ce5;
   color: #fff;
 }

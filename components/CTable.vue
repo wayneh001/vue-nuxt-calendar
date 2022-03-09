@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5 vh-100">
+  <div class="pt-5 vh-100">
     <div
       class="p-3 mb-3 d-flex justify-content-between align-items-center bg-light"
     >
@@ -57,7 +57,7 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-main w-100" type="button">新增會議</button>
+    <button class="btn btn-main w-100" type="button" @click.prevent="onAdd">新增會議</button>
   </div>
 </template>
 <script>
@@ -67,6 +67,11 @@ export default {
       title: "",
     },
   },
+  methods: {
+    onAdd() {
+      this.$router.push("/meeting");
+    }
+  }
 };
 </script>
 <style scoped>

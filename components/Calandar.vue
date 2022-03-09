@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="app">
     <calendar-view
       :show-date="showDate"
       @show-date-change="setShowDate"
@@ -10,7 +10,7 @@
 <script>
 import CalendarView from "@/components/CalendarView";
 export default {
-  name: "CCalandar",
+  name: "Calandar",
   data: function () {
     return { showDate: new Date() };
   },
@@ -28,8 +28,8 @@ export default {
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   color: #2c3e50;
-  height: 67vh;
-  width: 90vw;
+  height: 100vh;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }

@@ -10,7 +10,7 @@
             type="text"
             class="form-control form-control-title bg-light"
             placeholder="請輸入單位"
-            v-model="meeting.title"
+            v-model="editedMeeting.title"
             ref="titleFoucs"
             :readonly="!titleEdit"
             @keyup.enter="doneTitleEdit"
@@ -26,7 +26,7 @@
         label="申請人"
         type="text"
         placeholder="請輸入申請人姓名"
-        v-model="meeting.applicant"
+        v-model="editedMeeting.applicant"
       />
       <!-- 單位 -->
       <CInput
@@ -34,7 +34,7 @@
         label="單位"
         type="text"
         placeholder="請輸入單位名稱"
-        v-model="meeting.unit"
+        v-model="editedMeeting.unit"
       />
       <!-- 電話與信箱 -->
       <div class="row mb-3">
@@ -43,7 +43,7 @@
             label="聯絡電話"
             type="text"
             placeholder="請輸入聯絡電話"
-            v-model="meeting.tel"
+            v-model="editedMeeting.tel"
           />
         </div>
         <div class="col-6">
@@ -51,26 +51,36 @@
             label="電子信箱"
             type="text"
             placeholder="請輸入電子信箱"
-            v-model="meeting.email"
+            v-model="editedMeeting.email"
           />
         </div>
       </div>
       <!-- 日期 -->
-      <CInput className="mb-3" label="日期" type="date" v-model="meeting.date" />
+      <CInput
+        className="mb-3"
+        label="日期"
+        type="date"
+        v-model="editedMeeting.date"
+      />
       <!-- 時間 -->
       <div class="row mb-3">
         <label class="form-label">時間</label>
-        <div class="col-6">
-          <CSelect
-            label="請選擇開始時間"
-            v-model="meeting.startTime"
-          />
+        <div class="col-5">
+          <select class="form-select" v-model="editedMeeting.startTime">
+            <option selected value="">請選擇開始時間</option>
+            <option v-for="(item, index) in time" :key="index">
+              {{ item }}
+            </option>
+          </select>
         </div>
-        <div class="col-6">
-          <CSelect
-            label="請選擇結束時間"
-            v-model="meeting.startTime"
-          />
+        <div class="col-2 text-center">~</div>
+        <div class="col-5">
+          <select class="form-select" v-model="editedMeeting.endTime">
+            <option selected value="">請選擇結束時間</option>
+            <option v-for="(item, index) in time" :key="index">
+              {{ item }}
+            </option>
+          </select>
         </div>
       </div>
       <div class="mb-3"></div>
@@ -78,20 +88,29 @@
       <div class="mb-3">
         <label class="form-label">例行會議</label>
         <div class="d-flex justify-content-between bg-light p-2">
-          <div class="form-check form-check-inline" v-for="(item, index) in routine" :key="index">
+          <div
+            class="form-check form-check-inline"
+            v-for="(item, index) in routine"
+            :key="index"
+          >
             <input
               class="form-check-input"
               type="radio"
-              v-model="meeting.routine"
+              v-model="editedMeeting.routine"
               :value="item"
             />
-            <label class="form-check-label" for="inlineRadio1"
-              >{{ item }}</label
-            >
+            <label class="form-check-label" for="inlineRadio1">{{
+              item
+            }}</label>
           </div>
         </div>
       </div>
-      <CInput className="mb-3" label="例行會議結束日期" type="date" v-model="meeting.date" />
+      <CInput
+        className="mb-3"
+        label="例行會議結束日期"
+        type="date"
+        v-model="editedMeeting.date"
+      />
       <!-- 底圖 -->
       <div class="mb-3">
         <label class="form-label">底圖</label>
@@ -122,29 +141,58 @@
   </div>
 </template>
 <script>
-import CInput from '~/components/CInput'
-import CSelect from '~/components/CSelect'
+import CInput from "~/components/CInput";
 export default {
   data() {
     return {
-      meeting: {
-        title: "總務處月會",
-        applicant: "申請人",
-        unit: "事務組",
-        tel: "57311",
-        email: "affairs@ncu.edu.tw",
-        date: "2022-03-02",
-        startTime: "請選擇開始時間",
-        endTime: "2",
-        routine: "非例行會議",
-        routineEndDate: "2022-03-25",
-        background: "",
-      },
+      editedMeeting: this.meeting
+        ? { ...this.meeting }
+        : {
+            title: "",
+            applicant: "",
+            unit: "",
+            tel: "",
+            email: "",
+            date: "",
+            startTime: "",
+            endTime: "",
+            routine: "",
+            routineEndDate: "",
+            background: "",
+          },
       titleEdit: false,
-      routine: ['非例行會議', '每日', '每週', '每月'],
+      time: [
+        "08:00",
+        "08:30",
+        "09:00",
+        "09:30",
+        "10:00",
+        "10:30",
+        "11:00",
+        "11:30",
+        "12:00",
+        "12:30",
+        "13:00",
+        "13:30",
+        "14:00",
+        "14:30",
+        "15:00",
+        "15:30",
+        "16:00",
+        "16:30",
+        "17:00",
+        "17:30",
+      ],
+      routine: ["非例行會議", "每日", "每週", "每月"],
     };
   },
-  component: { CInput, CSelect },
+  props: {
+    meeting: {
+      type: Object,
+      require: false,
+    },
+  },
+  component: { CInput },
   methods: {
     onTitleEdit() {
       this.titleEdit = true;

@@ -65,14 +65,14 @@ export default {
     }
   },
   methods: {
-    onEdit(uid) {
-      console.log(uid);
+    onEdit(id) {
+      this.$router.push(`/${id}`);
     },
-    onDelete(uid) {
-      console.log(uid);
+    onDelete(id) {
+      console.log(id);
     },
     onAdd() {
-      this.$router.push("/meeting");
+      this.$router.push("/newMeeting");
     }
   },
 };

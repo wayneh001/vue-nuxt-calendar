@@ -71,6 +71,9 @@ export default {
     onDelete(uid) {
       console.log(uid);
     },
+    onAdd() {
+      this.$router.push("/meeting");
+    }
   },
 };
 </script>

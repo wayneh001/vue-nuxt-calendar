@@ -10,6 +10,10 @@ body {
   color: #fff;
 }
 
+.btn-main:hover {
+  color: #fff;
+}
+
 .bg-main {
   background-color: #686ce5;
   color: #fff;

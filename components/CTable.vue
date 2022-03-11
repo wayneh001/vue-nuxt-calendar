@@ -25,8 +25,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="table-column" v-for="(item, index) in meetingsList" :key="index">
-          <td scope="row">{{ item.date }}</td>
+        <tr class="table-column" v-for="(item, index) in meeting" :key="index">
+          <td scope="row">{{ item.startDate }}</td>
           <td>{{ item.startTime }} ~ {{ item.endTime }}</td>
           <td>{{ item.title }}</td>
           <td class="text-center">
@@ -58,7 +58,7 @@ import CDeleteModal from "@/components/CDeleteModal";
 export default {
   data() {
     return {
-      meetingsList: this.meetings
+      meeting: this.meetings
       ? { ...this.meetings }
         : {
         },

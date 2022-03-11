@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <calendar-view
+    <CalendarView
+      :events="meetings"
       :show-date="showDate"
       @show-date-change="setShowDate"
       class="theme-default holiday-us-traditional holiday-us-official"
@@ -11,11 +12,20 @@
 import CalendarView from "@/components/CalendarView";
 export default {
   name: "Calandar",
-  data: function () {
-    return { showDate: new Date() };
+  data() {
+    return {
+      showDate: new Date(),
+      meetings: this.meetingLists ? [...this.meetingLists] : [],
+    };
   },
   components: {
     CalendarView,
+  },
+  props: {
+    meetingLists: {
+      type: Array,
+      reuqire: false,
+    },
   },
   methods: {
     setShowDate(d) {

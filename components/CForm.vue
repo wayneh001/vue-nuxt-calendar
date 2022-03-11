@@ -60,7 +60,7 @@
         className="mb-3"
         label="日期"
         type="date"
-        v-model="editedMeeting.date"
+        v-model="editedMeeting.startDate"
       />
       <!-- 時間 -->
       <div class="row mb-3">
@@ -110,7 +110,7 @@
         label="例行會議結束日期"
         type="date"
         :disabled="editedMeeting.routine === '非例行會議'"
-        v-model="editedMeeting.date"
+        v-model="editedMeeting.routineEndDate"
       />
       <!-- 底圖 -->
       <div class="mb-5">
@@ -160,7 +160,8 @@ export default {
             unit: "",
             tel: "",
             email: "",
-            date: "",
+            startDate: "",
+            endDate: "",
             startTime: "",
             endTime: "",
             routine: "非例行會議",
@@ -216,7 +217,6 @@ export default {
       this.$emit("close");
     },
     onSave(item) {
-      console.log(item.routine);
       this.$emit("close", item);
     },
   },

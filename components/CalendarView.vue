@@ -86,7 +86,6 @@
           >
             <div
               :key="e.id"
-              :draggable="enableDragDrop"
               :class="e.classes"
               :title="e.title"
               :style="'top:' + getEventTop(e)"
@@ -109,35 +108,26 @@ export default {
   name: "CalendarView",
   data() {
     return {
-      currentDragEvent: null,
-      displayPeriodUom: {
-        type: String,
-        default() {
-          return "month";
-        },
-      },
+      displayPeriodUom: "month",
+      displayPeriodCount: 1,
+      monthNameFormat: "short",
+      weekdayNameFormat: "short",
+      showEventTimes: false,
+      disablePast: false,
+      disableFuture: false,
+      startingDayOfWeek: 1,
+      dateClasses: {},
+      eventTop: "1.4em",
+      eventContentHeight: "1.4em",
+      eventBorderHeight: "2px"
     };
   },
   components: { CalendarViewHeader },
   mixins: [CalendarMathMixin],
   props: {
     showDate: { type: Date, default: () => undefined },
-    // displayPeriodUom: { type: String, default: () => "month" },
-    displayPeriodCount: { type: Number, default: () => 1 },
     locale: { type: String, default: () => undefined },
-    monthNameFormat: { type: String, default: () => "long" },
-    weekdayNameFormat: { type: String, default: () => "short" },
-    showEventTimes: { type: Boolean, default: () => false },
-    timeFormatOptions: { type: Object, default: () => {} },
-    disablePast: { type: Boolean, default: () => false },
-    disableFuture: { type: Boolean, default: () => false },
-    enableDragDrop: { type: Boolean, default: () => false },
-    startingDayOfWeek: { type: Number, default: () => 0 },
     events: { type: Array, default: () => [] },
-    dateClasses: { type: Object, default: () => {} },
-    eventTop: { type: String, default: () => "1.4em" },
-    eventContentHeight: { type: String, default: () => "1.4em" },
-    eventBorderHeight: { type: String, default: () => "2px" },
   },
   computed: {
     /*
@@ -224,6 +214,7 @@ export default {
 
     // Ensure all event properties have suitable default
     fixedEvents() {
+      // console.log(this.events);
       return this.events.map(this.normalizeEvent);
     },
 
@@ -311,53 +302,6 @@ export default {
     },
 
     // ******************************
-    // Drag and drop events
-    // ******************************
-
-    onDragStart(calendarEvent, windowEvent) {
-      if (!this.enableDragDrop) return false;
-      // Not using dataTransfer.setData to store the event ID because it (a) doesn't allow access to the data being
-      // dragged during dragover, dragenter, and dragleave events, and because storing an ID requires an unnecessary
-      // lookup. This does limit the drop zones to areas within this instance of this component.
-      this.currentDragEvent = calendarEvent;
-      // Firefox and possibly other browsers require dataTransfer to be set, even if the value is not used. IE11
-      // requires that the first argument be exactly "text" (not "text/plain", etc.).
-      windowEvent.dataTransfer.setData("text", "foo");
-      this.$emit("drag-start", calendarEvent);
-      return true;
-    },
-
-    handleDragEvent(bubbleEventName, bubbleParam) {
-      if (!this.enableDragDrop) return false;
-      if (!this.currentDragEvent) {
-        // shouldn't happen
-        // If current drag event is not set, check if user has set its own slot for events
-        if (!this.$scopedSlots["event"]) return false;
-      }
-      this.$emit(bubbleEventName, this.currentDragEvent, bubbleParam);
-      return true;
-    },
-
-    onDragOver(day) {
-      this.handleDragEvent("drag-over-date", day);
-    },
-
-    onDragEnter(day, windowEvent) {
-      if (!this.handleDragEvent("drag-enter-date", day)) return;
-      windowEvent.target.classList.add("draghover");
-    },
-
-    onDragLeave(day, windowEvent) {
-      if (!this.handleDragEvent("drag-leave-date", day)) return;
-      windowEvent.target.classList.remove("draghover");
-    },
-
-    onDrop(day, windowEvent) {
-      if (!this.handleDragEvent("drop-on-date", day)) return;
-      windowEvent.target.classList.remove("draghover");
-    },
-
-    // ******************************
     // Calendar Events
     // ******************************
 
@@ -379,6 +323,7 @@ export default {
           if (b.endDate > a.endDate) return 1;
           return a.id < b.id ? -1 : 1;
         });
+        console.log(events)
       return events;
     },
 
@@ -430,14 +375,12 @@ export default {
       const startTime = this.formattedTime(
         e.startDate,
         this.displayLocale,
-        this.timeFormatOptions
       );
       let endTime = "";
       if (!this.isSameDateTime(e.startDate, e.endDate)) {
         endTime = this.formattedTime(
           e.endDate,
           this.displayLocale,
-          this.timeFormatOptions
         );
       }
       return (
@@ -460,10 +403,6 @@ export default {
       const b = this.eventBorderHeight;
       return `calc(${this.eventTop} + ${r}*${h} + ${r}*${b})`;
     },
-  },
-
-  created() {
-    this.displayPeriodUom = "month";
   },
 };
 </script>

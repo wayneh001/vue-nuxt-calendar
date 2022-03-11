@@ -112,7 +112,7 @@
         v-model="editedMeeting.date"
       />
       <!-- 底圖 -->
-      <div class="mb-3">
+      <div class="mb-5">
         <label class="form-label">底圖</label>
         <button
           class="btn btn-main w-100"

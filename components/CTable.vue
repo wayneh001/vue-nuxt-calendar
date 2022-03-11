@@ -4,7 +4,7 @@
       class="p-3 mb-3 d-flex justify-content-between align-items-center bg-light"
     >
       <h3 class="m-0">我的會議</h3>
-      <nuxt-link class="d-flex justify-content-end nav-link" to="index"
+      <nuxt-link class="d-flex justify-content-end nav-link" to="/"
         >登出</nuxt-link
       >
     </div>
@@ -15,9 +15,9 @@
     <table class="table table-striped mb-3">
       <thead>
         <tr class="bg-main">
-          <th scope="col" >日期</th>
-          <th scope="col" >時間</th>
-          <th scope="col" >會議名稱</th>
+          <th scope="col">日期</th>
+          <th scope="col">時間</th>
+          <th scope="col">會議名稱</th>
           <th scope="col" class="text-center">編輯</th>
         </tr>
       </thead>
@@ -27,8 +27,12 @@
           <td>{{ item.startTime }} ~ {{ item.endTime }}</td>
           <td>{{ item.title }}</td>
           <td class="text-center">
-            <a href="#" @click="onEdit(index)"><i class="fa fas fa-pencil me-2"></i></a>
-            <a href="#" @click="onDelete(index)"><i class="fa fas fa-trash-can"></i></a>
+            <a href="#" @click="onEdit(item.id)"
+              ><i class="fa fas fa-pencil me-2"></i
+            ></a>
+            <a href="#" @click="onDelete(item.id)"
+              ><i class="fa fas fa-trash-can"></i
+            ></a>
           </td>
         </tr>
       </tbody>
@@ -36,44 +40,60 @@
     <button class="btn btn-main w-100" type="button" @click.prevent="onAdd">
       新增會議
     </button>
+    <!-- <CDeleteModal
+      ref="deleteModal"
+      :item="tempMeeting"
+      @delete-item="deleteMeeting"
+    /> -->
   </div>
 </template>
 <script>
+import CDeleteModal from "@/components/CDeleteModal";
 export default {
   data() {
     return {
       mettings: [
         {
-          title: '總務處月會',
-          date: '2022-03-02',
-          startTime: '14:00',
-          endTime: '16:00',
+          id: "1",
+          title: "總務處月會",
+          date: "2022-03-02",
+          startTime: "14:00",
+          endTime: "16:00",
         },
         {
-          title: '事務組週會',
-          date: '2022-03-07',
-          startTime: '09:00',
-          endTime: '11:00',
+          id: "2  ",
+          title: "事務組週會",
+          date: "2022-03-07",
+          startTime: "09:00",
+          endTime: "11:00",
         },
         {
-          title: '事務組週會',
-          date: '2022-03-14',
-          startTime: '09:00',
-          endTime: '11:00',
+          id: "3",
+          title: "事務組週會",
+          date: "2022-03-14",
+          startTime: "09:00",
+          endTime: "11:00",
         },
-      ]
-    }
+      ],
+      tempMeeting: {},
+    };
   },
+  components: { CDeleteModal },
   methods: {
     onEdit(id) {
       this.$router.push(`/${id}`);
     },
-    onDelete(id) {
-      console.log(id);
+    onDelete(item) {
+      // this.tempMeeting = { ...item };
+      // this.$refs.deleteModal.open(item);
     },
     onAdd() {
       this.$router.push("/newMeeting");
-    }
+    },
+    deleteMeeting() {
+      console.log("會議已刪除");
+      this.$refs.deleteModal.hideModal();
+    },
   },
 };
 </script>

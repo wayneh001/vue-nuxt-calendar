@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <calendar-view
-      :items="items"
       :show-date="showDate"
       @show-date-change="setShowDate"
       class="theme-default holiday-us-traditional holiday-us-official"

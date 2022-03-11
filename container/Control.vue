@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div v-show="!isEdit">
-      <CTable @add="openEdit" />
+    <div v-if="!isEdit">
+      <CTable :meetings="meetings" @open="openEdit" />
     </div>
-    <div v-show="isEdit">
-      <CForm @close="closeEdit"/>
+    <div v-if="isEdit">
+      <CForm :meeting="meeting" @close="closeEdit" />
     </div>
   </div>
 </template>
@@ -18,6 +18,48 @@ export default {
     return {
       isEdit: false,
       meeting: {},
+      meetings: [
+        {
+          id: "1",
+          title: "總務處月會",
+          applicant: "申請人姓名",
+          unit: "事務組",
+          tel: "57311",
+          email: "affairs@ncu.edu.tw",
+          date: "2022-03-02",
+          startTime: "14:00",
+          endTime: "16:00",
+          routine: "每月",
+          routineEndDate: "2022-12-31",
+          background: "",
+        },
+        {
+          id: "2  ",
+          title: "事務組週會",
+          applicant: "申請人姓名",
+          unit: "事務組",
+          email: "affairs@ncu.edu.tw",
+          date: "2022-03-07",
+          startTime: "09:00",
+          endTime: "11:00",
+          routine: "每月",
+          routineEndDate: "2022-12-31",
+          background: "",
+        },
+        {
+          id: "3",
+          title: "事務組週會",
+          applicant: "申請人姓名",
+          unit: "事務組",
+          email: "affairs@ncu.edu.tw",
+          date: "2022-03-14",
+          startTime: "09:00",
+          endTime: "11:00",
+          routine: "每月",
+          routineEndDate: "2022-12-31",
+          background: "",
+        },
+      ],
     };
   },
   components: {
@@ -25,7 +67,9 @@ export default {
     CForm,
   },
   methods: {
-    openEdit() {
+    openEdit(item) {
+      this.meeting = item;
+      console.log(this.meeting);
       this.isEdit = true;
     },
     closeEdit() {

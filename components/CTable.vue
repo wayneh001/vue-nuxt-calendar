@@ -25,15 +25,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="table-column" v-for="(item, index) in mettings" :key="index">
+        <tr class="table-column" v-for="(item, index) in meetingsList" :key="index">
           <td scope="row">{{ item.date }}</td>
           <td>{{ item.startTime }} ~ {{ item.endTime }}</td>
           <td>{{ item.title }}</td>
           <td class="text-center">
-            <a href="#" @click="onEdit(item.id)"
+            <a href="#" @click="onEdit(item)"
               ><i class="fa fas fa-pencil me-2"></i
             ></a>
-            <a href="#" @click="onDelete(item.id)"
+            <a href="#" @click="onDelete(item)"
               ><i class="fa fas fa-trash-can"></i
             ></a>
           </td>
@@ -58,43 +58,28 @@ import CDeleteModal from "@/components/CDeleteModal";
 export default {
   data() {
     return {
-      mettings: [
-        {
-          id: "1",
-          title: "總務處月會",
-          date: "2022-03-02",
-          startTime: "14:00",
-          endTime: "16:00",
+      meetingsList: this.meetings
+      ? { ...this.meetings }
+        : {
         },
-        {
-          id: "2  ",
-          title: "事務組週會",
-          date: "2022-03-07",
-          startTime: "09:00",
-          endTime: "11:00",
-        },
-        {
-          id: "3",
-          title: "事務組週會",
-          date: "2022-03-14",
-          startTime: "09:00",
-          endTime: "11:00",
-        },
-      ],
-      tempMeeting: {},
     };
+  },
+  props: {
+    meetings: {
+      type: Array,
+      reuqire: false,
+    }
   },
   components: { CDeleteModal },
   methods: {
-    onEdit(id) {
-      this.$router.push(`/${id}`);
+    onEdit(item) {
+      this.$emit("open", item);
     },
     onDelete(item) {
-      // this.tempMeeting = { ...item };
-      // this.$refs.deleteModal.open(item);
+
     },
     onAdd() {
-      this.$emit("add");
+      this.$emit("open");
     },
     deleteMeeting() {
       console.log("會議已刪除");

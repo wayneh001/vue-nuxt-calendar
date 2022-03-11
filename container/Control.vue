@@ -18,9 +18,7 @@ export default {
     return {
       isEdit: false,
       meeting: {},
-      meetings: this.meetingLists
-        ? [ ...this.meetingLists ]
-        : [],
+      meetings: this.meetingLists ? [...this.meetingLists] : [],
     };
   },
   props: {
@@ -48,6 +46,13 @@ export default {
         this.$emit("update", this.meetings);
       }
       this.isEdit = false;
+    },
+  },
+  watch: {
+    meetingLists: function (newValue) {
+      console.log(newValue);
+      this.meetings = [...newValue];
+      console.log(this.meetings);
     },
   },
 };

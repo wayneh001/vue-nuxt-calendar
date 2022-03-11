@@ -94,14 +94,14 @@
             :key="index"
           >
             <input
+              :id="item"
               class="form-check-input"
+              name="item"
               type="radio"
               v-model="editedMeeting.routine"
               :value="item"
             />
-            <label class="form-check-label" for="inlineRadio1">{{
-              item
-            }}</label>
+            <label class="form-check-label" :for="item">{{ item }}</label>
           </div>
         </div>
       </div>
@@ -109,6 +109,7 @@
         className="mb-3"
         label="例行會議結束日期"
         type="date"
+        :disabled="editedMeeting.routine === '非例行會議'"
         v-model="editedMeeting.date"
       />
       <!-- 底圖 -->
@@ -134,7 +135,13 @@
           </button>
         </div>
         <div class="col-6">
-          <button class="btn btn-main w-100" type="button" @click.prevent="onSave">儲存</button>
+          <button
+            class="btn btn-main w-100"
+            type="button"
+            @click.prevent="onSave(editedMeeting)"
+          >
+            儲存
+          </button>
         </div>
       </div>
     </form>
@@ -156,7 +163,7 @@ export default {
             date: "",
             startTime: "",
             endTime: "",
-            routine: "",
+            routine: "非例行會議",
             routineEndDate: "",
             background: "",
           },
@@ -208,9 +215,10 @@ export default {
     onCancel() {
       this.$emit("close");
     },
-    onSave() {
-      this.$emit("close");
-    }
+    onSave(item) {
+      console.log(item.routine);
+      this.$emit("close", item);
+    },
   },
 };
 </script>

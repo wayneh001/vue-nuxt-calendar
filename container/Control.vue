@@ -42,7 +42,7 @@ export default {
           date: "2022-03-07",
           startTime: "09:00",
           endTime: "11:00",
-          routine: "每月",
+          routine: "每週",
           routineEndDate: "2022-12-31",
           background: "",
         },
@@ -55,7 +55,7 @@ export default {
           date: "2022-03-14",
           startTime: "09:00",
           endTime: "11:00",
-          routine: "每月",
+          routine: "每週",
           routineEndDate: "2022-12-31",
           background: "",
         },
@@ -72,8 +72,16 @@ export default {
       console.log(this.meeting);
       this.isEdit = true;
     },
-    closeEdit() {
+    closeEdit(item) {
+      if (item != undefined) {
+        this.meeting = item;
+        let index = this.meetings.findIndex(function (meeting) {
+          return meeting.id == item.id;
+        });
+        this.meetings[index] = item;
+      }
       this.isEdit = false;
+      console.log(this.meetings);
     },
   },
 };

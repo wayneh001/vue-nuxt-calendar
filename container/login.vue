@@ -75,7 +75,7 @@ export default {
   },
   methods: {
     login() {
-      this.$router.push("/control");
+      this.$router.push("/dashboard");
     },
     onCancel() {
       console.log("yes");

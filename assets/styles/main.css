@@ -29,3 +29,7 @@ body {
 .table-column:hover {
   background-color: #E1E3FB;
 }
+
+.notice {
+  background-color: #e1e3fb;
+}

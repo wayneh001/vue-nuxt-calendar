@@ -122,8 +122,8 @@
           底圖
         </button>
       </div>
-      <!-- 取消與儲存 -->
-      <div class="row mb-3">
+      <!-- 儲存與取消 -->
+      <div class="button row mb-3">
         <div class="col-6">
           <button
             class="btn btn-light w-100"
@@ -134,7 +134,7 @@
           </button>
         </div>
         <div class="col-6">
-          <button class="btn btn-main w-100" type="button">儲存</button>
+          <button class="btn btn-main w-100" type="button" @click.prevent="onSave">儲存</button>
         </div>
       </div>
     </form>
@@ -206,8 +206,11 @@ export default {
       console.log("yes");
     },
     onCancel() {
-      this.$router.push("/control");
+      this.$emit("close");
     },
+    onSave() {
+      this.$emit("close");
+    }
   },
 };
 </script>

@@ -1,17 +1,20 @@
 <template>
-  <div class="pt-5 vh-100">
+  <div class="container pt-5 vh-100">
     <div
       class="p-3 mb-3 d-flex justify-content-between align-items-center bg-light"
     >
+      <!-- 標題 -->
       <h3 class="m-0">我的會議</h3>
       <nuxt-link class="d-flex justify-content-end nav-link" to="/"
         >登出</nuxt-link
       >
     </div>
+    <!-- 公告 -->
     <div class="notice p-3 mb-3">
       <h5>公告</h5>
       <p>本月 14 日會議室電腦系統升級，當日不開放會議預約。</p>
     </div>
+    <!-- 列表 -->
     <table class="table table-striped mb-3">
       <thead>
         <tr class="bg-main">
@@ -37,9 +40,12 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn btn-main w-100" type="button" @click.prevent="onAdd">
-      新增會議
-    </button>
+    <!-- 新增會議 -->
+    <div class="button">
+      <button class="btn btn-main w-100" type="button" @click.prevent="onAdd">
+        新增會議
+      </button>
+    </div>
     <!-- <CDeleteModal
       ref="deleteModal"
       :item="tempMeeting"
@@ -88,7 +94,7 @@ export default {
       // this.$refs.deleteModal.open(item);
     },
     onAdd() {
-      this.$router.push("/newMeeting");
+      this.$emit("add");
     },
     deleteMeeting() {
       console.log("會議已刪除");

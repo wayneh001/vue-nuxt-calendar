@@ -33,8 +33,6 @@
       <div class="tools" @click.prevent="onSwitch($event)">
         <a href=""><div id="month" class="toggle" name="month">月</div></a>
          <a href=""><div id="week" class="toggle" name="week">週</div></a>
-        <!-- <a href=""><div class="toggle">週</div></a> -->
-        <!-- <a href=""><div class="toggle">月</div></a> -->
       </div>
     </div>
   </div>

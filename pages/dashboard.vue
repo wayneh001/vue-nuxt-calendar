@@ -75,5 +75,10 @@ export default {
       }
     }
   },
+  watch: {
+    meetingLists: function() {
+      console.log('Data Updated')
+    }
+  }
 };
 </script>

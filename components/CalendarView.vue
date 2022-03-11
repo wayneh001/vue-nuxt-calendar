@@ -119,7 +119,7 @@ export default {
       dateClasses: {},
       eventTop: "1.4em",
       eventContentHeight: "1.4em",
-      eventBorderHeight: "2px"
+      eventBorderHeight: "2px",
     };
   },
   components: { CalendarViewHeader },
@@ -127,7 +127,7 @@ export default {
   props: {
     showDate: { type: Date, default: () => undefined },
     locale: { type: String, default: () => undefined },
-    events: { type: Array, default: () => [] },
+    events: [],
   },
   computed: {
     /*
@@ -323,7 +323,7 @@ export default {
           if (b.endDate > a.endDate) return 1;
           return a.id < b.id ? -1 : 1;
         });
-        console.log(events)
+      // console.log(events);
       return events;
     },
 
@@ -372,16 +372,10 @@ export default {
 		end time. Midnight is not displayed.
 		*/
     getFormattedTimeRange(e) {
-      const startTime = this.formattedTime(
-        e.startDate,
-        this.displayLocale,
-      );
+      const startTime = this.formattedTime(e.startDate, this.displayLocale);
       let endTime = "";
       if (!this.isSameDateTime(e.startDate, e.endDate)) {
-        endTime = this.formattedTime(
-          e.endDate,
-          this.displayLocale,
-        );
+        endTime = this.formattedTime(e.endDate, this.displayLocale);
       }
       return (
         (startTime !== ""

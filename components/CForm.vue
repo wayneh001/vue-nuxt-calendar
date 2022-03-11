@@ -61,6 +61,7 @@
         label="日期"
         type="date"
         v-model="editedMeeting.startDate"
+        @input="dateSync"
       />
       <!-- 時間 -->
       <div class="row mb-3">
@@ -219,6 +220,9 @@ export default {
     onSave(item) {
       this.$emit("close", item);
     },
+    dateSync() {
+      this.editedMeeting.endDate = this.editedMeeting.startDate;
+    }
   },
 };
 </script>

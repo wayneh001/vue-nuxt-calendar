@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <CalendarView
-      :events="meetings"
+      :events="this.meetingLists"
       :show-date="showDate"
       @show-date-change="setShowDate"
       class="theme-default holiday-us-traditional holiday-us-official"
@@ -15,7 +15,6 @@ export default {
   data() {
     return {
       showDate: new Date(),
-      meetings: this.meetingLists ? [...this.meetingLists] : [],
     };
   },
   components: {
@@ -32,6 +31,9 @@ export default {
       this.showDate = d;
     },
   },
+  updated() {
+    // console.log('Calandar updated!!!');
+  }
 };
 </script>
 <style>

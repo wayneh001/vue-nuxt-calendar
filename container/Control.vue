@@ -42,7 +42,13 @@ export default {
         let index = this.meetings.findIndex(function (meeting) {
           return meeting.id == item.id;
         });
-        this.meetings[index] = item;
+        if (this.meeting.id) {
+          this.meetings[index] = item;
+        } else {
+          item.id = this.meetings.length.toString()
+          this.meetings.push(item);
+        }
+
         this.$emit("update", this.meetings);
       }
       this.isEdit = false;
@@ -50,9 +56,7 @@ export default {
   },
   watch: {
     meetingLists: function (newValue) {
-      console.log(newValue);
       this.meetings = [...newValue];
-      console.log(this.meetings);
     },
   },
 };

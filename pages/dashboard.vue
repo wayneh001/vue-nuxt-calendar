@@ -23,7 +23,7 @@ export default {
     return {
       meetingLists: [
         {
-          id: "1",
+          id: "0",
           title: "總務處月會",
           applicant: "申請人姓名",
           unit: "事務組",
@@ -38,7 +38,7 @@ export default {
           background: "",
         },
         {
-          id: "2  ",
+          id: "1",
           title: "事務組週會",
           applicant: "申請人姓名",
           unit: "事務組",
@@ -52,7 +52,7 @@ export default {
           background: "",
         },
         {
-          id: "3",
+          id: "2",
           title: "事務組週會",
           applicant: "申請人姓名",
           unit: "事務組",

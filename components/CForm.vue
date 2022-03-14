@@ -9,9 +9,10 @@
           <input
             type="text"
             class="form-control form-control-title bg-light"
-            placeholder="請輸入單位"
+            placeholder="請輸入會議名稱"
             v-model="editedMeeting.title"
             ref="titleFoucs"
+            autofocus
             :readonly="!titleEdit"
             @keyup.enter="doneTitleEdit"
           />
@@ -156,6 +157,7 @@ export default {
       editedMeeting: this.meeting
         ? { ...this.meeting }
         : {
+            id: "",
             title: "",
             applicant: "",
             unit: "",
@@ -169,7 +171,7 @@ export default {
             routineEndDate: "",
             background: "",
           },
-      titleEdit: false,
+      titleEdit: true,
       time: [
         "08:00",
         "08:30",
@@ -222,8 +224,13 @@ export default {
     },
     dateSync() {
       this.editedMeeting.endDate = this.editedMeeting.startDate;
-    }
+    },
   },
+  mounted() {
+    if (this.editedMeeting.title != "") {
+      this.titleEdit = false;
+    }
+  }
 };
 </script>
 <style scoped>

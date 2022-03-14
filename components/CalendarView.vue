@@ -522,7 +522,7 @@ header are in the CalendarViewHeader component.
   position: absolute;
   white-space: nowrap;
   overflow: hidden;
-  background-color: #f7f7f7;
+  background-color: #e1e3fb;
   border-width: 1px;
 }
 

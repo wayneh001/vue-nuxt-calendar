@@ -4,6 +4,7 @@
       :events="this.meetingLists"
       :show-date="showDate"
       @show-date-change="setShowDate"
+      @clickEvent="onClickEvent"
       class="theme-default holiday-us-traditional holiday-us-official"
     />
   </div>
@@ -30,6 +31,9 @@ export default {
     setShowDate(d) {
       this.showDate = d;
     },
+    onClickEvent(item) {
+      this.$emit("clickEvent", item);
+    }
   },
   updated() {
     // console.log('Calandar updated!!!');

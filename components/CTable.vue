@@ -25,7 +25,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="table-column" v-for="(item, index) in this.meetings" :key="index">
+        <tr class="table-column" v-for="(item, index) in filter(this.meetings)" :key="index">
           <td scope="row">{{ item.startDate }}</td>
           <td>{{ item.startTime }} ~ {{ item.endTime }}</td>
           <td>{{ item.title }}</td>
@@ -64,6 +64,9 @@ export default {
   },
   components: { CDeleteModal },
   methods: {
+    filter() {
+      return this.meetings.filter((item) => item.classes == "")
+    },
     onEdit(item) {
       this.$emit("open", item);
     },

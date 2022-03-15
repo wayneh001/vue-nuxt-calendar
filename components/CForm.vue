@@ -157,7 +157,6 @@ export default {
       editedMeeting: this.meeting
         ? { ...this.meeting }
         : {
-            editabled: true,
             id: "",
             title: "",
             applicant: "",
@@ -171,6 +170,7 @@ export default {
             routine: "非例行會議",
             routineEndDate: "",
             background: "",
+            classes: "",
           },
       titleEdit: true,
       time: [

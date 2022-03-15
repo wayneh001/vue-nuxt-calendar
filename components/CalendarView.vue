@@ -82,7 +82,7 @@
               :style="{ top: getEventTop(e), height: getEventHeight(e) }"
               class="cv-event"
               @dragstart="onDragStart(e, $event)"
-              @click.stop="onClickEvent(e)"
+              @click.prevent="onClickEvent(e.originalEvent)"
               v-html="getEventTitle(e)"
             />
           </slot>
@@ -256,8 +256,9 @@ export default {
       this.$emit("click-date", day);
     },
 
-    onClickEvent(e, day) {
-      this.$emit("click-event", e, day);
+    onClickEvent(item) {
+      // console.log(item);
+      this.$emit("clickEvent", item);
     },
 
     onChangeDate(d) {
@@ -552,6 +553,12 @@ header are in the CalendarViewHeader component.
   overflow: hidden;
   background-color: #e1e3fb;
   border-width: 1px;
+  cursor: pointer;
+}
+
+.cv-event:hover {
+  background-color: #686ce5;
+  color: #fff;
 }
 
 /* Colors */
@@ -644,6 +651,13 @@ header are in the CalendarViewHeader component.
 .cv-event.span7 {
   width: calc((700% / 7) - 0.05em);
   text-align: center;
+}
+
+.cv-event.disabled {
+  background-color: #f8f9fa;
+  color: #000;
+  opacity: 50%;
+  cursor: auto;
 }
 
 /* Hide scrollbars for the grid and the week */

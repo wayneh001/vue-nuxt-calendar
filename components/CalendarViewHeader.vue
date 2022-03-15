@@ -30,9 +30,27 @@
         </div>
       </div>
 
-      <div class="tools" @click.prevent="onSwitch($event)">
-        <a href=""><div id="month" class="toggle" name="month">月</div></a>
-         <a href=""><div id="week" class="toggle" name="week">週</div></a>
+      <div class="tools" @click.prevent="onSwitchCheck($event)">
+        <a href=""
+          ><div
+            id="month"
+            class="toggle"
+            :class="{ toggleActive: isActive }"
+            name="month"
+          >
+            月
+          </div></a
+        >
+        <a href=""
+          ><div
+            id="week"
+            class="toggle"
+            :class="{ toggleActive: !isActive }"
+            name="week"
+          >
+            週
+          </div></a
+        >
       </div>
     </div>
   </div>
@@ -43,6 +61,12 @@ import CalendarViewHeader from "@/components/CalendarViewHeader";
 export default {
   name: "CalendarViewHeader",
   components: { CalendarView, CalendarViewHeader },
+  data() {
+    return {
+      isActive: true,
+      status: "month",
+    };
+  },
   props: {
     headerProps: {
       type: Object,
@@ -53,10 +77,16 @@ export default {
     onInput(d) {
       this.$emit("input", d);
     },
-    onSwitch: function (event) {
-      this.$emit("switch", event.target.id);
+    onSwitchCheck: function (event) {
+      this.status = event.target.id;
     },
   },
+  watch: {
+    status: function(newValue) {
+      this.isActive = !this.isActive;
+      this.$emit("switch", newValue);
+    }
+  }
 };
 </script>
 <style>
@@ -80,20 +110,7 @@ export default {
   color: #3e4044;
 }
 
-.tools a:hover {
-  color: #fff;
-}
-
-.tools a:active {
-  color: #fff;
-}
-
-.tools a:hover .toggle {
-  background-color: #686ce5;
-  color: #fff;
-}
-
-.tools a:active .toggle {
+.toggleActive {
   background-color: #686ce5;
   color: #fff;
 }

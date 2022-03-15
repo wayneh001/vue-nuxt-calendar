@@ -23,6 +23,7 @@ export default {
     return {
       meetingLists: [
         {
+          editabled: true,
           id: "0",
           title: "總務處月會",
           applicant: "申請人姓名",
@@ -38,6 +39,7 @@ export default {
           background: "",
         },
         {
+          editabled: true,
           id: "1",
           title: "事務組週會",
           applicant: "申請人姓名",
@@ -52,6 +54,7 @@ export default {
           background: "",
         },
         {
+          editabled: true,
           id: "2",
           title: "事務組週會",
           applicant: "申請人姓名",

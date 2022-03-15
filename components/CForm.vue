@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5 vh-100">
+  <div class="container py-5">
     <form>
       <!-- 標題 -->
       <div
@@ -157,6 +157,7 @@ export default {
       editedMeeting: this.meeting
         ? { ...this.meeting }
         : {
+            editabled: true,
             id: "",
             title: "",
             applicant: "",
@@ -193,6 +194,7 @@ export default {
         "16:30",
         "17:00",
         "17:30",
+        "18:00",
       ],
       routine: ["非例行會議", "每日", "每週", "每月"],
     };

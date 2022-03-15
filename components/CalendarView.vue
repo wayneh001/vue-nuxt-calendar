@@ -36,7 +36,7 @@
         </slot>
       </template>
     </div>
-    <div class="cv-weeks">
+    <div id="weeks" class="cv-weeks">
       <div
         v-for="(weekStart, weekIndex) in weeksOfPeriod"
         :key="`${weekIndex}-week`"
@@ -68,27 +68,18 @@
               ...((dateClasses && dateClasses[isoYearMonthDay(day)]) || null),
             ]"
             @click="onClickDay(day)"
-            @drop.prevent="onDrop(day, $event)"
-            @dragover.prevent="onDragOver(day)"
-            @dragenter.prevent="onDragEnter(day, $event)"
-            @dragleave.prevent="onDragLeave(day, $event)"
           >
             <div class="cv-day-number">{{ day.getDate() }}</div>
             <slot :day="day" name="dayContent" />
           </div>
         </div>
         <template v-for="e in getWeekEvents(weekStart)">
-          <slot
-            :event="e"
-            :weekStartDate="weekStart"
-            :top="getEventTop(e)"
-            name="event"
-          >
+          <slot :event="e" :weekStartDate="weekStart" name="event">
             <div
               :key="e.id"
               :class="e.classes"
               :title="e.title"
-              :style="'top:' + getEventTop(e)"
+              :style="{ top: getEventTop(e), height: getEventHeight(e) }"
               class="cv-event"
               @dragstart="onDragStart(e, $event)"
               @click.stop="onClickEvent(e)"
@@ -117,6 +108,7 @@ export default {
       disableFuture: false,
       startingDayOfWeek: 1,
       dateClasses: {},
+      weekdaysHeight: 0,
       eventTop: "1.4em",
       eventContentHeight: "1.4em",
       eventBorderHeight: "2px",
@@ -274,6 +266,7 @@ export default {
 
     onChangePeriod(p) {
       this.displayPeriodUom = p;
+      this.onChangeDate();
     },
 
     // ******************************
@@ -393,11 +386,45 @@ export default {
     getEventTop(e) {
       // Compute the top position of the event based on its assigned row within the given week.
       const r = e.eventRow;
-      const h = this.eventContentHeight;
+      let h = this.eventContentHeight;
       const b = this.eventBorderHeight;
       return `calc(${this.eventTop} + ${r}*${h} + ${r}*${b})`;
     },
+
+    getClientHeight() {
+      if (process.client) {
+        this.weekdaysHeight = document.getElementById("weeks").clientHeight;
+        console.log(this.weekdaysHeight);
+      }
+    },
+
+    timeDiff(e) {
+      let start = e.originalEvent.startTime.split(":");
+      let end = e.originalEvent.endTime.split(":");
+      let startTime = new Date(0, 0, 0, start[0], start[1], 0);
+      let endTime = new Date(0, 0, 0, end[0], end[1], 0);
+      return (endTime - startTime) / (60 * 60 * 1000);
+    },
+
+    getEventHeight(e) {
+      let cell = this.weekdaysHeight / 10;
+      console.log(cell);
+      return this.displayPeriodUom == "month"
+        ? "1.4em"
+        : `calc(${cell}*${this.timeDiff(e)}px)`;
+    },
   },
+
+  mounted() {
+    this.getClientHeight();
+  },
+
+  // watch: {
+  //   displayPeriodUom: function () {
+  //     this.getClientHeight();
+  //     console.log(this.weekdaysHeight);
+  //   },
+  // },
 };
 </script>
 <!--

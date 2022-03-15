@@ -1,5 +1,5 @@
 <template>
-  <div class="container pt-5 vh-100">
+  <div class="container py-5">
     <div
       class="p-3 mb-3 d-flex justify-content-between align-items-center bg-light"
     >

@@ -88,6 +88,16 @@
           </slot>
         </template>
       </div>
+      <div class="cv-time" v-show="displayPeriodUom == 'week'">
+        <div
+          class="cv-time-block ps-1 d-flex align-items-end"
+          v-for="n in 10"
+          :key="n"
+          :style="{ height: cell + 'px' }"
+        >
+          <div>{{ n + 7 }}:00</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -391,7 +401,10 @@ export default {
       const b = this.eventBorderHeight;
       return this.displayPeriodUom == "month"
         ? `calc(${this.eventTop} + ${r}*${h} + ${r}*${b})`
-        : `calc(${this.cell}*${this.timeDiff("08:00", e.originalEvent.startTime)}px)`;
+        : `calc(${this.cell}*${this.timeDiff(
+            "08:00",
+            e.originalEvent.startTime
+          )}px)`;
     },
 
     getClientHeight() {
@@ -410,10 +423,12 @@ export default {
     },
 
     getEventHeight(e) {
-      
       return this.displayPeriodUom == "month"
         ? "1.4em"
-        : `calc(${this.cell}*${this.timeDiff(e.originalEvent.startTime, e.originalEvent.endTime)}px)`;
+        : `calc(${this.cell}*${this.timeDiff(
+            e.originalEvent.startTime,
+            e.originalEvent.endTime
+          )}px)`;
     },
   },
 
@@ -510,7 +525,6 @@ header are in the CalendarViewHeader component.
 
   /* Allow week events to scroll if they are too tall */
   position: relative;
-  width: 100%;
   overflow-y: auto;
   -ms-overflow-style: none;
 }
@@ -666,4 +680,18 @@ header are in the CalendarViewHeader component.
   width: 0; /* remove scrollbar space */
   background: transparent; /* optional: just make scrollbar invisible */
 }
+
+.cv-time {
+  position: absolute;
+  pointer-events: none;
+  width: calc(100% * 9 / 12 - 3.5rem - 1px);
+}
+
+.cv-time-block {
+  vertical-align: bottom;
+  color: #000;
+  border-bottom: 0.5px dashed #000;
+  opacity: 50%;
+}
+
 </style>

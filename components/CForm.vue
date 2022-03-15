@@ -70,7 +70,7 @@
         <div class="col-5">
           <select class="form-select" v-model="editedMeeting.startTime">
             <option selected value="">請選擇開始時間</option>
-            <option v-for="(item, index) in time" :key="index">
+            <option v-for="(item, index) in time.slice(0, 20)" :key="index">
               {{ item }}
             </option>
           </select>
@@ -79,7 +79,7 @@
         <div class="col-5">
           <select class="form-select" v-model="editedMeeting.endTime">
             <option selected value="">請選擇結束時間</option>
-            <option v-for="(item, index) in time" :key="index">
+            <option v-for="(item, index) in time.slice(1)" :key="index">
               {{ item }}
             </option>
           </select>
@@ -232,7 +232,7 @@ export default {
     if (this.editedMeeting.title != "") {
       this.titleEdit = false;
     }
-  }
+  },
 };
 </script>
 <style scoped>

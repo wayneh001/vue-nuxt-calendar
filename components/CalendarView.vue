@@ -108,7 +108,7 @@ export default {
       disableFuture: false,
       startingDayOfWeek: 1,
       dateClasses: {},
-      weekdaysHeight: 0,
+      cell: 0,
       eventTop: "1.4em",
       eventContentHeight: "1.4em",
       eventBorderHeight: "2px",
@@ -386,32 +386,33 @@ export default {
     getEventTop(e) {
       // Compute the top position of the event based on its assigned row within the given week.
       const r = e.eventRow;
-      let h = this.eventContentHeight;
+      const h = this.eventContentHeight;
       const b = this.eventBorderHeight;
-      return `calc(${this.eventTop} + ${r}*${h} + ${r}*${b})`;
+      return this.displayPeriodUom == "month"
+        ? `calc(${this.eventTop} + ${r}*${h} + ${r}*${b})`
+        : `calc(${this.cell}*${this.timeDiff("08:00", e.originalEvent.startTime)}px)`;
     },
 
     getClientHeight() {
       if (process.client) {
-        this.weekdaysHeight = document.getElementById("weeks").clientHeight;
-        console.log(this.weekdaysHeight);
+        this.cell = document.getElementById("weeks").clientHeight / 10;
+        console.log(this.cell);
       }
     },
 
-    timeDiff(e) {
-      let start = e.originalEvent.startTime.split(":");
-      let end = e.originalEvent.endTime.split(":");
+    timeDiff(t1, t2) {
+      let start = t1.split(":");
+      let end = t2.split(":");
       let startTime = new Date(0, 0, 0, start[0], start[1], 0);
       let endTime = new Date(0, 0, 0, end[0], end[1], 0);
       return (endTime - startTime) / (60 * 60 * 1000);
     },
 
     getEventHeight(e) {
-      let cell = this.weekdaysHeight / 10;
-      console.log(cell);
+      
       return this.displayPeriodUom == "month"
         ? "1.4em"
-        : `calc(${cell}*${this.timeDiff(e)}px)`;
+        : `calc(${this.cell}*${this.timeDiff(e.originalEvent.startTime, e.originalEvent.endTime)}px)`;
     },
   },
 

@@ -25,7 +25,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="table-column" v-for="(item, index) in filter(this.meetings)" :key="index">
+        <tr
+          class="table-column"
+          v-for="(item, index) in filter(this.meetings)"
+          :key="index"
+        >
           <td scope="row">{{ item.startDate }}</td>
           <td>{{ item.startTime }} ~ {{ item.endTime }}</td>
           <td>{{ item.title }}</td>
@@ -46,32 +50,26 @@
         新增會議
       </button>
     </div>
-    <!-- <CDeleteModal
-      ref="deleteModal"
-      :item="tempMeeting"
-      @delete-item="deleteMeeting"
-    /> -->
   </div>
 </template>
 <script>
-import CDeleteModal from "@/components/CDeleteModal";
 export default {
   props: {
     meetings: {
       type: Array,
       reuqire: false,
-    }
+    },
   },
-  components: { CDeleteModal },
   methods: {
     filter() {
-      return this.meetings.filter((item) => item.classes == "")
+      return this.meetings.filter((item) => item.classes == "");
     },
     onEdit(item) {
       this.$emit("open", item);
     },
     onDelete(item) {
-
+      this.meeting = item;
+      this.$emit("delete", item);
     },
     onAdd() {
       this.$emit("open");

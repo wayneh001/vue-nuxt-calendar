@@ -1,41 +1,77 @@
 <template>
-  <div class="modal fade" tabindex="-1" id="modal">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content border-0">
-        <div class="modal-header bg-danger text-white">
-          <h5 class="modal-title">
-            <span>刪除 {{ item.title }}</span>
-          </h5>
-          <button type="button" class="btn-close"></button>
+  <div>
+    <b-modal
+      header-class="bg-danger text-white"
+      ref="my-modal"
+      hide-footer
+      hide-header-close
+      title="刪除會議"
+    >
+      <div class="body">
+        <div class="mb-3">
+          確定刪除<strong>{{ item.title }}</strong>？
         </div>
-        <div class="modal-body">
-          是否刪除
-          <strong class="text-danger">{{ item.title }}</strong>
-          (刪除後將無法恢復)。
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary">取消</button>
-          <button type="button" class="btn btn-danger" @click="confirm">
-            確認刪除
-          </button>
+        <div v-if="item.routine != '非例行會議'">
+          <label class="form-label">刪除單次會議或所有例行會議？</label>
+          <div class="w-100"></div>
+          <div class="form-check form-check-inline">
+            <input
+              id="single"
+              class="form-check-input"
+              name="single"
+              type="radio"
+              v-model="routineMeeting"
+              value="單次會議"
+            />
+            <label class="form-check-label" for="single">單次會議</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input
+              id="series"
+              class="form-check-input"
+              name="series"
+              type="radio"
+              v-model="routineMeeting"
+              value="所有例行會議"
+            />
+            <label class="form-check-label" for="series">所有例行會議</label>
+          </div>
         </div>
       </div>
-    </div>
+      <div class="footer mt-5 d-flex justify-content-end">
+        <button type="button" class="btn btn-light me-2" @click="hideModal">
+          取消
+        </button>
+        <button type="button" class="btn btn-danger" @click="confirm(item)">
+          確定
+        </button>
+      </div>
+    </b-modal>
   </div>
 </template>
+
 <script>
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 export default {
-  props: {
-    item: {},
+  data() {
+    return {
+      item: {},
+      routineMeeting: "單次會議",
+    };
   },
   methods: {
-    open(item) {
-      $('#modal').modal("show");
+    showModal(item) {
+      this.$refs["my-modal"].show();
       this.item = item;
     },
-    confirm() {
-      this.$emit("delete-item");
-      $('#modal').modal("hide");
+    hideModal() {
+      this.$refs["my-modal"].hide();
+    },
+    confirm(item) {
+      console.log(item);
+      this.$refs["my-modal"].hide();
+      this.$emit("confirm", item);
     },
   },
 };

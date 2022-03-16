@@ -1,24 +1,26 @@
 <template>
   <div>
     <div v-if="!isEdit">
-      <CTable :meetings="meetings" @open="openEdit" />
+      <CTable :meetings="meetings" @open="openEdit" @delete="showDeleteModal" />
     </div>
     <div v-if="isEdit">
       <CForm :meeting="meeting" @close="closeEdit" />
     </div>
+    <CDeleteModal @confirm="closeDelete" ref="deleteModal" />
   </div>
 </template>
 
 <script>
 import CTable from "@/components/CTable";
 import CForm from "@/components/CForm";
+import CDeleteModal from "@/components/CDeleteModal";
 export default {
   name: "Index",
   data() {
     return {
       isEdit: false,
-      meeting: {},
       meetings: this.meetingLists ? [...this.meetingLists] : [],
+      meeting: {},
     };
   },
   props: {
@@ -30,6 +32,7 @@ export default {
   components: {
     CTable,
     CForm,
+    CDeleteModal,
   },
   methods: {
     openEdit(item) {
@@ -45,7 +48,7 @@ export default {
         if (this.meeting.id) {
           this.meetings[index] = item;
         } else {
-          item.id = this.meetings.length.toString()
+          item.id = this.meetings.length.toString();
           this.meetings.push(item);
         }
 
@@ -53,6 +56,18 @@ export default {
       }
       this.isEdit = false;
     },
+    showDeleteModal(item) {
+      this.$refs.deleteModal.showModal(item);
+    },
+    closeDelete(item) {
+      if (item != undefined) {
+        this.meeting = item;
+        this.meetings = this.meetings.filter(function (meeting) {
+          return meeting.id != item.id;
+        });
+        this.$emit("update", this.meetings);
+      }
+    }
   },
   watch: {
     meetingLists: function (newValue) {

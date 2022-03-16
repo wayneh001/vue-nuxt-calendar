@@ -153,6 +153,8 @@ export default {
 			return s.join("")
 		},
 
+		reverseFormattedPeriod() {},
+
 		// ******************************
 		// Date comparisons
 		// ******************************

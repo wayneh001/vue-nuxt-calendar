@@ -17,9 +17,12 @@
           </a>
         </div>
         <div class="tab bg-light">
-          <a href="#">
-            <h5 class="m-0"><slot name="label" /></h5>
-          </a>
+          <div
+            class="periodLabel d-flex justify-content-center align-items-center"
+          >
+            <span class="text-start">{{ headerProps.periodLabel }}</span
+            ><input :type="status" class="label bg-light" v-model="newData" />
+          </div>
         </div>
         <div
           :disabled="!headerProps.nextPeriod"
@@ -65,6 +68,8 @@ export default {
     return {
       isActive: true,
       status: "month",
+      newData: "",
+      periodLabel: this.headerProps.periodLabel,
     };
   },
   props: {
@@ -80,13 +85,28 @@ export default {
     onSwitchCheck: function (event) {
       this.status = event.target.id;
     },
+    calculatePeriodLabel(v) {
+      let n = v.charAt(v.length - 1);
+      return n;
+    },
   },
   watch: {
-    status: function(newValue) {
+    status: function (newValue) {
       this.isActive = !this.isActive;
       this.$emit("switch", newValue);
-    }
-  }
+    },
+    newData: function (newValue) {
+      let y = this.headerProps.currentPeriod.getFullYear();
+      let m = this.calculatePeriodLabel(newValue) - 1;
+      let d = new Date(y, m);
+      // console.log(d);
+      this.onInput(d);
+    },
+  },
+
+  mounted() {
+    console.log(this.headerProps.currentPeriod);
+  },
 };
 </script>
 <style>
@@ -123,5 +143,42 @@ export default {
 .tab a {
   text-decoration: none;
   color: #3e4044;
+}
+
+.periodLabel {
+  position: relative;
+  height: 2rem;
+  width: 350px;
+}
+.periodLabel span {
+  width: inherit;
+  position: absolute;
+  pointer-events: none;
+  left: 0;
+  z-index: 1;
+  font-size: calc(1.275rem + 0.3vw);
+  color: #000;
+}
+.periodLabel input {
+  position: absolute;
+  right: 0;
+  border: none;
+}
+
+.label::-webkit-datetime-edit {
+  outline: none;
+}
+
+.label::-webkit-datetime-edit-fields-wrapper {
+  opacity: 0;
+  width: 0;
+}
+
+.label::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+.label:focus-visible {
+  outline: none;
 }
 </style>

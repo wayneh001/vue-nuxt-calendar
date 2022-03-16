@@ -20,7 +20,7 @@
         @input="onChangeDate"
         @switch="onChangePeriod"
       >
-        <template slot="label">{{ periodLabel }}</template>
+        <!-- <template slot="label">{{ periodLabel }}</template> -->
       </calendar-view-header>
     </slot>
     <div class="cv-header-days">
@@ -245,6 +245,7 @@ export default {
         // Dates for header display
         periodStart: this.periodStart,
         periodEnd: this.periodEnd,
+        periodLabel: this.periodLabel,
         // Extra information that could be useful to a custom header
         displayLocale: this.displayLocale,
         displayFirstDate: this.displayFirstDate,
@@ -512,6 +513,10 @@ header are in the CalendarViewHeader component.
   -ms-overflow-style: none;
 }
 
+.outsideOfMonth {
+  background-color: #f8f9fa;
+}
+
 /* Use flex basis of 0 on week row so all weeks will be same height regardless of content */
 .cv-week {
   display: flex;
@@ -693,5 +698,4 @@ header are in the CalendarViewHeader component.
   border-bottom: 0.5px dashed #000;
   opacity: 50%;
 }
-
 </style>

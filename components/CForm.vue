@@ -147,10 +147,12 @@
         </div>
       </div>
     </form>
+    <CModal ref="Modal"></CModal>
   </div>
 </template>
 <script>
 import CInput from "~/components/CInput";
+import CModal from "~/components/CModal";
 export default {
   data() {
     return {
@@ -205,7 +207,7 @@ export default {
       require: false,
     },
   },
-  component: { CInput },
+  component: { CInput, CModal },
   methods: {
     onTitleEdit() {
       this.titleEdit = true;
@@ -216,7 +218,7 @@ export default {
       this.$refs.titleFoucs.blur();
     },
     onChangeBG() {
-      console.log("yes");
+      this.$refs.Modal.showModal();
     },
     onCancel() {
       this.$emit("close");

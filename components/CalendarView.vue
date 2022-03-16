@@ -411,7 +411,7 @@ export default {
     getClientHeight() {
       if (process.client) {
         this.cell = document.getElementById("weeks").clientHeight / 10;
-        console.log(this.cell);
+        // console.log(this.cell);
       }
     },
 

@@ -86,26 +86,50 @@ export default {
       this.status = event.target.id;
     },
     calculatePeriodLabel(v) {
-      let n = v.charAt(v.length - 1);
+      let n = v.substr(-2, 2);
       return n;
+    },
+    getWeek(d) {
+      let oneJan = new Date(d.getFullYear(), 0, 1); // first date of year.
+      let numberOfDays = Math.floor((d - oneJan) / (24 * 60 * 60 * 1000));
+      let w = Math.ceil((d.getDay() + 1 + numberOfDays) / 7);
+      // console.log(w);
+      return w;
     },
   },
   watch: {
     status: function (newValue) {
+      console.log(newValue);
       this.isActive = !this.isActive;
       this.$emit("switch", newValue);
     },
     newData: function (newValue) {
       let y = this.headerProps.currentPeriod.getFullYear();
-      let m = this.calculatePeriodLabel(newValue) - 1;
-      let d = new Date(y, m);
-      // console.log(d);
-      this.onInput(d);
+      let m = 1;
+      let w = 1;
+      let d = this.headerProps.currentPeriod.getDate();
+      let date = new Date();
+      if (this.status == "month") {
+        m = this.calculatePeriodLabel(newValue) - 1;
+        date = new Date(y, m);
+      } else {
+        w = this.calculatePeriodLabel(newValue);
+        let diff = w - this.getWeek(this.headerProps.currentPeriod);
+        console.log(diff);
+        m = this.headerProps.currentPeriod.getMonth();
+        date = new Date(y, m, d + diff * 7);
+      }
+      console.log(date);
+      this.onInput(date);
     },
   },
 
   mounted() {
     console.log(this.headerProps.currentPeriod);
+  },
+
+  updated() {
+    // console.log(this.headerProps.currentPeriod, this.headerProps.currentPeriod.getDate());
   },
 };
 </script>

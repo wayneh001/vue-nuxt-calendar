@@ -13,16 +13,37 @@
             <label class="form-label mb-1">當前底圖</label>
           </div>
           <div class="col-7">
-            <div id="currentImage" class="currentImg bg-main"></div>
+            <div id="currentImage" class="currentImg">
+              <img class="img-fluid" :src="currentImage" />
+            </div>
           </div>
           <div class="col-5">
             <div
               id="dragImage"
               class="dragImage d-flex justify-content-center align-items-center mb-4"
             >
-              拖曳圖片至此，或點擊上傳圖片
+              <div>
+                <div class="d-flex justify-content-center mb-2">
+                  <i class="fa fas fa-cloud-arrow-up fs-1"></i>
+                </div>
+                <div>拖曳圖片至此，或點擊上傳圖片</div>
+              </div>
             </div>
-            <button type="button" class="btn btn-main w-100">上傳底圖</button>
+            <input class="form-control" type="file" />
+          </div>
+          <div class="col-12 mt-4">
+            <no-ssr>
+              <carousel items="5" loop="true" nav="true">
+                <div
+                  class="stockImage"
+                  v-for="(item, index) in stockImages"
+                  :key="index"
+                  @click="setImage(item)"
+                >
+                  <img class="img-fluid" :src="item.url" />
+                </div>
+              </carousel>
+            </no-ssr>
           </div>
         </div>
       </div>
@@ -30,7 +51,7 @@
         <button type="button" class="btn btn-light me-2" @click="hideModal">
           取消
         </button>
-        <button type="button" class="btn btn-main" @click="confirm(item)">
+        <button type="button" class="btn btn-main" @click="confirm(currentImage)">
           確定
         </button>
       </div>
@@ -41,7 +62,34 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      stockImages: [
+        {
+          url: "https://cdn.pixabay.com/photo/2021/06/24/11/18/background-6360868_960_720.png",
+          editable: false,
+        },
+        {
+          url: "https://cdn.pixabay.com/photo/2021/07/15/08/43/abstract-6467847_960_720.png",
+          editable: false,
+        },
+        {
+          url: "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
+          editable: false,
+        },
+        {
+          url: "https://cdn.pixabay.com/photo/2021/06/24/11/18/background-6360866_960_720.png",
+          editable: false,
+        },
+        {
+          url: "https://cdn.pixabay.com/photo/2021/06/24/11/18/background-6360865_960_720.png",
+          editable: false,
+        },
+      ],
+      currentImage: this.image,
+    };
+  },
+  props: {
+    image: "",
   },
   methods: {
     showModal() {
@@ -50,25 +98,35 @@ export default {
     hideModal() {
       this.$refs["my-modal"].hide();
     },
+    setImage(item) {
+      this.currentImage = item.url;
+    },
+    confirm(iamge) {
+      this.$emit("setImage", iamge)
+      this.hideModal();
+    }
   },
+  mounted() {
+    // console.log(this.stockImages);
+  }
 };
 </script>
 <style>
 .currentImg {
   width: 100%;
   height: auto;
-  aspect-ratio: 3/2;
 }
 .dragImage {
   width: 100%;
   height: auto;
-  aspect-ratio: 1/0.8;
-  border: 2px dashed #686ce5;
+  aspect-ratio: 3/2;
+  border: 2px dashed #ddd
 }
 
 .stockImage {
-  width: 20%;
+  cursor: pointer;
+  width: 12rem;
   height: auto;
-  aspect-ratio: 3/2;
+  aspect-ratio: 4/3;
 }
 </style>

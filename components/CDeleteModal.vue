@@ -9,7 +9,8 @@
     >
       <div class="body">
         <div class="mb-3">
-          確定刪除<strong>{{ item.title }}</strong>？
+          確定刪除<strong>{{ item.title }}</strong
+          >？
         </div>
         <div v-if="item.routine != '非例行會議'">
           <label class="form-label">刪除單次會議或所有例行會議？</label>
@@ -67,9 +68,9 @@ export default {
       this.$refs["my-modal"].hide();
     },
     confirm(item) {
-      console.log(item);
-      this.$refs["my-modal"].hide();
+      // console.log(item);
       this.$emit("confirm", item);
+      this.hideModal();
     },
   },
 };

@@ -36,6 +36,11 @@ body {
 .fa-pencil {
   color: #000;
 }
+
+.fa-cloud-arrow-up {
+  color: #686ce5;
+}
+
 .table-column:hover {
   background-color: #E1E3FB;
 }

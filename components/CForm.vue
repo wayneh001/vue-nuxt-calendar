@@ -147,7 +147,7 @@
         </div>
       </div>
     </form>
-    <CModal ref="Modal"></CModal>
+    <CModal ref="Modal" :image="editedMeeting.background" @setImage="onSetImage"></CModal>
   </div>
 </template>
 <script>
@@ -219,6 +219,9 @@ export default {
     },
     onChangeBG() {
       this.$refs.Modal.showModal();
+    },
+    onSetImage(iamge) {
+      this.editedMeeting.background = iamge;
     },
     onCancel() {
       this.$emit("close");

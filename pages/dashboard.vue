@@ -42,7 +42,8 @@ export default {
           endTime: "16:00",
           routine: "每月",
           routineEndDate: "2022-12-31",
-          background: "",
+          background:
+            "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
           classes: "",
         },
         {
@@ -57,7 +58,8 @@ export default {
           endTime: "10:00",
           routine: "每週",
           routineEndDate: "2022-12-31",
-          background: "",
+          background:
+            "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
           classes: "",
         },
         {
@@ -72,7 +74,8 @@ export default {
           endTime: "10:00",
           routine: "每週",
           routineEndDate: "2022-12-31",
-          background: "",
+          background:
+            "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
           classes: "",
         },
         {
@@ -87,7 +90,8 @@ export default {
           endTime: "14:00",
           routine: "每週",
           routineEndDate: "2022-12-31",
-          background: "",
+          background:
+            "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
           classes: "disabled",
         },
         {
@@ -102,7 +106,8 @@ export default {
           endTime: "16:00",
           routine: "每週",
           routineEndDate: "2022-12-31",
-          background: "",
+          background:
+            "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
           classes: "disabled",
         },
         {
@@ -117,7 +122,8 @@ export default {
           endTime: "10:00",
           routine: "每週",
           routineEndDate: "2022-12-31",
-          background: "",
+          background:
+            "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
           classes: "disabled",
         },
         {
@@ -132,7 +138,8 @@ export default {
           endTime: "14:00",
           routine: "每週",
           routineEndDate: "2022-12-31",
-          background: "",
+          background:
+            "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
           classes: "disabled",
         },
       ],

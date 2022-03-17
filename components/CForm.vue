@@ -147,7 +147,11 @@
         </div>
       </div>
     </form>
-    <CModal ref="Modal" :image="editedMeeting.background" @setImage="onSetImage"></CModal>
+    <CModal
+      ref="Modal"
+      :image="editedMeeting.background"
+      @setImage="onSetImage"
+    ></CModal>
   </div>
 </template>
 <script>

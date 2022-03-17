@@ -125,7 +125,7 @@ export default {
   },
 
   mounted() {
-    console.log(this.headerProps.currentPeriod);
+    // console.log(this.headerProps.currentPeriod);
   },
 
   updated() {

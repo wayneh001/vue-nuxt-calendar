@@ -88,7 +88,7 @@
           </slot>
         </template>
       </div>
-      <div class="cv-time" v-show="displayPeriodUom == 'week'">
+      <div class="cv-time" v-show="displayPeriodUom === 'week'">
         <div
           class="cv-time-block ps-1 d-flex align-items-end"
           v-for="n in 10"
@@ -400,7 +400,7 @@ export default {
       const r = e.eventRow;
       const h = this.eventContentHeight;
       const b = this.eventBorderHeight;
-      return this.displayPeriodUom == "month"
+      return this.displayPeriodUom === "month"
         ? `calc(${this.eventTop} + ${r}*${h} + ${r}*${b})`
         : `calc(${this.cell}*${this.timeDiff(
             "08:00",
@@ -424,7 +424,7 @@ export default {
     },
 
     getEventHeight(e) {
-      return this.displayPeriodUom == "month"
+      return this.displayPeriodUom === "month"
         ? "1.4em"
         : `calc(${this.cell}*${this.timeDiff(
             e.originalEvent.startTime,

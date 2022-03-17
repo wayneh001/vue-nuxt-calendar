@@ -234,7 +234,7 @@ export default {
     },
   },
   mounted() {
-    if (this.editedMeeting.title != "") {
+    if (this.editedMeeting.title !== "") {
       this.titleEdit = false;
     }
   },

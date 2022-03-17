@@ -148,7 +148,7 @@ export default {
   },
   methods: {
     updateMeetingLists(meetings) {
-      if (meetings != undefined) {
+      if (meetings !== undefined) {
         this.meetingLists = meetings;
       }
     },

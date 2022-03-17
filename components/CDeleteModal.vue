@@ -12,7 +12,7 @@
           確定刪除<strong>{{ item.title }}</strong
           >？
         </div>
-        <div v-if="item.routine != '非例行會議'">
+        <div v-if="item.routine !== '非例行會議'">
           <label class="form-label">刪除單次會議或所有例行會議？</label>
           <div class="w-100"></div>
           <div class="form-check form-check-inline">

@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     filter() {
-      return this.meetings.filter((item) => item.classes == "");
+      return this.meetings.filter((item) => item.classes === "");
     },
     onEdit(item) {
       this.$emit("open", item);

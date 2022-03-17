@@ -109,7 +109,7 @@ export default {
       let w = 1;
       let d = this.headerProps.currentPeriod.getDate();
       let date = new Date();
-      if (this.status == "month") {
+      if (this.status === "month") {
         m = this.calculatePeriodLabel(newValue) - 1;
         date = new Date(y, m);
       } else {

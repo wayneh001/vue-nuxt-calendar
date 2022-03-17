@@ -71,9 +71,9 @@ export default {
 		// higher than the number of days in the destination month. The count can be positive or negative.
 		incrementPeriod(d, uom, count) {
 			return new Date(
-				d.getFullYear() + (uom == "year" ? count : 0),
-				d.getMonth() + (uom == "month" ? count : 0),
-				d.getDate() + (uom == "week" ? count * 7 : 0)
+				d.getFullYear() + (uom === "year" ? count : 0),
+				d.getMonth() + (uom === "month" ? count : 0),
+				d.getDate() + (uom === "week" ? count * 7 : 0)
 			)
 		},
 

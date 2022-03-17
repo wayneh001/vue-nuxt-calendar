@@ -32,7 +32,7 @@
             <input class="form-control" type="file" />
           </div>
           <div class="col-12 mt-4">
-            <no-ssr>
+            <client-only>
               <carousel items="5" loop="true" nav="true">
                 <div
                   class="stockImage"
@@ -43,7 +43,7 @@
                   <img class="img-fluid" :src="item.url" />
                 </div>
               </carousel>
-            </no-ssr>
+            </client-only>
           </div>
         </div>
       </div>

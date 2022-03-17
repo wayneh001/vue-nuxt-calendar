@@ -21,7 +21,6 @@ export default {
       isEdit: false,
       meetings: this.meetingLists ? [...this.meetingLists] : [],
       meeting: {},
-      idPool: [],
     };
   },
   props: {
@@ -43,24 +42,22 @@ export default {
     closeEdit(item) {
       if (item != undefined) {
         this.meeting = item;
-        item.id === "" ? this.onCreate(item) : this.onUpdate(item);
+        let index = this.meetings.findIndex(function (meeting) {
+          return meeting.id == item.id;
+        });
+        if (this.meeting.id) {
+          this.meetings[index] = item;
+        } else {
+          item.id = this.meetings.length.toString();
+          this.meetings.push(item);
+        }
+
+        this.$emit("update", this.meetings);
       }
       this.isEdit = false;
     },
     showDeleteModal(item) {
       this.$refs.deleteModal.showModal(item);
-    },
-    onUpdate(item) {
-      let index = this.meetings.findIndex(function (meeting) {
-        return meeting.id == item.id;
-      });
-      this.meetings[index] = [...item];
-      this.UpdateMeetings();
-    },
-    onCreate(item) {
-      item.id = this.getRandomID();
-      this.meetings.push(item);
-      this.UpdateMeetings();
     },
     onDelete(item) {
       if (item != undefined) {
@@ -68,32 +65,14 @@ export default {
         this.meetings = this.meetings.filter(function (meeting) {
           return meeting.id != item.id;
         });
-        this.UpdateMeetings();
+        this.$emit("update", this.meetings);
       }
-    },
-    UpdateMeetings() {
-      this.$emit("update", this.meetings);
-    },
-    getRandomID() {
-      let id;
-      do {
-        id = Math.floor(Math.random() * 1000000).toString();
-      } while (this.idPool.includes(id));
-      console.log(id);
-      return id;
-    },
+    }
   },
   watch: {
     meetingLists: function (newValue) {
       this.meetings = [...newValue];
     },
-  },
-  mounted() {
-    let a = [];
-    this.meetings.forEach(function (item) {
-      a.push(item.id);
-    });
-    this.idPool = [...a];
   },
 };
 </script>

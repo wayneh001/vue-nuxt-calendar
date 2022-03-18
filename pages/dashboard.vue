@@ -19,12 +19,16 @@
   </div>
 </template>
 <script>
+import Data from '@/static/data.json';
 import Control from "@/container/Control";
 import Calandar from "@/container/Calandar";
 export default {
   components: {
     Control,
     Calandar,
+  },
+  asyncData ({ params }) {
+    return { Data }
   },
   data() {
     return {

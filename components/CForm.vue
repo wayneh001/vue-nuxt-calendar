@@ -233,6 +233,13 @@ export default {
     onSave(item) {
       this.$emit("close", item);
     },
+    getLastDay() {
+      let date = new Date;
+      let ld = date.getFullYear()
+      if (this.editedMeeting.routineEndDate === "") {
+        this.editedMeeting.routineEndDate = `${ld.toString()}-12-31`
+      }
+    },
     dateSync() {
       this.editedMeeting.endDate = this.editedMeeting.startDate;
     },
@@ -241,6 +248,8 @@ export default {
     if (this.editedMeeting.title !== "") {
       this.titleEdit = false;
     }
+    this.getLastDay();
+    // console.log(this.editedMeeting.routineEndDate);
   },
 };
 </script>

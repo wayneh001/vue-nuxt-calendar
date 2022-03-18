@@ -73,34 +73,50 @@ export default {
     onCreateRoutine(item) {
       let array = [];
       let startDate = new Date(item.startDate);
+      let baseDate = new Date(startDate);
       let endDate = new Date(item.routineEndDate);
       let dd = this.getDiff(startDate, endDate, 1);
       let wd = Math.floor(this.getDiff(startDate, endDate, 7));
       let md = Math.floor(this.getDiff(startDate, endDate, 30));
       switch (item.routine) {
         case "每月":
-          for (let m = 1; m <= md; m++) {
+          for (let m = 1; m < md; m++) {
             let itemCopy = { ...item };
             itemCopy.id = this.getRandomID(array);
-            itemCopy.startDate = this.routineFormatted(startDate, 1, 0);
-            itemCopy.endDate = itemCopy.startDate
+            itemCopy.startDate = this.routineFormatted(
+              startDate,
+              baseDate,
+              1,
+              0
+            );
+            itemCopy.endDate = itemCopy.startDate;
             array.push(itemCopy);
           }
           break;
         case "每週":
-          for (let w = 1; w <= wd; w++) {
+          for (let w = 1; w < wd; w++) {
             let itemCopy = { ...item };
             itemCopy.id = this.getRandomID(array);
-            itemCopy.startDate = this.routineFormatted(startDate, 0, 7);
+            itemCopy.startDate = this.routineFormatted(
+              startDate,
+              baseDate,
+              0,
+              7
+            );
             itemCopy.endDate = itemCopy.startDate;
             array.push(itemCopy);
           }
           break;
         case "每日":
-          for (let d = 1; d <= dd; d++) {
+          for (let d = 1; d < dd; d++) {
             let itemCopy = { ...item };
             itemCopy.id = this.getRandomID(array);
-            itemCopy.startDate = this.routineFormatted(startDate, 0, 1);
+            itemCopy.startDate = this.routineFormatted(
+              startDate,
+              baseDate,
+              0,
+              1
+            );
             itemCopy.endDate = itemCopy.startDate;
             array.push(itemCopy);
           }
@@ -109,11 +125,18 @@ export default {
       this.meetings = this.meetings.concat(array);
       this.updateMeetings(this.meetings);
     },
-    routineFormatted(date, m, d) {
-      if (m !== 0) {
-        date = new Date(date.setMonth(date.getMonth() + m));
+    routineFormatted(date, baseDate, m, d) {
+      if (m === 0) {
+        date.setDate(date.getDate() + d);
       } else {
-        date = new Date(date.setDate(date.getDate() + d));
+        let tempDate = new Date(date.setMonth(date.getMonth() + m));
+        tempDate.setDate(1);
+        let diff = baseDate.getDay() - tempDate.getDay();
+        if (diff >= 0) {
+          date.setDate(baseDate.getDate() + diff - 1);
+        } else {
+          date.setDate(baseDate.getDate() + diff + 6);
+        }
       }
       let sy = date.getFullYear().toString();
       let sm = date.getMonth() + 1;
@@ -156,14 +179,15 @@ export default {
     meetingLists: function (newValue) {
       this.meetings = [...newValue];
       this.getIDPool(this.idPool);
-      console.log(newValue);
+      // console.log(newValue);
     },
   },
   mounted() {
     this.getIDPool();
     // let date1 = new Date(this.meetings[0].startDate);
     // let date2 = new Date(this.meetings[0].routineEndDate);
-    // console.log(date1.getMonth() + 1);
+    // date1.setDate(25+2);
+    // console.log(date1, date2.getDay());
   },
 };
 </script>

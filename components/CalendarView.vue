@@ -19,6 +19,7 @@
         :header-props="headerProps"
         @input="onChangeDate"
         @switch="onChangePeriod"
+        @search="onInputKeywords"
       >
         <!-- <template slot="label">{{ periodLabel }}</template> -->
       </calendar-view-header>
@@ -79,7 +80,11 @@
               :key="e.id"
               :class="e.classes"
               :title="e.title"
-              :style="{ top: getEventTop(e), height: getEventHeight(e) }"
+              :style="{
+                top: getEventTop(e),
+                height: getEventHeight(e),
+                opacity: filterEvents(e),
+              }"
               class="cv-event"
               @dragstart="onDragStart(e, $event)"
               @click.prevent="onClickEvent(e.originalEvent)"
@@ -122,6 +127,7 @@ export default {
       eventTop: "1.4em",
       eventContentHeight: "1.4em",
       eventBorderHeight: "2px",
+      keywords: "",
     };
   },
   components: { CalendarViewHeader },
@@ -332,6 +338,11 @@ export default {
       return events;
     },
 
+    onInputKeywords(k) {
+      this.keywords = k;
+      console.log(this.keywords);
+    },
+
     getWeekEvents(weekStart) {
       // Return a list of events that CONTAIN the week starting on a day.
       // Sorted so the events that start earlier are always shown first.
@@ -430,6 +441,14 @@ export default {
             e.originalEvent.startTime,
             e.originalEvent.endTime
           )}px)`;
+    },
+
+    filterEvents(e) {
+      if (e.originalEvent.title.includes(this.keywords) || this.keywords === "") {
+        return "100%";
+      } else {
+        return "0";
+      }
     },
   },
 

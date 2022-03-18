@@ -3,8 +3,15 @@
     <div
       class="p-3 mb-3 d-flex justify-content-between align-items-center w-100 bg-light"
     >
-      <div class="d-flex align-items-center">
-        <input type="text" class="form-control" placeholder="請輸入關鍵字" />
+      <div class="tools">
+        <input
+          type="text"
+          class="form-control me-2"
+          placeholder="請輸入關鍵字"
+          v-model="keywords"
+        />
+        <button class="btn btn-secondary me-2" type="button" style="width: 6rem;" @click="reset">清除</button>
+        <button class="btn btn-main" type="button" style="width: 6rem;" @click="search(keywords)">搜尋</button>
       </div>
       <div class="d-flex justify-content-between align-items-center">
         <div
@@ -70,6 +77,7 @@ export default {
       status: "month",
       newData: "",
       periodLabel: this.headerProps.periodLabel,
+      keywords: "",
     };
   },
   props: {
@@ -96,6 +104,13 @@ export default {
       // console.log(w);
       return w;
     },
+    reset() {
+      this.keywords = "";
+      this.search(this.keywords);
+    },
+    search(k) {
+      this.$emit("search", k)
+    }
   },
   watch: {
     status: function (newValue) {

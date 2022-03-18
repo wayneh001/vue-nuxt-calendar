@@ -27,7 +27,7 @@
       <tbody>
         <tr
           class="table-column"
-          v-for="(item, index) in filter(this.meetings)"
+          v-for="(item, index) in pageRender(this.meetings)"
           :key="index"
         >
           <td scope="row">{{ item.startDate }}</td>
@@ -44,6 +44,12 @@
         </tr>
       </tbody>
     </table>
+    <!-- 頁碼 -->
+    <CPagination
+      :total-page="totalPage"
+      :current-page="currentPage"
+      @page-change="pageChangeHandler"
+    />
     <!-- 新增會議 -->
     <div class="button">
       <button class="btn btn-main w-100" type="button" @click.prevent="onAdd">
@@ -53,16 +59,26 @@
   </div>
 </template>
 <script>
+import CPagination from "@/components/CPagination";
 export default {
+  data() {
+    return {
+      currentPage: 1,
+    };
+  },
   props: {
     meetings: {
       type: Array,
       reuqire: false,
     },
   },
+  components: { CPagination },
   methods: {
-    filter() {
-      return this.meetings.filter((item) => item.classes === "");
+    pageRender(list) {
+      return list.slice(
+        (this.currentPage - 1) * 10,
+        this.currentPage * 10
+      );
     },
     onEdit(item) {
       this.$emit("open", item);
@@ -77,6 +93,15 @@ export default {
     deleteMeeting() {
       console.log("會議已刪除");
       this.$refs.deleteModal.hideModal();
+    },
+    pageChangeHandler(value) {
+      this.currentPage = value;
+    },
+  },
+  computed: {
+    totalPage() {
+      console.log(Math.ceil(this.meetings.length / 10));
+      return Math.ceil(this.meetings.length / 10);
     },
   },
 };

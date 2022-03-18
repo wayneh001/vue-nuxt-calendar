@@ -5,7 +5,10 @@ body {
   font-family: "Ubuntu", sans-serif;
 }
 
-.btn-main {
+.btn-main,
+.bg-main,
+.bg-event:hover,
+.fa-cloud-arrow-up {
   background-color: #686ce5;
   color: #fff;
 }
@@ -14,19 +17,9 @@ body {
   color: #fff;
 }
 
-.bg-main {
-  background-color: #686ce5;
-  color: #fff;
-}
-
 .bg-event {
-  background-color: #E1E3FB;
+  background-color: #e1e3fb;
   color: #000;
-}
-
-.bg-event:hover {
-  background-color: #686ce5;
-  color: #fff;
 }
 
 .fa-trash-can {
@@ -37,12 +30,8 @@ body {
   color: #000;
 }
 
-.fa-cloud-arrow-up {
-  color: #686ce5;
-}
-
 .table-column:hover {
-  background-color: #E1E3FB;
+  background-color: #e1e3fb;
 }
 
 .notice {

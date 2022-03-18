@@ -43,7 +43,7 @@
         <button type="button" class="btn btn-light me-2" @click="hideModal">
           取消
         </button>
-        <button type="button" class="btn btn-danger" @click="confirm(item)">
+        <button type="button" class="btn btn-danger" @click="confirm(item, routineMeeting)">
           確定
         </button>
       </div>
@@ -67,9 +67,8 @@ export default {
     hideModal() {
       this.$refs["my-modal"].hide();
     },
-    confirm(item) {
-      // console.log(item);
-      this.$emit("confirm", item);
+    confirm(item, routine) {
+      this.$emit("confirm", item, routine);
       this.hideModal();
     },
   },

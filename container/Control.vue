@@ -36,6 +36,9 @@ export default {
     CDeleteModal,
   },
   methods: {
+    filter() {
+      this.meetings = this.meetings.filter((item) => item.classes === "");
+    },
     openEdit(item) {
       this.meeting = item;
       this.isEdit = true;
@@ -148,12 +151,18 @@ export default {
     getDiff(d1, d2, delta) {
       return (d2.getTime() - d1.getTime()) / 1000 / 3600 / 24 / delta;
     },
-    onDelete(item) {
+    onDelete(item, routine) {
       if (item != undefined) {
         this.meeting = item;
-        this.meetings = this.meetings.filter(function (meeting) {
-          return meeting.id != item.id;
-        });
+        if (routine === "單次會議") {
+          this.meetings = this.meetings.filter(function (meeting) {
+            return meeting.id !== item.id;
+          });
+        } else {
+          this.meetings = this.meetings.filter(function (meeting) {
+            return meeting.title !== item.title;
+          });
+        }
         this.updateMeetings();
       }
     },
@@ -175,11 +184,12 @@ export default {
       return id;
     },
   },
+  computed: {},
   watch: {
     meetingLists: function (newValue) {
       this.meetings = [...newValue];
       this.getIDPool(this.idPool);
-      // console.log(newValue);
+      this.filter();
     },
   },
   mounted() {

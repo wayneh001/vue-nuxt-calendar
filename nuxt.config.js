@@ -18,7 +18,10 @@ export default {
   css: ["~/assets/styles/main.css"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{src: 'plugins/fontawesome.js'}, {src: 'plugins/owl.js', ssr: false}],
+  plugins: [
+    { src: "plugins/fontawesome.js" },
+    { src: "plugins/owl.js", ssr: false },
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -29,9 +32,7 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/bootstrap
-    "bootstrap-vue/nuxt",
+    "bootstrap-vue/nuxt", "@nuxt/content"
+    // "axios"
   ],
-
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
 };

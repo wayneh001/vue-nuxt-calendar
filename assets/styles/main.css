@@ -54,3 +54,11 @@ body {
   text-decoration: none;
   color: #3e4044;
 }
+
+.fa-trash-can {
+  color: #ff0000;
+}
+
+.fa-pencil {
+  color: #000;
+}

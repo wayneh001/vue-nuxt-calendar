@@ -159,14 +159,6 @@ export default {
 };
 </script>
 <style scoped>
-.fa-trash-can {
-  color: #ff0000;
-}
-
-.fa-pencil {
-  color: #000;
-}
-
 .table-column:hover {
   background-color: #e1e3fb;
 }

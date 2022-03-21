@@ -69,7 +69,7 @@ export default {
       if (item.routine === "非例行會議") {
         item.id = this.getRandomID(this.idPool);
         this.meetings.push(item);
-        this.updateMeetings();
+        this.updateMeetings(this.meetings);
       } else {
         this.onCreateRoutine(item);
       }

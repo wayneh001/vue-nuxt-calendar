@@ -274,8 +274,9 @@ export default {
     },
 
     onClickEvent(item) {
-      // console.log(item);
-      this.$emit("clickEvent", item);
+      if (item.classes !== "disabled" && item.title.includes(this.keywords) ) {
+        this.$emit("clickEvent", item);
+      }
     },
 
     onChangeDate(d) {
@@ -388,11 +389,8 @@ export default {
 		end time. Midnight is not displayed.
 		*/
     getFormattedTimeRange(e) {
-      const startTime = this.formattedTime(e.startDate, this.displayLocale);
-      let endTime = "";
-      if (!this.isSameDateTime(e.startDate, e.endDate)) {
-        endTime = this.formattedTime(e.endDate, this.displayLocale);
-      }
+      const startTime = e.originalEvent.startTime;
+      let endTime = e.originalEvent.endTime;
       return (
         (startTime !== ""
           ? `<span class="startTime">${startTime}</span>`
@@ -402,7 +400,7 @@ export default {
     },
 
     getEventTitle(e) {
-      if (!this.showEventTimes) return e.title;
+      if (this.displayPeriodUom === "week") return e.title;
       return this.getFormattedTimeRange(e) + " " + e.title;
     },
 
@@ -444,7 +442,10 @@ export default {
     },
 
     filterEvents(e) {
-      if (e.originalEvent.title.includes(this.keywords) || this.keywords === "") {
+      if (
+        e.originalEvent.title.includes(this.keywords) ||
+        this.keywords === ""
+      ) {
         return "100%";
       } else {
         return "0";
@@ -692,9 +693,9 @@ header are in the CalendarViewHeader component.
 }
 
 .cv-event.disabled {
-  background-color: #f8f9fa;
+  background-color: #ddd;
   color: #000;
-  opacity: 50%;
+  opacity: 100%;
   cursor: auto;
 }
 

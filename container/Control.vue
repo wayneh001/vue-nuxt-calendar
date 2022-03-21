@@ -84,13 +84,13 @@ export default {
       let md = Math.floor(this.getDiff(startDate, endDate, 30));
       switch (item.routine) {
         case "每月":
-          for (let m = 1; m < md; m++) {
+          for (let m = 0; m < md; m++) {
             let itemCopy = { ...item };
             itemCopy.id = this.getRandomID(array);
             itemCopy.startDate = this.routineFormatted(
               startDate,
               baseDate,
-              1,
+              m,
               0
             );
             itemCopy.endDate = itemCopy.startDate;
@@ -98,6 +98,7 @@ export default {
           }
           break;
         case "每週":
+          array.push(item);
           for (let w = 1; w < wd; w++) {
             let itemCopy = { ...item };
             itemCopy.id = this.getRandomID(array);
@@ -112,6 +113,7 @@ export default {
           }
           break;
         case "每日":
+          array.push(item);
           for (let d = 1; d < dd; d++) {
             let itemCopy = { ...item };
             itemCopy.id = this.getRandomID(array);
@@ -133,13 +135,14 @@ export default {
       if (m === 0) {
         date.setDate(date.getDate() + d);
       } else {
-        let tempDate = new Date(date.setMonth(date.getMonth() + m));
+        let tempDate = new Date(date.setMonth(baseDate.getMonth() + m));
         tempDate.setDate(1);
+        console.log(tempDate);
         let diff = baseDate.getDay() - tempDate.getDay();
         if (diff >= 0) {
-          date.setDate(baseDate.getDate() + diff - 1);
+          date.setDate(baseDate.getDate() + diff);
         } else {
-          date.setDate(baseDate.getDate() + diff + 6);
+          date.setDate(baseDate.getDate() + diff + 7);
         }
       }
       let sy = date.getFullYear().toString();
@@ -195,7 +198,7 @@ export default {
   },
   mounted() {
     this.getIDPool();
-    let today = new Date()
+    let today = new Date();
     // console.log(today.getDate());
   },
 };

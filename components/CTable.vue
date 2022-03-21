@@ -111,13 +111,13 @@ export default {
   methods: {
     dataCategorized(list) {
       let today = new Date();
-      let finished = list.filter(function (item) {
+      let upcoming = list.filter(function (item) {
         return (
-          parseInt(item.startDate.substr(5, 2)) < today.getMonth() + 1 ||
-          parseInt(item.startDate.substr(8, 2)) < today.getDate()
+          parseInt(item.startDate.substr(5, 2)) > today.getMonth() + 1 ||
+          parseInt(item.startDate.substr(8, 2)) >= today.getDate()
         );
       });
-      let upcoming = list.filter((item) => !finished.includes(item));
+      let finished = list.filter((item) => !upcoming.includes(item));
       if (this.status === "upcoming") {
         return upcoming;
       } else {
@@ -161,7 +161,6 @@ export default {
   watch: {
     status: function () {
       this.isActive = !this.isActive;
-      console.log(this.dataCategorized(this.meetings));
     },
   },
   computed: {

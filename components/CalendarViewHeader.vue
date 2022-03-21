@@ -44,7 +44,7 @@
         <a href=""
           ><div
             id="month"
-            class="toggle"
+            class="toggle px-5 py-2"
             :class="{ toggleActive: isActive }"
             name="month"
           >
@@ -54,7 +54,7 @@
         <a href=""
           ><div
             id="week"
-            class="toggle"
+            class="toggle px-5 py-2"
             :class="{ toggleActive: !isActive }"
             name="week"
           >
@@ -114,7 +114,6 @@ export default {
   },
   watch: {
     status: function (newValue) {
-      console.log(newValue);
       this.isActive = !this.isActive;
       this.$emit("switch", newValue);
     },
@@ -149,75 +148,5 @@ export default {
 };
 </script>
 <style>
-.tools {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #ccc;
-  width: 8rem;
-  height: 2rem;
-}
-
-.tools a {
-  text-decoration: none;
-  color: #3e4044;
-}
-
-.toggleActive {
-  background-color: #686ce5;
-  color: #fff;
-}
-
-.tab {
-  padding-left: 1em;
-  padding-right: 1em;
-}
-
-.tab a {
-  text-decoration: none;
-  color: #3e4044;
-}
-
-.periodLabel {
-  position: relative;
-  height: 2rem;
-  width: 350px;
-}
-.periodLabel span {
-  width: inherit;
-  position: absolute;
-  pointer-events: none;
-  left: 0;
-  z-index: 1;
-  font-size: calc(1.275rem + 0.3vw);
-  color: #000;
-}
-.periodLabel input {
-  position: absolute;
-  right: 0;
-  border: none;
-}
-
-.label::-webkit-datetime-edit {
-  outline: none;
-}
-
-.label::-webkit-datetime-edit-fields-wrapper {
-  opacity: 0;
-  width: 0;
-}
-
-.label::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-}
-
-.label:focus-visible {
-  outline: none;
-}
 </style>

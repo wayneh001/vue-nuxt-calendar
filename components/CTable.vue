@@ -14,6 +14,29 @@
       <h5>公告</h5>
       <p>本月 14 日會議室電腦系統升級，當日不開放會議預約。</p>
     </div>
+    <!-- 切換標籤 -->
+    <div class="tools mb-3" @click.prevent="onSwitchCheck($event)">
+      <a href=""
+        ><div
+          id="finished"
+          class="toggle px-5 py-2"
+          :class="{ toggleActive: !isActive }"
+          name="finished"
+        >
+          已結束會議
+        </div></a
+      >
+      <a href=""
+        ><div
+          id="upcoming"
+          class="toggle px-5 py-2"
+          :class="{ toggleActive: isActive }"
+          name="upcoming"
+        >
+          待進行會議
+        </div></a
+      >
+    </div>
     <!-- 列表 -->
     <table class="table table-striped mb-3">
       <thead>
@@ -40,6 +63,16 @@
             <a href="#" @click="onDelete(item)"
               ><i class="fa fas fa-trash-can"></i
             ></a>
+            <div
+              class="position-absolute"
+              :style="{ opacity: openTooltip(item) }"
+            >
+              <div
+                class="shadow-sm p-3 mb-5 bg-body rounded position-relative text-danger custom-tooltip"
+              >
+                操作無效，已超過可取消預約時間。
+              </div>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -63,6 +96,8 @@ import CPagination from "@/components/CPagination";
 export default {
   data() {
     return {
+      isActive: true,
+      status: "upcoming",
       currentPage: 1,
     };
   },
@@ -74,11 +109,27 @@ export default {
   },
   components: { CPagination },
   methods: {
+    dataCategorized(list) {
+      let today = new Date();
+      let finished = list.filter(function (item) {
+        return (
+          parseInt(item.startDate.substr(5, 2)) < today.getMonth() + 1 ||
+          parseInt(item.startDate.substr(8, 2)) < today.getDate()
+        );
+      });
+      let upcoming = list.filter((item) => !finished.includes(item));
+      if (this.status === "upcoming") {
+        return upcoming;
+      } else {
+        return finished;
+      }
+    },
+    onSwitchCheck: function (event) {
+      this.status = event.target.id;
+    },
     pageRender(list) {
-      return list.slice(
-        (this.currentPage - 1) * 10,
-        this.currentPage * 10
-      );
+      let output = this.dataCategorized(list);
+      return output.slice((this.currentPage - 1) * 10, this.currentPage * 10);
     },
     onEdit(item) {
       this.$emit("open", item);
@@ -90,6 +141,15 @@ export default {
     onAdd() {
       this.$emit("open");
     },
+    openTooltip(item) {
+      let now = new Date();
+      if (item.startDate < now.getDate() || item.startTime < now.getHours) {
+        return "0%";
+      } else {
+        return "0";
+      }
+      return "100%";
+    },
     deleteMeeting() {
       console.log("會議已刪除");
       this.$refs.deleteModal.hideModal();
@@ -98,9 +158,15 @@ export default {
       this.currentPage = value;
     },
   },
+  watch: {
+    status: function () {
+      this.isActive = !this.isActive;
+      console.log(this.dataCategorized(this.meetings));
+    },
+  },
   computed: {
     totalPage() {
-      console.log(Math.ceil(this.meetings.length / 10));
+      // console.log(Math.ceil(this.meetings.length / 10));
       return Math.ceil(this.meetings.length / 10);
     },
   },
@@ -110,8 +176,9 @@ export default {
 .notice {
   background-color: #e1e3fb;
 }
-.btn-main {
-  background-color: #686ce5;
-  color: #fff;
+.custom-tooltip {
+  width: 18rem;
+  right: 12rem;
+  z-index: 1000;
 }
 </style>

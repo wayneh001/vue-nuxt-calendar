@@ -19,6 +19,7 @@ export default {
   data() {
     return {
       isEdit: false,
+      isActive: true,
       meetings: this.meetingLists ? [...this.meetingLists] : [],
       meeting: {},
       idPool: [],
@@ -194,10 +195,8 @@ export default {
   },
   mounted() {
     this.getIDPool();
-    // let date1 = new Date(this.meetings[0].startDate);
-    // let date2 = new Date(this.meetings[0].routineEndDate);
-    // date1.setDate(25+2);
-    // console.log(date1, date2.getDay());
+    let today = new Date()
+    // console.log(today.getDate());
   },
 };
 </script>

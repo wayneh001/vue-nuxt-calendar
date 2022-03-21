@@ -22,22 +22,6 @@ body {
   color: #000;
 }
 
-.fa-trash-can {
-  color: #ff0000;
-}
-
-.fa-pencil {
-  color: #000;
-}
-
-.table-column:hover {
-  background-color: #e1e3fb;
-}
-
-.notice {
-  background-color: #e1e3fb;
-}
-
 .tools {
   display: flex;
   align-items: center;
@@ -69,41 +53,4 @@ body {
 .tab a {
   text-decoration: none;
   color: #3e4044;
-}
-
-.periodLabel {
-  position: relative;
-  height: 2rem;
-  width: 350px;
-}
-.periodLabel span {
-  width: inherit;
-  position: absolute;
-  pointer-events: none;
-  left: 0;
-  z-index: 1;
-  font-size: calc(1.275rem + 0.3vw);
-  color: #000;
-}
-.periodLabel input {
-  position: absolute;
-  right: 0;
-  border: none;
-}
-
-.label::-webkit-datetime-edit {
-  outline: none;
-}
-
-.label::-webkit-datetime-edit-fields-wrapper {
-  opacity: 0;
-  width: 0;
-}
-
-.label::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-}
-
-.label:focus-visible {
-  outline: none;
 }

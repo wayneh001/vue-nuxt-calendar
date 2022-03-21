@@ -51,7 +51,11 @@
         <button type="button" class="btn btn-light me-2" @click="hideModal">
           取消
         </button>
-        <button type="button" class="btn btn-main" @click="confirm(currentImage)">
+        <button
+          type="button"
+          class="btn btn-main"
+          @click="confirm(currentImage)"
+        >
           確定
         </button>
       </div>
@@ -102,13 +106,13 @@ export default {
       this.currentImage = item.url;
     },
     confirm(iamge) {
-      this.$emit("setImage", iamge)
+      this.$emit("setImage", iamge);
       this.hideModal();
-    }
+    },
   },
   mounted() {
     // console.log(this.stockImages);
-  }
+  },
 };
 </script>
 <style>
@@ -120,7 +124,8 @@ export default {
   width: 100%;
   height: auto;
   aspect-ratio: 3/2;
-  border: 2px dashed #ddd
+  background-color: #fff;
+  border: 2px dashed #ddd;
 }
 
 .stockImage {
@@ -128,5 +133,10 @@ export default {
   width: 12rem;
   height: auto;
   aspect-ratio: 4/3;
+}
+
+.fa-cloud-arrow-up {
+  background-color: #fff!important;
+  color: #686ce5;
 }
 </style>

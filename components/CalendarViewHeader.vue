@@ -10,8 +10,22 @@
           placeholder="請輸入關鍵字"
           v-model="keywords"
         />
-        <button class="btn btn-secondary me-2" type="button" style="width: 6rem;" @click="reset">清除</button>
-        <button class="btn btn-main" type="button" style="width: 6rem;" @click="search(keywords)">搜尋</button>
+        <button
+          class="btn btn-secondary me-2"
+          type="button"
+          style="width: 6rem"
+          @click="reset"
+        >
+          清除
+        </button>
+        <button
+          class="btn btn-main"
+          type="button"
+          style="width: 6rem"
+          @click="search(keywords)"
+        >
+          搜尋
+        </button>
       </div>
       <div class="d-flex justify-content-between align-items-center">
         <div
@@ -109,8 +123,8 @@ export default {
       this.search(this.keywords);
     },
     search(k) {
-      this.$emit("search", k)
-    }
+      this.$emit("search", k);
+    },
   },
   watch: {
     status: function (newValue) {
@@ -148,5 +162,40 @@ export default {
 };
 </script>
 <style>
+.periodLabel {
+  position: relative;
+  height: 2rem;
+  width: 350px;
+}
+.periodLabel span {
+  width: inherit;
+  position: absolute;
+  pointer-events: none;
+  left: 0;
+  z-index: 1;
+  font-size: calc(1.275rem + 0.3vw);
+  color: #000;
+}
+.periodLabel input {
+  position: absolute;
+  right: 0;
+  border: none;
+}
 
+.label::-webkit-datetime-edit {
+  outline: none;
+}
+
+.label::-webkit-datetime-edit-fields-wrapper {
+  opacity: 0;
+  width: 0;
+}
+
+.label::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+.label:focus-visible {
+  outline: none;
+}
 </style>

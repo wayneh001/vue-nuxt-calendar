@@ -16,7 +16,7 @@
     </div>
     <!-- 切換標籤 -->
     <div class="tools mb-3" @click.prevent="onSwitchCheck($event)">
-      <a href=""
+      <a href="" style="width: 50%"
         ><div
           id="finished"
           class="toggle px-5 py-2"
@@ -26,7 +26,7 @@
           已結束會議
         </div></a
       >
-      <a href=""
+      <a href="" style="width: 50%"
         ><div
           id="upcoming"
           class="toggle px-5 py-2"
@@ -38,7 +38,7 @@
       >
     </div>
     <!-- 列表 -->
-    <table class="table table-striped mb-3">
+    <table class="table mb-3">
       <thead>
         <tr class="bg-main">
           <th scope="col">日期</th>
@@ -52,27 +52,18 @@
           class="table-column"
           v-for="(item, index) in pageRender(this.meetings)"
           :key="index"
+          :class="{ disabled: status === 'finished' }"
         >
           <td scope="row">{{ item.startDate }}</td>
           <td>{{ item.startTime }} ~ {{ item.endTime }}</td>
           <td>{{ item.title }}</td>
           <td class="text-center">
-            <a href="#" @click="onEdit(item)"
+            <a href="#" @click="onEdit(item)" :disabled="status === 'finished'"
               ><i class="fa fas fa-pencil me-2"></i
             ></a>
-            <a href="#" @click="onDelete(item)"
+            <a href="#" @click="onDelete(item)" :disabled="status === 'finished'"
               ><i class="fa fas fa-trash-can"></i
             ></a>
-            <div
-              class="position-absolute"
-              :style="{ opacity: openTooltip(item) }"
-            >
-              <div
-                class="shadow-sm p-3 mb-5 bg-body rounded position-relative text-danger custom-tooltip"
-              >
-                操作無效，已超過可取消預約時間。
-              </div>
-            </div>
           </td>
         </tr>
       </tbody>
@@ -99,6 +90,7 @@ export default {
       isActive: true,
       status: "upcoming",
       currentPage: 1,
+      // editable1: true,
     };
   },
   props: {
@@ -132,23 +124,18 @@ export default {
       return output.slice((this.currentPage - 1) * 10, this.currentPage * 10);
     },
     onEdit(item) {
-      this.$emit("open", item);
+      if (this.status === "upcoming") {
+        this.$emit("open", item);
+      }
     },
     onDelete(item) {
-      this.meeting = item;
-      this.$emit("delete", item);
+      if (this.status === "upcoming") {
+        this.$emit("delete", item);
+        this.meeting = item;
+      }
     },
     onAdd() {
       this.$emit("open");
-    },
-    openTooltip(item) {
-      let now = new Date();
-      if (item.startDate < now.getDate() || item.startTime < now.getHours) {
-        return "0%";
-      } else {
-        return "0";
-      }
-      return "100%";
     },
     deleteMeeting() {
       console.log("會議已刪除");
@@ -172,6 +159,17 @@ export default {
 };
 </script>
 <style scoped>
+.fa-trash-can {
+  color: #ff0000;
+}
+
+.fa-pencil {
+  color: #000;
+}
+
+.table-column:hover {
+  background-color: #e1e3fb;
+}
 .notice {
   background-color: #e1e3fb;
 }
@@ -179,5 +177,20 @@ export default {
   width: 18rem;
   right: 12rem;
   z-index: 1000;
+  pointer-events: none;
+}
+.disabled,
+.disabled:hover {
+  /* background-color: #ddd; */
+  color: #999;
+}
+
+.disabled a {
+  cursor: none;
+}
+
+.disabled .fa-trash-can,
+.disabled .fa-pencil {
+  color: #999;
 }
 </style>

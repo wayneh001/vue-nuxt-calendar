@@ -7,7 +7,7 @@
       hide-header-close
       title="刪除會議"
     >
-      <div class="body">
+      <div class="body" v-if="deleteable">
         <div class="mb-3">
           確定刪除<strong>{{ item.title }}</strong
           >？
@@ -39,11 +39,18 @@
           </div>
         </div>
       </div>
+      <div class="body" v-if="!deleteable">
+        <div class="mb-3">操作無效，已超過可取消預約時間。</div>
+      </div>
       <div class="footer mt-5 d-flex justify-content-end">
         <button type="button" class="btn btn-light me-2" @click="hideModal">
           取消
         </button>
-        <button type="button" class="btn btn-danger" @click="confirm(item, routineMeeting)">
+        <button
+          type="button"
+          class="btn btn-danger"
+          @click="confirm(item, routineMeeting)"
+        >
           確定
         </button>
       </div>
@@ -55,12 +62,14 @@
 export default {
   data() {
     return {
+      deleteable: true,
       item: {},
       routineMeeting: "單次會議",
     };
   },
   methods: {
     showModal(item) {
+      this.deleteable = this.check(item);
       this.$refs["my-modal"].show();
       this.item = item;
     },
@@ -68,8 +77,27 @@ export default {
       this.$refs["my-modal"].hide();
     },
     confirm(item, routine) {
-      this.$emit("confirm", item, routine);
+      if (this.deleteable === true) {
+        this.$emit("confirm", item, routine);
+      }
       this.hideModal();
+    },
+    check(item) {
+      let now = new Date();
+      let date = new Date(item.startDate);
+      console.log(now, date);
+      if (now.getFullYear() === date.getFullYear() && now.getMonth() === date.getMonth() && now.getDate() === date.getDate()) {
+        if (
+          parseInt(item.startTime.substr(0, 2)) - now.getHours() > 2 ||
+          parseInt(item.startTime.substr(3, 2) - now.getMinutes() > 0)
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
     },
   },
 };

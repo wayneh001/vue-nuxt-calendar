@@ -21,6 +21,7 @@ export default {
   plugins: [
     { src: "plugins/fontawesome.js" },
     { src: "plugins/owl.js", ssr: false },
+    { src: "plugins/veevalidate.js" },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -32,7 +33,11 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/bootstrap
-    "bootstrap-vue/nuxt", "@nuxt/content"
+    "bootstrap-vue/nuxt",
+    "@nuxt/content",
     // "axios"
   ],
+  build: {
+    transpile: ["vee-validate"],
+  },
 };

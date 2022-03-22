@@ -2,38 +2,45 @@
   <div class="container py-5">
     <form>
       <!-- 標題 -->
-      <div
-        class="mb-3 d-flex justify-content-between align-items-center bg-light"
-      >
-        <h3 class="m-0">
-          <input
-            type="text"
-            class="form-control form-control-title bg-light"
-            placeholder="請輸入會議名稱"
-            v-model="editedMeeting.title"
-            ref="titleFoucs"
-            autofocus
-            :readonly="!titleEdit"
-            @keyup.enter="doneTitleEdit"
-          />
-        </h3>
-        <a href="#" @click="onTitleEdit()"
-          ><i class="fa fas fa-pencil me-2"></i
-        ></a>
+      <div class="mb-3">
+        <div class="d-flex justify-content-between align-items-center bg-light">
+          <h3 class="m-0">
+            <input
+              type="text"
+              class="form-control form-control-title bg-light"
+              name="會議名稱"
+              placeholder="請輸入會議名稱"
+              v-model="editedMeeting.title"
+              ref="titleFoucs"
+              autofocus
+              :readonly="!titleEdit"
+              @keyup.enter="doneTitleEdit"
+            />
+          </h3>
+          <a href="#" @click="onTitleEdit()"
+            ><i class="fa fas fa-pencil me-2"></i
+          ></a>
+        </div>
       </div>
       <!-- 申請人 -->
       <CInput
+        name="申請人"
+        rules="required"
         className="mb-3"
         label="申請人"
         type="text"
+        reuqired
         placeholder="請輸入申請人姓名"
         v-model="editedMeeting.applicant"
       />
       <!-- 單位 -->
       <CInput
+        name="單位"
+        rules="required"
         className="mb-3"
         label="單位"
         type="text"
+        required
         placeholder="請輸入單位名稱"
         v-model="editedMeeting.unit"
       />
@@ -41,16 +48,22 @@
       <div class="row mb-3">
         <div class="col-6">
           <CInput
+            name="聯絡電話"
+            rules="required"
             label="聯絡電話"
             type="text"
+            reuqired
+            pattern="[0-9]{5}"
             placeholder="請輸入聯絡電話"
             v-model="editedMeeting.tel"
           />
         </div>
         <div class="col-6">
           <CInput
+            name="電子信箱"
+            rules="required"
             label="電子信箱"
-            type="text"
+            type="email"
             placeholder="請輸入電子信箱"
             v-model="editedMeeting.email"
           />
@@ -58,36 +71,47 @@
       </div>
       <!-- 日期 -->
       <CInput
+        name="日期"
+        rules="required"
         className="mb-3"
         label="日期"
         type="date"
         v-model="editedMeeting.startDate"
         @input="dateSync"
+        :min="today()"
       />
       <!-- 時間 -->
-      <div class="row mb-3">
-        <label class="form-label">時間</label>
-        <div class="col-5">
-          <select class="form-select" v-model="editedMeeting.startTime">
-            <option selected value="">請選擇開始時間</option>
-            <option v-for="(item, index) in time.slice(0, 20)" :key="index">
-              {{ item }}
-            </option>
-          </select>
-        </div>
-        <div class="col-2 text-center">~</div>
-        <div class="col-5">
-          <select class="form-select" v-model="editedMeeting.endTime">
-            <option selected value="">請選擇結束時間</option>
-            <option v-for="(item, index) in time.slice(1)" :key="index">
-              {{ item }}
-            </option>
-          </select>
+      <div class="mb-5">
+        <div class="row">
+          <div class="col-5">
+            <label class="form-label">開始時間</label>
+            <select class="form-select" v-model="editedMeeting.startTime">
+              <option
+                v-for="(item, index) in time.slice(0, 20)"
+                :key="index"
+                :disabled="startTimeCheck(index)"
+              >
+                {{ item }}
+              </option>
+            </select>
+          </div>
+          <div class="col-2 text-center">~</div>
+          <div class="col-5">
+            <label class="form-label">結束時間</label>
+            <select class="form-select" v-model="editedMeeting.endTime">
+              <option
+                v-for="(item, index) in time.slice(1)"
+                :key="index"
+                :disabled="endTimeCheck(index)"
+              >
+                {{ item }}
+              </option>
+            </select>
+          </div>
         </div>
       </div>
-      <div class="mb-3"></div>
       <!-- 例行會議 -->
-      <div class="mb-3">
+      <div class="mb-5">
         <label class="form-label">例行會議</label>
         <div class="d-flex justify-content-between bg-light p-2">
           <div
@@ -139,7 +163,7 @@
         <div class="col-6">
           <button
             class="btn btn-main w-100"
-            type="button"
+            type="submit"
             @click.prevent="onSave(editedMeeting)"
           >
             儲存
@@ -152,6 +176,7 @@
       :image="editedMeeting.background"
       @setImage="onSetImage"
     ></CModal>
+    <CCheckModal ref="checkModal" />
   </div>
 </template>
 <script>
@@ -230,18 +255,98 @@ export default {
     onCancel() {
       this.$emit("close");
     },
+    onCheck(item) {
+      let dictionary = {
+        title: "會議名稱",
+        applicant: "申請人",
+        unit: "單位",
+        tel: "聯絡電話",
+        email: "電子信箱",
+        startDate: "日期",
+        startTime: "開始時間",
+        endTime: "結束時間",
+      };
+      let keys = [];
+      for (let key in item) {
+        // console.log(key)
+        if (item[key] === "" && dictionary[key]) {
+          keys.push(`${dictionary[key]}`);
+        }
+      }
+      console.log(keys);
+      if (keys.length === 0) {
+        let formErr = this.onFormateCheck(item);
+        console.log(formErr);
+        if (formErr === "") {
+          return true;
+        } else {
+          this.$refs.checkModal.showModal(keys, formErr);
+          return false;
+        }
+      } else {
+        this.$refs.checkModal.showModal(keys, "");
+        return false;
+      }
+    },
+    onFormateCheck(item) {
+      const ef =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!/^[0-9]{5}$/.test(item.tel)) {
+        return "聯絡電話格式不正確";
+      } else if (!ef.test(item.email)) {
+        return "電子郵件格式不正確";
+      } else {
+        return "";
+      }
+    },
     onSave(item) {
-      this.$emit("close", item);
+      if (this.onCheck(item)) {
+        this.$emit("close", item);
+      }
     },
     getLastDay() {
-      let date = new Date;
-      let ld = date.getFullYear()
+      let date = new Date();
+      let ld = date.getFullYear();
       if (this.editedMeeting.routineEndDate === "") {
-        this.editedMeeting.routineEndDate = `${ld.toString()}-12-31`
+        this.editedMeeting.routineEndDate = `${ld.toString()}-12-31`;
       }
+    },
+    today() {
+      let date = new Date();
+      let sy = date.getFullYear().toString();
+      let sm = date.getMonth() + 1;
+      let sd = date.getDate();
+      sm = sm < 10 ? `0${sm}` : sm.toString();
+      sd = sd < 10 ? `0${sd}` : sd.toString();
+      return `${sy}-${sm}-${sd}`;
     },
     dateSync() {
       this.editedMeeting.endDate = this.editedMeeting.startDate;
+    },
+    startTimeCheck(index) {
+      let now = new Date();
+      let date = new Date(this.editedMeeting.startDate);
+      if (
+        now.getFullYear() === date.getFullYear() &&
+        now.getMonth() === date.getMonth() &&
+        now.getDate() === date.getDate()
+      ) {
+        let key = this.time.findIndex(
+          (item) => item.substr(0, 2) === (now.getHours() + 2).toString()
+        );
+        // console.log(key);
+        if (index <= key) {
+          return true;
+        }
+      }
+    },
+    endTimeCheck(index) {
+      let key = this.time.findIndex(
+        (item) => item === this.editedMeeting.startTime
+      );
+      if (index <= key - 1) {
+        return true;
+      }
     },
   },
   mounted() {
@@ -250,6 +355,9 @@ export default {
     }
     this.getLastDay();
     // console.log(this.editedMeeting.routineEndDate);
+    // let now = new Date();
+    // let a = now.getHours();
+    // console.log(a);
   },
 };
 </script>

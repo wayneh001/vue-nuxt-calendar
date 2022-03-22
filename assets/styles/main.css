@@ -17,6 +17,10 @@ body {
   color: #fff;
 }
 
+.text-main {
+  color: #686ce5;
+}
+
 .bg-event {
   background-color: #e1e3fb;
   color: #000;

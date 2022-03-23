@@ -81,7 +81,7 @@
         :min="today()"
       />
       <!-- 時間 -->
-      <div class="mb-5">
+      <div class="mb-3">
         <div class="row">
           <div class="col-5">
             <label class="form-label">開始時間</label>
@@ -111,7 +111,7 @@
         </div>
       </div>
       <!-- 例行會議 -->
-      <div class="mb-5">
+      <div class="mb-3">
         <label class="form-label">例行會議</label>
         <div class="d-flex justify-content-between bg-light p-2">
           <div

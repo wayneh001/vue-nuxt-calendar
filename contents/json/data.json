@@ -13,7 +13,7 @@
       "routine": "每月",
       "routineEndDate": "2022-12-31",
       "background":
-        "@/assets/image/BG06.jpg",
+        "BG06",
       "classes": ""
     },
     {
@@ -30,7 +30,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "@/assets/image/BG06.jpg",
+        "BG06",
       "classes": ""
     },
     {
@@ -47,7 +47,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "@/assets/image/BG06.jpg",
+        "BG06",
       "classes": ""
     },
     {
@@ -64,7 +64,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "@/assets/image/BG06.jpg",
+        "BG06",
       "classes": "disabled"
     },
     {
@@ -81,7 +81,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "@/assets/image/BG06.jpg",
+        "BG06",
       "classes": "disabled"
     },
     {
@@ -98,7 +98,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "@/assets/image/BG06.jpg",
+        "BG06",
       "classes": "disabled"
     },
     {
@@ -115,7 +115,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "@/assets/image/BG06.jpg",
+        "BG06",
       "classes": "disabled"
     },
     {
@@ -132,7 +132,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "@/assets/image/BG06.jpg",
+        "BG06",
       "classes": ""
     },
     {
@@ -149,7 +149,7 @@
       "routine": "非例行會議",
       "routineEndDate": "2022-12-31",
       "background":
-        "@/assets/image/BG06.jpg",
+        "BG01",
       "classes": ""
     },
     {
@@ -166,7 +166,7 @@
       "routine": "非例行會議",
       "routineEndDate": "2022-12-31",
       "background":
-        "@/assets/image/BG06.jpg",
+        "BG02",
       "classes": ""
     },
     {
@@ -183,7 +183,7 @@
       "routine": "非例行會議",
       "routineEndDate": "2022-12-31",
       "background":
-        "@/assets/image/BG06.jpg",
+        "BG03",
       "classes": ""
     },
     {
@@ -200,7 +200,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "@/assets/image/BG06.jpg",
+        "BG06",
       "classes": ""
     }
   ]

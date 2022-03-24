@@ -1,7 +1,7 @@
 export default {
   methods: {
     today() {
-      let now = new Date("2022-03-24 17:01:00");
+      let now = new Date();
       return now;
     },
     getDateStr(date) {

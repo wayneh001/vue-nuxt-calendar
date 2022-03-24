@@ -52,9 +52,6 @@ export default {
   },
   mixins: [GeneralMathMixin],
   methods: {
-    getBGImage() {
-      return "";
-    },
     getBlockStyle(item) {
       let sh = this.numberized(item.startTime, 0, 2);
       let sm = this.numberized(item.startTime, 3, 2);
@@ -79,8 +76,7 @@ export default {
 </script>
 <style>
 .background {
-  /* background-color: brown; */
-  background-image: url("@/assets/image/BG06.jpg");
+  background-image: url("@/static/image/BG06.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;

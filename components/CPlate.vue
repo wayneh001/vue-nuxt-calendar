@@ -1,6 +1,7 @@
 <template>
   <div
     class="d-flex justify-content-center align-items-center vh-100 background"
+    :style="{ background: getBGImage() }"
   >
     <div class="blur w-75 h-75"></div>
     <div
@@ -18,7 +19,8 @@
           <label
             class="fs-custom-2 fw-bolder ms-5"
             v-if="this.meeting.type === 'upcoming'"
-            >@{{ this.meeting.data.startTime }}~ {{ this.meeting.data.endTime }}</label
+            >@{{ this.meeting.data.startTime }}~
+            {{ this.meeting.data.endTime }}</label
           >
           <div class="fs-custom-1 fw-bolder text-main">
             {{ this.meeting.data.title }}
@@ -29,7 +31,9 @@
             <div class="col-12 mb-3">
               <div>
                 <div class="fs-custom-4 fw-bolder text-secondary">單位</div>
-                <div class="fs-custom-2 fw-bolder">{{ this.meeting.data.unit }}</div>
+                <div class="fs-custom-2 fw-bolder">
+                  {{ this.meeting.data.unit }}
+                </div>
               </div>
             </div>
             <div class="col-6">
@@ -43,7 +47,9 @@
             <div class="col-6">
               <div>
                 <div class="fs-custom-4 fw-bolder text-secondary">聯絡電話</div>
-                <div class="fs-custom-2 fw-bolder">{{ this.meeting.data.tel }}</div>
+                <div class="fs-custom-2 fw-bolder">
+                  {{ this.meeting.data.tel }}
+                </div>
               </div>
             </div>
           </div>
@@ -63,15 +69,26 @@ export default {
   },
   methods: {
     getBGImage() {
-      return "";
+      if (this.meeting.status && this.meeting.data.background !== "") {
+        let src = this.meeting.data.background;
+        return (
+          "center no-repeat fixed url(" +
+          require(`@/static/image/${src}.jpg`) +
+          ")"
+        );
+      } else {
+        return (
+          "center no-repeat fixed url(" +
+          require("@/static/image/BG01.jpg") +
+          ")"
+        );
+      }
     },
   },
 };
 </script>
 <style>
 .background {
-  /* background-color: brown; */
-  background-image: url("@/assets/image/BG06.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;

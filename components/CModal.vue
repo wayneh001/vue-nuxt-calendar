@@ -14,7 +14,8 @@
           </div>
           <div class="col-7">
             <div id="currentImage" class="currentImg">
-              <img class="img-fluid" :src="currentImage" />
+              <!-- <img class="img-fluid" :src="currentImage" /> -->
+              <img class="img-fluid" :src="require(`../static/image/${currentImage}.jpg`)" />
             </div>
           </div>
           <div class="col-5">
@@ -40,7 +41,7 @@
                   :key="index"
                   @click="setImage(item)"
                 >
-                  <img class="img-fluid" :src="item.url" />
+                  <img class="img-fluid" :src="item.src" alt="image" />
                 </div>
               </carousel>
             </client-only>
@@ -69,23 +70,23 @@ export default {
     return {
       stockImages: [
         {
-          url: "@/assets/image/BG01.jpg",
+          src: require("../static/image/BG01.jpg"),
           editable: false,
         },
         {
-          url: "@/assets/image/BG02.jpg",
+          src: require("../static/image/BG02.jpg"),
           editable: false,
         },
         {
-          url: "@/assets/image/BG03.jpg",
+          src: require("../static/image/BG03.jpg"),
           editable: false,
         },
         {
-          url: "@/assets/image/BG04.jpg",
+          src: require("../static/image/BG04.jpg"),
           editable: false,
         },
         {
-          url: "@/assets/image/BG05.jpg",
+          src: require("../static/image/BG05.jpg"),
           editable: false,
         },
       ],

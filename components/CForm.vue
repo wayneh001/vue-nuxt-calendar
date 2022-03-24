@@ -202,7 +202,7 @@ export default {
             endTime: "",
             routine: "非例行會議",
             routineEndDate: "",
-            background: "",
+            background: "BG00",
             classes: "",
           },
       titleEdit: true,

@@ -66,3 +66,23 @@ body {
 .fa-pencil {
   color: #000;
 }
+
+.fs-custom-1 {
+  font-size: calc(4rem + 1.5vw) !important;
+}
+
+.fs-custom-2 {
+  font-size: calc(2rem + 0.9vw) !important;
+}
+
+.fs-custom-4 {
+  font-size: calc(1.8rem + 0.3vw) !important;
+}
+
+.blur {
+  position: absolute;
+  filter: blur(6rem);
+}
+.plate {
+  background: hsla(0, 0%, 100%, 0.75);
+}

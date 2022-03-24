@@ -695,7 +695,6 @@ header are in the CalendarViewHeader component.
 .cv-event.disabled {
   background-color: #ddd;
   color: #999;
-  opacity: 100%;
   cursor: auto;
 }
 

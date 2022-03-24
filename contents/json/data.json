@@ -13,7 +13,7 @@
       "routine": "每月",
       "routineEndDate": "2022-12-31",
       "background":
-        "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
+        "@/assets/image/BG06.jpg",
       "classes": ""
     },
     {
@@ -21,6 +21,7 @@
       "title": "事務組週會",
       "applicant": "申請人姓名",
       "unit": "事務組",
+      "tel": "57311",
       "email": "affairs@ncu.edu.tw",
       "startDate": "2022-03-07",
       "endDate": "2022-03-07",
@@ -29,7 +30,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
+        "@/assets/image/BG06.jpg",
       "classes": ""
     },
     {
@@ -37,6 +38,7 @@
       "title": "事務組週會",
       "applicant": "申請人姓名",
       "unit": "事務組",
+      "tel": "57311",
       "email": "affairs@ncu.edu.tw",
       "startDate": "2022-03-14",
       "endDate": "2022-03-14",
@@ -45,7 +47,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
+        "@/assets/image/BG06.jpg",
       "classes": ""
     },
     {
@@ -53,6 +55,7 @@
       "title": "文書組週會",
       "applicant": "申請人姓名",
       "unit": "文書組",
+      "tel": "57311",
       "email": "document@ncu.edu.tw",
       "startDate": "2022-03-14",
       "endDate": "2022-03-14",
@@ -61,7 +64,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
+        "@/assets/image/BG06.jpg",
       "classes": "disabled"
     },
     {
@@ -69,6 +72,7 @@
       "title": "採購組週會",
       "applicant": "申請人姓名",
       "unit": "採購組",
+      "tel": "57311",
       "email": "purchase@ncu.edu.tw",
       "startDate": "2022-03-14",
       "endDate": "2022-03-14",
@@ -77,7 +81,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
+        "@/assets/image/BG06.jpg",
       "classes": "disabled"
     },
     {
@@ -85,6 +89,7 @@
       "title": "營繕組週會",
       "applicant": "申請人姓名",
       "unit": "營繕組",
+      "tel": "57311",
       "email": "construct@ncu.edu.tw",
       "startDate": "2022-03-15",
       "endDate": "2022-03-15",
@@ -93,7 +98,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
+        "@/assets/image/BG06.jpg",
       "classes": "disabled"
     },
     {
@@ -101,6 +106,7 @@
       "title": "出納組週會",
       "applicant": "申請人姓名",
       "unit": "出納組",
+      "tel": "57311",
       "email": "cashier@ncu.edu.tw",
       "startDate": "2022-03-15",
       "endDate": "2022-03-15",
@@ -109,7 +115,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
+        "@/assets/image/BG06.jpg",
       "classes": "disabled"
     },
     {
@@ -117,6 +123,7 @@
       "title": "事務組週會",
       "applicant": "申請人姓名",
       "unit": "事務組",
+      "tel": "57311",
       "email": "affairs@ncu.edu.tw",
       "startDate": "2022-03-21",
       "endDate": "2022-03-21",
@@ -125,7 +132,58 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
+        "@/assets/image/BG06.jpg",
+      "classes": ""
+    },
+    {
+      "id": "934865",
+      "title": "會館細則修正會議",
+      "applicant": "申請人姓名",
+      "unit": "事務組",
+      "tel": "57311",
+      "email": "affairs@ncu.edu.tw",
+      "startDate": "2022-03-24",
+      "endDate": "2022-03-24",
+      "startTime": "10:30",
+      "endTime": "11:30",
+      "routine": "非例行會議",
+      "routineEndDate": "2022-12-31",
+      "background":
+        "@/assets/image/BG06.jpg",
+      "classes": ""
+    },
+    {
+      "id": "729528",
+      "title": "校園餐廳改善會議",
+      "applicant": "申請人姓名",
+      "unit": "事務組",
+      "tel": "57311",
+      "email": "affairs@ncu.edu.tw",
+      "startDate": "2022-03-24",
+      "endDate": "2022-03-24",
+      "startTime": "13:30",
+      "endTime": "15:30",
+      "routine": "非例行會議",
+      "routineEndDate": "2022-12-31",
+      "background":
+        "@/assets/image/BG06.jpg",
+      "classes": ""
+    },
+    {
+      "id": "829572",
+      "title": "公車路線修正會議",
+      "applicant": "申請人姓名",
+      "unit": "事務組",
+      "tel": "57311",
+      "email": "affairs@ncu.edu.tw",
+      "startDate": "2022-03-24",
+      "endDate": "2022-03-24",
+      "startTime": "16:00",
+      "endTime": "17:00",
+      "routine": "非例行會議",
+      "routineEndDate": "2022-12-31",
+      "background":
+        "@/assets/image/BG06.jpg",
       "classes": ""
     },
     {
@@ -133,6 +191,7 @@
       "title": "事務組週會",
       "applicant": "申請人姓名",
       "unit": "事務組",
+      "tel": "57311",
       "email": "affairs@ncu.edu.tw",
       "startDate": "2022-03-28",
       "endDate": "2022-03-28",
@@ -141,7 +200,7 @@
       "routine": "每週",
       "routineEndDate": "2022-12-31",
       "background":
-        "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
+        "@/assets/image/BG06.jpg",
       "classes": ""
     }
   ]

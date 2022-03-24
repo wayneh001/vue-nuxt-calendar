@@ -78,7 +78,7 @@
         type="date"
         v-model="editedMeeting.startDate"
         @input="dateSync"
-        :min="today()"
+        :min="getDateStr(this.today())"
       />
       <!-- 時間 -->
       <div class="mb-3">
@@ -182,7 +182,9 @@
 <script>
 import CInput from "~/components/CInput";
 import CModal from "~/components/CModal";
+import GeneralMathMixin from "@/components/Methods/GeneralMathMixin";
 export default {
+  mixins: [GeneralMathMixin],
   data() {
     return {
       editedMeeting: this.meeting
@@ -310,15 +312,6 @@ export default {
       if (this.editedMeeting.routineEndDate === "") {
         this.editedMeeting.routineEndDate = `${ld.toString()}-12-31`;
       }
-    },
-    today() {
-      let date = new Date();
-      let sy = date.getFullYear().toString();
-      let sm = date.getMonth() + 1;
-      let sd = date.getDate();
-      sm = sm < 10 ? `0${sm}` : sm.toString();
-      sd = sd < 10 ? `0${sd}` : sd.toString();
-      return `${sy}-${sm}-${sd}`;
     },
     dateSync() {
       this.editedMeeting.endDate = this.editedMeeting.startDate;

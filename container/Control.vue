@@ -14,8 +14,10 @@
 import CTable from "@/components/CTable";
 import CForm from "@/components/CForm";
 import CDeleteModal from "@/components/CDeleteModal";
+import GeneralMathMixin from "@/components/Methods/GeneralMathMixin";
 export default {
   name: "Index",
+  mixins: [GeneralMathMixin],
   data() {
     return {
       isEdit: false,
@@ -145,12 +147,7 @@ export default {
           date.setDate(baseDate.getDate() + diff + 7);
         }
       }
-      let sy = date.getFullYear().toString();
-      let sm = date.getMonth() + 1;
-      let sd = date.getDate();
-      sm = sm < 10 ? `0${sm}` : sm.toString();
-      sd = sd < 10 ? `0${sd}` : sd.toString();
-      return `${sy}-${sm}-${sd}`;
+      return getDateStr(date);
     },
     getDiff(d1, d2, delta) {
       return (d2.getTime() - d1.getTime()) / 1000 / 3600 / 24 / delta;
@@ -174,11 +171,11 @@ export default {
       this.$emit("update", item);
     },
     getIDPool() {
-      let a = [];
+      let ids = [];
       this.meetings.forEach(function (item) {
-        a.push(item.id);
+        ids.push(item.id);
       });
-      this.idPool = [...a];
+      this.idPool = [...ids];
     },
     getRandomID(pool) {
       let id;
@@ -198,8 +195,6 @@ export default {
   },
   mounted() {
     this.getIDPool();
-    let today = new Date();
-    // console.log(today.getDate());
   },
 };
 </script>

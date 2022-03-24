@@ -19,12 +19,12 @@
   </div>
 </template>
 <script>
-import data from "@/contents/json/data.json";
+import meetingData from "@/contents/json/data.json";
 import Control from "@/container/Control";
 import Calandar from "@/container/Calandar";
 export default {
   asyncData({ params }) {
-    return { data };
+    return { meetingData };
   },
   components: {
     Control,
@@ -52,7 +52,7 @@ export default {
     },
   },
   mounted() {
-    this.meetingLists = this.data;
+    this.meetingLists = this.meetingData;
     // alert("公告：本月 14 日會議室電腦系統升級，當日不開放會議預約。");
   },
 };

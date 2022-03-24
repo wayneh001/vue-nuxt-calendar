@@ -59,7 +59,9 @@
 </template>
 
 <script>
+import GeneralMathMixin from "@/components/Methods/GeneralMathMixin";
 export default {
+  
   data() {
     return {
       deleteable: true,
@@ -67,6 +69,7 @@ export default {
       routineMeeting: "單次會議",
     };
   },
+  mixins: [GeneralMathMixin],
   methods: {
     showModal(item) {
       this.deleteable = this.check(item);
@@ -83,13 +86,15 @@ export default {
       this.hideModal();
     },
     check(item) {
-      let now = new Date();
       let date = new Date(item.startDate);
-      console.log(now, date);
-      if (now.getFullYear() === date.getFullYear() && now.getMonth() === date.getMonth() && now.getDate() === date.getDate()) {
+      if (
+        this.today().getFullYear() === date.getFullYear() &&
+        this.today().getMonth() === date.getMonth() &&
+        this.today().getDate() === date.getDate()
+      ) {
         if (
-          parseInt(item.startTime.substr(0, 2)) - now.getHours() > 2 ||
-          parseInt(item.startTime.substr(3, 2) - now.getMinutes() > 0)
+          this.numberized(item.startTime, 0, 2) - now.getHours() > 2 ||
+          this.numberized(item.startTime, 3, 2) - now.getMinutes() > 0
         ) {
           return true;
         } else {

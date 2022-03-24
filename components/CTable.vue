@@ -84,6 +84,7 @@
 </template>
 <script>
 import CPagination from "@/components/CPagination";
+import GeneralMathMixin from "@/components/Methods/GeneralMathMixin";
 export default {
   data() {
     return {
@@ -93,6 +94,7 @@ export default {
       // editable1: true,
     };
   },
+  mixins: [GeneralMathMixin],
   props: {
     meetings: {
       type: Array,

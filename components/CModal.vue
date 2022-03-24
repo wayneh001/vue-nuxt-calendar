@@ -69,23 +69,23 @@ export default {
     return {
       stockImages: [
         {
-          url: "https://cdn.pixabay.com/photo/2021/06/24/11/18/background-6360868_960_720.png",
+          url: "@/assets/image/BG01.jpg",
           editable: false,
         },
         {
-          url: "https://cdn.pixabay.com/photo/2021/07/15/08/43/abstract-6467847_960_720.png",
+          url: "@/assets/image/BG02.jpg",
           editable: false,
         },
         {
-          url: "https://cdn.pixabay.com/photo/2021/09/15/13/28/art-6626881_960_720.png",
+          url: "@/assets/image/BG03.jpg",
           editable: false,
         },
         {
-          url: "https://cdn.pixabay.com/photo/2021/06/24/11/18/background-6360866_960_720.png",
+          url: "@/assets/image/BG04.jpg",
           editable: false,
         },
         {
-          url: "https://cdn.pixabay.com/photo/2021/06/24/11/18/background-6360865_960_720.png",
+          url: "@/assets/image/BG05.jpg",
           editable: false,
         },
       ],

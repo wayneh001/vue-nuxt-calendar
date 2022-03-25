@@ -7,7 +7,7 @@
             class="page-link"
             href="#"
             @click.prevent="changePage(currentPage - 1)"
-            ><span aria-hidden="true">&laquo;</span></a
+            ><i class="fa fas fa-chevron-left"></i></a
           >
         </li>
         <li
@@ -23,7 +23,7 @@
             class="page-link"
             href="#"
             @click.prevent="changePage(currentPage + 1)"
-            ><span aria-hidden="true">&raquo;</span></a
+            ><i class="fa fas fa-chevron-right"></i></a
           >
         </li>
       </ul>

@@ -83,7 +83,7 @@
         type="date"
         v-model="editedMeeting.startDate"
         @input="dateSync"
-        :min="getDateStr(this.today())"
+        :min="this.getDateStr(this.today())"
       />
       <!-- 時間 -->
       <div class="mb-3">
@@ -344,11 +344,22 @@ export default {
       }
     },
     endTimeCheck(index) {
+      let now = new Date();
+      let date = new Date(this.editedMeeting.startDate);
       let key = this.time.findIndex(
         (item) => item === this.editedMeeting.startTime
       );
-      if (index <= key - 1) {
-        return true;
+      if (
+        now.getFullYear() === date.getFullYear() &&
+        now.getMonth() === date.getMonth() &&
+        now.getDate() === date.getDate()
+      ) {
+        let key = this.time.findIndex(
+          (item) => item.substr(0, 2) === (now.getHours() + 2).toString()
+        );
+        if (index <= key || index <= key - 1) {
+          return true;
+        }
       }
     },
   },

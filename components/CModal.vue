@@ -35,7 +35,7 @@
           </div>
           <div class="col-12 mt-4">
             <client-only>
-              <carousel items="5" loop="true" nav="true">
+              <carousel items="5" nav="true">
                 <div
                   class="stockImage"
                   v-for="(item, index) in stockImages"
@@ -71,22 +71,27 @@ export default {
     return {
       stockImages: [
         {
+          name: "BG01",
           src: require("../static/image/BG01.jpg"),
           editable: false,
         },
         {
+          name: "BG02",
           src: require("../static/image/BG02.jpg"),
           editable: false,
         },
         {
+          name: "BG03",
           src: require("../static/image/BG03.jpg"),
           editable: false,
         },
         {
+          name: "BG04",
           src: require("../static/image/BG04.jpg"),
           editable: false,
         },
         {
+          name: "BG05",
           src: require("../static/image/BG05.jpg"),
           editable: false,
         },
@@ -105,7 +110,7 @@ export default {
       this.$refs["my-modal"].hide();
     },
     setImage(item) {
-      this.currentImage = item.url;
+      this.currentImage = item.name;
     },
     confirm(iamge) {
       this.$emit("setImage", iamge);

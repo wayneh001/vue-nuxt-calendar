@@ -53,7 +53,7 @@ export default {
   },
   mounted() {
     this.meetingLists = this.meetingData;
-    // alert("公告：本月 14 日會議室電腦系統升級，當日不開放會議預約。");
+    alert("公告：本月 14 日會議室電腦系統升級，當日不開放會議預約。");
   },
 };
 </script>

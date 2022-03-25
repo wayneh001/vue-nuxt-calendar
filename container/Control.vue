@@ -147,7 +147,7 @@ export default {
           date.setDate(baseDate.getDate() + diff + 7);
         }
       }
-      return getDateStr(date);
+      return this.getDateStr(date);
     },
     getDiff(d1, d2, delta) {
       return (d2.getTime() - d1.getTime()) / 1000 / 3600 / 24 / delta;

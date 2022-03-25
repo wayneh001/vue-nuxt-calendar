@@ -67,6 +67,11 @@ body {
   color: #000;
 }
 
+.fa-arrow-rotate-right,
+.fa-microphone {
+  color: #686ce5;
+}
+
 .fs-custom-1 {
   font-size: calc(4rem + 1.5vw) !important;
 }

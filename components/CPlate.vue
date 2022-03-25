@@ -15,6 +15,7 @@
       </div>
       <div class="m-5 p-5" v-if="this.meeting.status">
         <div class="titleDiv mb-5">
+          <i class="fa fas fa-calendar-day fs-custom-2 me-2"></i>
           <label class="fs-custom-2 fw-bolder">{{ this.meeting.label }}</label>
           <label
             class="fs-custom-2 fw-bolder ms-5"
@@ -30,7 +31,8 @@
           <div class="row">
             <div class="col-12 mb-3">
               <div>
-                <div class="fs-custom-4 fw-bolder text-secondary">單位</div>
+                <i class="fa fas fa-user-group me-2 fs-custom-4 text-secondary"></i>
+                <label class="fs-custom-4 fw-bolder text-secondary">單位</label>
                 <div class="fs-custom-2 fw-bolder">
                   {{ this.meeting.data.unit }}
                 </div>
@@ -38,7 +40,8 @@
             </div>
             <div class="col-6">
               <div>
-                <div class="fs-custom-4 fw-bolder text-secondary">聯絡人</div>
+                <i class="fa fas fa-user me-2 fs-custom-4 text-secondary"></i>
+                <label class="fs-custom-4 fw-bolder text-secondary">聯絡人</label>
                 <div class="fs-custom-2 fw-bolder">
                   {{ this.meeting.data.applicant }}
                 </div>
@@ -46,7 +49,8 @@
             </div>
             <div class="col-6">
               <div>
-                <div class="fs-custom-4 fw-bolder text-secondary">聯絡電話</div>
+                <i class="fa fas fa-phone me-2 fs-custom-4 text-secondary"></i>
+                <label class="fs-custom-4 fw-bolder text-secondary">聯絡電話</label>
                 <div class="fs-custom-2 fw-bolder">
                   {{ this.meeting.data.tel }}
                 </div>

@@ -27,6 +27,7 @@
         name="申請人"
         rules="required"
         className="mb-3"
+        icon="fa-user"
         label="申請人"
         type="text"
         reuqired
@@ -38,6 +39,7 @@
         name="單位"
         rules="required"
         className="mb-3"
+        icon="fa-user-group"
         label="單位"
         type="text"
         required
@@ -50,6 +52,7 @@
           <CInput
             name="聯絡電話"
             rules="required"
+            icon="fa-phone"
             label="聯絡電話"
             type="text"
             reuqired
@@ -62,6 +65,7 @@
           <CInput
             name="電子信箱"
             rules="required"
+            icon="fa-envelope"
             label="電子信箱"
             type="email"
             placeholder="請輸入電子信箱"
@@ -74,6 +78,7 @@
         name="日期"
         rules="required"
         className="mb-3"
+        icon="fa-calendar-days"
         label="日期"
         type="date"
         v-model="editedMeeting.startDate"
@@ -84,6 +89,7 @@
       <div class="mb-3">
         <div class="row">
           <div class="col-5">
+            <i class="fa fas fa-clock"></i>
             <label class="form-label">開始時間</label>
             <select class="form-select" v-model="editedMeeting.startTime">
               <option
@@ -97,6 +103,7 @@
           </div>
           <div class="col-2 text-center">~</div>
           <div class="col-5">
+            <i class="fa fas fa-clock"></i>
             <label class="form-label">結束時間</label>
             <select class="form-select" v-model="editedMeeting.endTime">
               <option
@@ -112,6 +119,7 @@
       </div>
       <!-- 例行會議 -->
       <div class="mb-3">
+        <i class="fa fas fa-calendar-week"></i>
         <label class="form-label">例行會議</label>
         <div class="d-flex justify-content-between bg-light p-2">
           <div
@@ -133,6 +141,7 @@
       </div>
       <CInput
         className="mb-3"
+        icon="fa-calendar-check"
         label="例行會議結束日期"
         type="date"
         :disabled="editedMeeting.routine === '非例行會議'"
@@ -140,6 +149,7 @@
       />
       <!-- 底圖 -->
       <div class="mb-5">
+        <i class="fa fas fa-image"></i>
         <label class="form-label">底圖</label>
         <button
           class="btn btn-main w-100"

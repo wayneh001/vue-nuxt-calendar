@@ -21,7 +21,6 @@ export default {
   plugins: [
     { src: "plugins/fontawesome.js" },
     { src: "plugins/owl.js", ssr: false },
-    { src: "plugins/veevalidate.js" },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -35,9 +34,18 @@ export default {
     // https://go.nuxtjs.dev/bootstrap
     "bootstrap-vue/nuxt",
     "@nuxt/content",
+    // "@nuxtjs/recaptcha",
+    // {
+    //   recaptcha: {
+    //     hideBadge: Boolean, // Hide badge element (v3 & v2 via size=invisible)
+    //     language: String, // Recaptcha language (v2)
+    //     siteKey: String, // Site key for requests
+    //     version: Number, // Version
+    //     size: String, // Size: 'compact', 'normal', 'invisible' (v2)
+    //   },
+    // },
     // "axios"
   ],
-  build: {
-    transpile: ["vee-validate"],
-  },
+
+  build: {},
 };

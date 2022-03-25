@@ -10,6 +10,7 @@
       <div class="body">
         <div class="row">
           <div class="col-12">
+            <i class="fa fas fa-image"></i>
             <label class="form-label mb-1">當前底圖</label>
           </div>
           <div class="col-7">

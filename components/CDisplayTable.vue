@@ -13,6 +13,7 @@
         今日無預定會議
       </div>
       <div class="m-5 p-5 w-100" v-if="this.meetings.length !== 0">
+        <i class="fa fas fa-calendar-day fs-custom-2 me-2"></i>
         <label class="fs-custom-2 fw-bolder">今日會議列表</label>
         <div class="tableDiv">
           <div

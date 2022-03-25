@@ -1,7 +1,13 @@
 <template>
   <div class="vw-100 vh-100">
     <client-only>
-      <carousel items="1" nav="false" dots="false">
+      <carousel
+        items="1"
+        nav="false"
+        dots="false"
+        autoplay="true"
+        smartSpeed="1000"
+      >
         <CPlate :meeting="current" />
         <CPlate :meeting="upcoming" />
         <CDisplayTable :meetings="todayMeetings" />
@@ -33,6 +39,7 @@ export default {
         status: false,
         data: {},
       },
+      timer: null,
     };
   },
   mixins: [GeneralMathMixin],
@@ -93,13 +100,15 @@ export default {
       console.log(this.current.data, this.upcoming.data);
     },
   },
-  // watch: {
-  //   current: function (newValue) {
-  //     this.getNext(newValue);
-  //   },
-  // },
   mounted() {
     this.getTodayList(this.meetingData);
+    this.timer = setInterval(() => {
+      setTimeout(this.queryInfo, 0);
+    }, 1000 * 60 * 30);
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
+    this.timer = null;
   },
 };
 </script>

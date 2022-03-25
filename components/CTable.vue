@@ -91,6 +91,7 @@ export default {
       isActive: true,
       status: "upcoming",
       currentPage: 1,
+      totalPage: 1,
       // editable1: true,
     };
   },
@@ -113,16 +114,22 @@ export default {
       });
       let finished = list.filter((item) => !upcoming.includes(item));
       if (this.status === "upcoming") {
+        this.countTotalPage(upcoming);
         return upcoming;
       } else {
+        this.countTotalPage(finished);
         return finished;
       }
     },
     onSwitchCheck: function (event) {
       this.status = event.target.id;
     },
+    countTotalPage(list) {
+      this.totalPage =  Math.ceil(list.length / 10);
+    },
     pageRender(list) {
-      let output = this.dataCategorized(list);
+      let filterList = list.filter((item) => item.classes === "");
+      let output = this.dataCategorized(filterList);
       return output.slice((this.currentPage - 1) * 10, this.currentPage * 10);
     },
     onEdit(item) {
@@ -150,12 +157,6 @@ export default {
   watch: {
     status: function () {
       this.isActive = !this.isActive;
-    },
-  },
-  computed: {
-    totalPage() {
-      // console.log(Math.ceil(this.meetings.length / 10));
-      return Math.ceil(this.meetings.length / 10);
     },
   },
 };

@@ -39,9 +39,6 @@ export default {
     CDeleteModal,
   },
   methods: {
-    filter() {
-      this.meetings = this.meetings.filter((item) => item.classes === "");
-    },
     openEdit(item) {
       this.meeting = item;
       this.isEdit = true;
@@ -62,15 +59,15 @@ export default {
           return meeting.id == item.id;
         });
         this.meetings[index] = { ...item };
-        this.updateMeetings();
+        this.updateMeetings(this.meetings);
       } else {
         this.onCreateRoutine(item);
       }
     },
     onCreate(item) {
+      item.id = this.getRandomID(this.idPool);
+      this.meetings.push(item);
       if (item.routine === "非例行會議") {
-        item.id = this.getRandomID(this.idPool);
-        this.meetings.push(item);
         this.updateMeetings(this.meetings);
       } else {
         this.onCreateRoutine(item);
@@ -79,52 +76,36 @@ export default {
     onCreateRoutine(item) {
       let array = [];
       let startDate = new Date(item.startDate);
-      let baseDate = new Date(startDate);
       let endDate = new Date(item.routineEndDate);
       let dd = this.getDiff(startDate, endDate, 1);
       let wd = Math.floor(this.getDiff(startDate, endDate, 7));
-      let md = Math.floor(this.getDiff(startDate, endDate, 30));
+      let md = Math.floor(this.getDiff(startDate, endDate, 28));
       switch (item.routine) {
         case "每月":
-          for (let m = 0; m < md; m++) {
+          for (let m = 1; m <= md; m++) {
             let itemCopy = { ...item };
             itemCopy.id = this.getRandomID(array);
-            itemCopy.startDate = this.routineFormatted(
-              startDate,
-              baseDate,
-              m,
-              0
-            );
+            itemCopy.startDate = this.routineFormatted(startDate, 28);
             itemCopy.endDate = itemCopy.startDate;
             array.push(itemCopy);
           }
           break;
         case "每週":
           array.push(item);
-          for (let w = 1; w < wd; w++) {
+          for (let w = 1; w <= wd; w++) {
             let itemCopy = { ...item };
             itemCopy.id = this.getRandomID(array);
-            itemCopy.startDate = this.routineFormatted(
-              startDate,
-              baseDate,
-              0,
-              7
-            );
+            itemCopy.startDate = this.routineFormatted(startDate, 7);
             itemCopy.endDate = itemCopy.startDate;
             array.push(itemCopy);
           }
           break;
         case "每日":
           array.push(item);
-          for (let d = 1; d < dd; d++) {
+          for (let d = 1; d <= dd; d++) {
             let itemCopy = { ...item };
             itemCopy.id = this.getRandomID(array);
-            itemCopy.startDate = this.routineFormatted(
-              startDate,
-              baseDate,
-              0,
-              1
-            );
+            itemCopy.startDate = this.routineFormatted(startDate, 1);
             itemCopy.endDate = itemCopy.startDate;
             array.push(itemCopy);
           }
@@ -133,19 +114,15 @@ export default {
       this.meetings = this.meetings.concat(array);
       this.updateMeetings(this.meetings);
     },
-    routineFormatted(date, baseDate, m, d) {
-      if (m === 0) {
+    routineFormatted(date, d) {
+      if (d === 28) {
+        let month = date.getMonth();
         date.setDate(date.getDate() + d);
-      } else {
-        let tempDate = new Date(date.setMonth(baseDate.getMonth() + m));
-        tempDate.setDate(1);
-        console.log(tempDate);
-        let diff = baseDate.getDay() - tempDate.getDay();
-        if (diff >= 0) {
-          date.setDate(baseDate.getDate() + diff);
-        } else {
-          date.setDate(baseDate.getDate() + diff + 7);
+        if (date.getMonth() === month) {
+          date.setDate(date.getDate() + 7);
         }
+      } else {
+        date.setDate(date.getDate() + d);
       }
       return this.getDateStr(date);
     },
@@ -168,6 +145,15 @@ export default {
       }
     },
     updateMeetings(item) {
+      item.sort(function (a, b) {
+        let asd = a.startDate;
+        let bsd = b.strartDate;
+        if (asd === bsd) {
+          return a.startTime > b.startTime ? 1 : -1;
+        } else {
+          return a.startDate > b.startDate ? 1 : -1;
+        }
+      });
       this.$emit("update", item);
     },
     getIDPool() {
@@ -190,11 +176,12 @@ export default {
     meetingLists: function (newValue) {
       this.meetings = [...newValue];
       this.getIDPool(this.idPool);
-      this.filter();
     },
   },
   mounted() {
     this.getIDPool();
+    // let date = new Date(2022,1,0)
+    // console.log(date.getDate());
   },
 };
 </script>

@@ -380,6 +380,9 @@ export default {
         ep.classes.push(`offset${startOffset}`);
         ep.classes.push(`span${span}`);
         results.push(ep);
+        results.sort(function (a, b) {
+          return a.originalEvent.startTime > b.originalEvent.startTime ? 1 : -1;
+        });
       }
       return results;
     },
@@ -407,6 +410,7 @@ export default {
     getEventTop(e) {
       // Compute the top position of the event based on its assigned row within the given week.
       const r = e.eventRow;
+      // console.log(e.originalEvent.startTime, r);
       const h = this.eventContentHeight;
       const b = this.eventBorderHeight;
       return this.displayPeriodUom === "month"

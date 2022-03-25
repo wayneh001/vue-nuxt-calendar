@@ -240,6 +240,7 @@ export default {
         "18:00",
       ],
       routine: ["非例行會議", "每日", "每週", "每月"],
+      invalidTime: [],
     };
   },
   props: {
@@ -285,7 +286,6 @@ export default {
           keys.push(`${dictionary[key]}`);
         }
       }
-      console.log(keys);
       if (keys.length === 0) {
         let formErr = this.onFormateCheck(item);
         console.log(formErr);
@@ -325,6 +325,9 @@ export default {
     },
     dateSync() {
       this.editedMeeting.endDate = this.editedMeeting.startDate;
+    },
+    getInvalidTime() {
+
     },
     startTimeCheck(index) {
       let now = new Date();

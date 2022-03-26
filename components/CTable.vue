@@ -105,6 +105,7 @@ export default {
   components: { CPagination },
   methods: {
     dataCategorized(list) {
+      this.meetingsSort(list);
       let today = new Date();
       let upcoming = list.filter(function (item) {
         return (

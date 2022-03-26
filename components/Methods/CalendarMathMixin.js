@@ -292,6 +292,8 @@ export default {
 				title: event.title || "Untitled",
 				// Events without an id receive an auto-generated ID
 				id: event.id || "e" + Math.random().toString(36).substr(2, 10),
+				startTime: event.startTime,
+				endTime: event.endTime,
 			}
 		},
 

@@ -61,7 +61,6 @@
 <script>
 import GeneralMathMixin from "@/components/Methods/GeneralMathMixin";
 export default {
-  
   data() {
     return {
       deleteable: true,
@@ -86,15 +85,11 @@ export default {
       this.hideModal();
     },
     check(item) {
-      let date = new Date(item.startDate);
-      if (
-        this.today().getFullYear() === date.getFullYear() &&
-        this.today().getMonth() === date.getMonth() &&
-        this.today().getDate() === date.getDate()
-      ) {
+      let today = this.getDateStr(this.today());
+      if (item.startDate === today) {
         if (
-          this.numberized(item.startTime, 0, 2) - now.getHours() > 2 ||
-          this.numberized(item.startTime, 3, 2) - now.getMinutes() > 0
+          this.numberized(item.startTime, 0, 2) - this.today().getHours() > 2 ||
+          this.numberized(item.startTime, 3, 2) - this.today().getMinutes() > 0
         ) {
           return true;
         } else {

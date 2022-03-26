@@ -95,7 +95,7 @@
               <option
                 v-for="(item, index) in time.slice(0, 20)"
                 :key="index"
-                :disabled="startTimeCheck(index)"
+                :disabled="startTimeSet(index)"
               >
                 {{ item }}
               </option>
@@ -109,7 +109,7 @@
               <option
                 v-for="(item, index) in time.slice(1)"
                 :key="index"
-                :disabled="endTimeCheck(index)"
+                :disabled="endTimeSet(index)"
               >
                 {{ item }}
               </option>
@@ -240,12 +240,15 @@ export default {
         "18:00",
       ],
       routine: ["非例行會議", "每日", "每週", "每月"],
-      invalidTime: [],
     };
   },
   props: {
     meeting: {
       type: Object,
+      require: false,
+    },
+    meetings: {
+      type: Array,
       require: false,
     },
   },
@@ -288,15 +291,19 @@ export default {
       }
       if (keys.length === 0) {
         let formErr = this.onFormateCheck(item);
-        console.log(formErr);
         if (formErr === "") {
-          return true;
+          formErr = this.onTimeCheck(item, this.meetings);
+          if (formErr === "") {
+            return true;
+          } else {
+            this.$refs.checkModal.showModal(keys, "timeConflict", formErr);
+          }
         } else {
-          this.$refs.checkModal.showModal(keys, formErr);
+          this.$refs.checkModal.showModal(keys, "formatError", formErr);
           return false;
         }
       } else {
-        this.$refs.checkModal.showModal(keys, "");
+        this.$refs.checkModal.showModal(keys, "missing", "");
         return false;
       }
     },
@@ -309,6 +316,62 @@ export default {
         return "電子郵件格式不正確";
       } else {
         return "";
+      }
+    },
+    getTimeSequence(start, end) {
+      let time = [...this.time];
+      let si = time.findIndex((e) => e === start);
+      let ei = time.findIndex((e) => e === end);
+      let sequence = time.slice(si, ei);
+      return sequence;
+    },
+    getInvalidTime(list) {
+      let today = this.getDateStr(this.today());
+      let datePool = [];
+      let obj = {
+        date: "",
+        time: [],
+      };
+      let array = [];
+      let f = this.getTimeSequence;
+      list.forEach(function (efe) {
+        if (efe.startDate > today) {
+          if (!datePool.includes(efe.startDate)) {
+            datePool.push(efe.startDate);
+            obj.date = efe.startDate;
+            obj.time = f(efe.startTime, efe.endTime);
+            array.push(obj);
+          } else {
+            let i = array.findIndex((efi) => efi.date === efe.startDate);
+            console.log(array[0].time, i);
+            array[i].time += f(efe.startTime, efe.endTime);
+          }
+        }
+      });
+      return array;
+    },
+    onTimeCheck(item, list) {
+      let itemSequence = this.getTimeSequence(item.startTime, item.endTime);
+      let invalidTime = this.getInvalidTime(list);
+      console.log(invalidTime);
+      if (invalidTime.filter((e) => e.date === item.startDate).length === 0) {
+        console.log("yes");
+        return "";
+      } else {
+        let results = [];
+        itemSequence.forEach(function (eseq) {
+          invalidTime.forEach(function (einv) {
+            let result = einv.time.indexOf(eseq);
+            results.push(result);
+          });
+          console.log(results);
+        });
+        if (results.filter((e) => e !== -1).length === 0) {
+          console.log("no");
+          return "";
+        } else {
+          return "會議時間衝突，該時段已有預約會議，請另外選擇時間";
+        }
       }
     },
     onSave(item) {
@@ -326,19 +389,14 @@ export default {
     dateSync() {
       this.editedMeeting.endDate = this.editedMeeting.startDate;
     },
-    getInvalidTime() {
-
-    },
-    startTimeCheck(index) {
-      let now = new Date();
-      let date = new Date(this.editedMeeting.startDate);
+    startTimeSet(index) {
       if (
-        now.getFullYear() === date.getFullYear() &&
-        now.getMonth() === date.getMonth() &&
-        now.getDate() === date.getDate()
+        this.today().getFullYear() === this.formatDate(this.editedMeeting.startDate).getFullYear() &&
+        this.today().getMonth() === this.formatDate(this.editedMeeting.startDate).getMonth() &&
+        this.today().getDate() === this.formatDate(this.editedMeeting.startDate).getDate()
       ) {
         let key = this.time.findIndex(
-          (item) => item.substr(0, 2) === (now.getHours() + 2).toString()
+          (item) => item.substr(0, 2) === (this.today().getHours() + 2).toString()
         );
         // console.log(key);
         if (index <= key) {
@@ -346,21 +404,19 @@ export default {
         }
       }
     },
-    endTimeCheck(index) {
-      let now = new Date();
-      let date = new Date(this.editedMeeting.startDate);
-      let key = this.time.findIndex(
-        (item) => item === this.editedMeeting.startTime
-      );
+    endTimeSet(index) {
       if (
-        now.getFullYear() === date.getFullYear() &&
-        now.getMonth() === date.getMonth() &&
-        now.getDate() === date.getDate()
+        this.today().getFullYear() === this.formatDate(this.editedMeeting.startDate).getFullYear() &&
+        this.today().getMonth() === this.formatDate(this.editedMeeting.startDate).getMonth() &&
+        this.today().getDate() === this.formatDate(this.editedMeeting.startDate).getDate()
       ) {
         let key = this.time.findIndex(
-          (item) => item.substr(0, 2) === (now.getHours() + 2).toString()
+          (item) => item.substr(0, 2) === (this.today().getHours() + 2).toString()
         );
-        if (index <= key || index <= key - 1) {
+        let key2 = this.time.findIndex(
+          (item) => item === this.editedMeeting.startTime
+        );
+        if (index <= key || index <= key2 - 1) {
           return true;
         }
       }
@@ -371,10 +427,15 @@ export default {
       this.titleEdit = false;
     }
     this.getLastDay();
-    // console.log(this.editedMeeting.routineEndDate);
-    // let now = new Date();
-    // let a = now.getHours();
-    // console.log(a);
+    // this.getInvalidTime(this.meetings);
+    // let a = [1, 2, 3];
+    // let b = [2, 4, 5];
+    // let d = [];
+    // a.forEach(function (e) {
+    //   let c = b.indexOf(e);
+    //   d.push(c);
+    // });
+    // console.log(d);
   },
 };
 </script>

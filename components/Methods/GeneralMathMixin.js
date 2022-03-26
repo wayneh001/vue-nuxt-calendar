@@ -1,8 +1,12 @@
 export default {
   methods: {
     today() {
-      let now = new Date();
+      let now = new Date("2022-03-28 09:00");
       return now;
+    },
+    formatDate(str) {
+      let date = new Date(str);
+      return date;
     },
     getDateStr(date) {
       let sy = date.getFullYear().toString();
@@ -14,8 +18,8 @@ export default {
       return str;
     },
     getTimeStr(time) {
-      let sh = time.getHours()
-      let sm = time.getMinute()
+      let sh = time.getHours();
+      let sm = time.getMinute();
       sh = sm < 10 ? `0${sm}` : sh.toString();
       sm = sd < 10 ? `0${sd}` : sm.toString();
       let str = `${sh}:${sm}`;
@@ -23,6 +27,17 @@ export default {
     },
     numberized(item, s, l) {
       return parseInt(item.substr(s, l));
+    },
+    meetingsSort(item) {
+      item.sort(function (a, b) {
+        let asd = a.startDate;
+        let bsd = b.strartDate;
+        if (asd === bsd) {
+          return a.startTime > b.startTime ? 1 : -1;
+        } else {
+          return a.startDate > b.startDate ? 1 : -1;
+        }
+      });
     },
   },
 };

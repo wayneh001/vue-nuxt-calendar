@@ -4,7 +4,7 @@
       <CTable :meetings="meetings" @open="openEdit" @delete="showDeleteModal" />
     </div>
     <div v-if="isEdit">
-      <CForm :meeting="meeting" @close="closeEdit" />
+      <CForm :meetings="meetings" :meeting="meeting" @close="closeEdit" />
     </div>
     <CDeleteModal @confirm="onDelete" ref="deleteModal" />
   </div>
@@ -141,19 +141,13 @@ export default {
             return meeting.title !== item.title;
           });
         }
-        this.updateMeetings();
+        this.updateMeetings(this.meetings);
       }
     },
     updateMeetings(item) {
-      item.sort(function (a, b) {
-        let asd = a.startDate;
-        let bsd = b.strartDate;
-        if (asd === bsd) {
-          return a.startTime > b.startTime ? 1 : -1;
-        } else {
-          return a.startDate > b.startDate ? 1 : -1;
-        }
-      });
+      if (item.length > 1) {
+        this.meetingsSort(item);
+      }
       this.$emit("update", item);
     },
     getIDPool() {

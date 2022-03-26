@@ -274,7 +274,7 @@ export default {
     },
 
     onClickEvent(item) {
-      if (item.classes !== "disabled" && item.title.includes(this.keywords) ) {
+      if (item.classes !== "disabled" && item.title.includes(this.keywords)) {
         this.$emit("clickEvent", item);
       }
     },
@@ -331,9 +331,9 @@ export default {
         .sort((a, b) => {
           if (a.startDate < b.startDate) return -1;
           if (b.startDate < a.startDate) return 1;
-          if (a.endDate > b.endDate) return -1;
-          if (b.endDate > a.endDate) return 1;
-          return a.id < b.id ? -1 : 1;
+          if (a.startTime < b.startTime) return -1;
+          if (a.startTime < b.startTime) return 1;
+          return;
         });
       // console.log(events);
       return events;
@@ -380,9 +380,6 @@ export default {
         ep.classes.push(`offset${startOffset}`);
         ep.classes.push(`span${span}`);
         results.push(ep);
-        results.sort(function (a, b) {
-          return a.originalEvent.startTime > b.originalEvent.startTime ? 1 : -1;
-        });
       }
       return results;
     },
@@ -392,8 +389,8 @@ export default {
 		end time. Midnight is not displayed.
 		*/
     getFormattedTimeRange(e) {
-      const startTime = e.originalEvent.startTime;
-      let endTime = e.originalEvent.endTime;
+      const startTime = e.startTime;
+      let endTime = e.endTime;
       return (
         (startTime !== ""
           ? `<span class="startTime">${startTime}</span>`
@@ -410,14 +407,13 @@ export default {
     getEventTop(e) {
       // Compute the top position of the event based on its assigned row within the given week.
       const r = e.eventRow;
-      // console.log(e.originalEvent.startTime, r);
       const h = this.eventContentHeight;
       const b = this.eventBorderHeight;
       return this.displayPeriodUom === "month"
         ? `calc(${this.eventTop} + ${r}*${h} + ${r}*${b})`
         : `calc(${this.cell}*${this.timeDiff(
             "08:00",
-            e.originalEvent.startTime
+            e.startTime
           )}px)`;
     },
 
@@ -440,14 +436,14 @@ export default {
       return this.displayPeriodUom === "month"
         ? "1.4em"
         : `calc(${this.cell}*${this.timeDiff(
-            e.originalEvent.startTime,
-            e.originalEvent.endTime
+            e.startTime,
+            e.endTime
           )}px)`;
     },
 
     filterEvents(e) {
       if (
-        e.originalEvent.title.includes(this.keywords) ||
+        e.title.includes(this.keywords) ||
         this.keywords === ""
       ) {
         return "100%";

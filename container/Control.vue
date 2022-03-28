@@ -39,10 +39,12 @@ export default {
     CDeleteModal,
   },
   methods: {
+    // 開啟編輯
     openEdit(item) {
       this.meeting = item;
       this.isEdit = true;
     },
+    // 結束編輯
     closeEdit(item) {
       if (item != undefined) {
         this.meeting = item;
@@ -50,9 +52,11 @@ export default {
       }
       this.isEdit = false;
     },
+    // 開啟刪除彈窗
     showDeleteModal(item) {
       this.$refs.deleteModal.showModal(item);
     },
+    // 更新會議
     onUpdate(item) {
       if (item.routine === "非例行會議") {
         let index = this.meetings.findIndex(function (meeting) {
@@ -64,6 +68,7 @@ export default {
         this.onCreateRoutine(item);
       }
     },
+    // 創造會議
     onCreate(item) {
       item.id = this.getRandomID(this.idPool);
       this.meetings.push(item);
@@ -73,6 +78,7 @@ export default {
         this.onCreateRoutine(item);
       }
     },
+    // 創造例行會議
     onCreateRoutine(item) {
       let array = [];
       let startDate = new Date(item.startDate);
@@ -114,6 +120,7 @@ export default {
       this.meetings = this.meetings.concat(array);
       this.updateMeetings(this.meetings);
     },
+    // 計算例行會議，依據 Radio 所選，分別加上 28 天 ( 每月 )、7 ( 每週 ) 天與 1 天 ( 每日 )，在每月的計算下，如加上 28 天後未進入下一月份，則再加上 7 天
     routineFormatted(date, d) {
       if (d === 28) {
         let month = date.getMonth();
@@ -126,9 +133,11 @@ export default {
       }
       return this.getDateStr(date);
     },
+    // 取得日期差
     getDiff(d1, d2, delta) {
       return (d2.getTime() - d1.getTime()) / 1000 / 3600 / 24 / delta;
     },
+    // 刪除會議
     onDelete(item, routine) {
       if (item != undefined) {
         this.meeting = item;
@@ -144,12 +153,14 @@ export default {
         this.updateMeetings(this.meetings);
       }
     },
+    // 上傳會議列表
     updateMeetings(item) {
       if (item.length > 1) {
         this.meetingsSort(item);
       }
       this.$emit("update", item);
     },
+    // 取得 ID 庫
     getIDPool() {
       let ids = [];
       this.meetings.forEach(function (item) {
@@ -157,6 +168,7 @@ export default {
       });
       this.idPool = [...ids];
     },
+    // 取得隨機 ID
     getRandomID(pool) {
       let id;
       do {

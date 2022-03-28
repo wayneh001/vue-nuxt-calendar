@@ -49,6 +49,7 @@ export default {
   },
   layout: "layoutBanner",
   methods: {
+    // 取得會議列表，並只存入今日會議
     getTodayList(data) {
       let str = this.getDateStr(this.today());
       let list = [];
@@ -62,6 +63,7 @@ export default {
         this.sortList(this.today(), this.todayMeetings);
       }
     },
+    // 分類今日會議列表，分別至已完成未完成與進行中
     sortList(time, list) {
       let finished = [];
       let current = {};
@@ -88,6 +90,7 @@ export default {
       console.log(finished, current, remain);
       this.displayData(current, remain);
     },
+    // 呈現當前與下一會議，並傳入組件
     displayData(c, r) {
       if (Object.entries(c).length !== 0) {
         this.current.status = true;
@@ -100,6 +103,7 @@ export default {
       console.log(this.current.data, this.upcoming.data);
     },
   },
+  // 設定每半小時更新一次頁面
   mounted() {
     this.getTodayList(this.meetingData);
     this.timer = setInterval(() => {

@@ -72,6 +72,7 @@ export default {
     },
   },
   methods: {
+    // 取得背景圖片
     getBGImage() {
       if (this.meeting.status && this.meeting.data.background !== "") {
         let src = this.meeting.data.background;

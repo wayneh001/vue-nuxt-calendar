@@ -254,23 +254,29 @@ export default {
   },
   component: { CInput, CModal },
   methods: {
+    // 開啟編輯標題
     onTitleEdit() {
       this.titleEdit = true;
       this.$refs.titleFoucs.focus();
     },
+    // 完成編輯標題
     doneTitleEdit() {
       this.titleEdit = false;
       this.$refs.titleFoucs.blur();
     },
+    // 開啟選取背景圖彈窗
     onChangeBG() {
       this.$refs.Modal.showModal();
     },
+    // 設定背景圖彈窗
     onSetImage(iamge) {
       this.editedMeeting.background = iamge;
     },
+    // 取消編輯
     onCancel() {
       this.$emit("close");
     },
+    // 表單檢查，依序檢查 1. 有無未輸入欄位 2. 輸入欄位 ( 聯絡電話與電子信箱 ) 格式是否正確 3. 所選之日期、開始時間與結束時間是否與現有會議衝突
     onCheck(item) {
       let dictionary = {
         title: "會議名稱",
@@ -307,6 +313,7 @@ export default {
         return false;
       }
     },
+    // 聯絡電話與電子信箱格式檢查
     onFormateCheck(item) {
       const ef =
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -318,6 +325,7 @@ export default {
         return "";
       }
     },
+    // 取得佔用時間點標籤區段 ( 會議以半小時為單位，藉由計算開始與結束時間，圈選出含開始不含結束在內的所有時間點標籤 )
     getTimeSequence(start, end) {
       let time = [...this.time];
       let si = time.findIndex((e) => e === start);
@@ -325,6 +333,7 @@ export default {
       let sequence = time.slice(si, ei);
       return sequence;
     },
+    // 取得無法使用時間數據。將今天以後的所有會議日期與時間點標籤區段存入
     getInvalidTime(list) {
       let today = this.getDateStr(this.today());
       let datePool = [];
@@ -350,6 +359,7 @@ export default {
       });
       return array;
     },
+    // 檢查時間，將所選開始日期、與佔用的時間點標籤區段是否與無法使用時間數據比對，確認時否有重疊
     onTimeCheck(item, list) {
       let itemSequence = this.getTimeSequence(item.startTime, item.endTime);
       let invalidTime = this.getInvalidTime(list);
@@ -374,11 +384,13 @@ export default {
         }
       }
     },
+    // 儲存事件
     onSave(item) {
       if (this.onCheck(item)) {
         this.$emit("close", item);
       }
     },
+    // 取得今年最後一天，作為預設的例行會議到期日
     getLastDay() {
       let date = new Date();
       let ld = date.getFullYear();
@@ -386,9 +398,11 @@ export default {
         this.editedMeeting.routineEndDate = `${ld.toString()}-12-31`;
       }
     },
+    // 連動開始日與結束日 ( 此專案中不會出現跨日期事件，然而套版有相關屬性，藉此同步避免出錯 )
     dateSync() {
       this.editedMeeting.endDate = this.editedMeeting.startDate;
     },
+    // 無效化開始時間點標籤，依據所選日期與當前時間無效化已過去的時間點標籤
     startTimeSet(index) {
       if (
         this.today().getFullYear() === this.formatDate(this.editedMeeting.startDate).getFullYear() &&
@@ -404,6 +418,7 @@ export default {
         }
       }
     },
+    // 無效化結束時間點標籤，依據所選日期、當前時間與已選之開始時間點標籤無效化結束時間點標籤
     endTimeSet(index) {
       if (
         this.today().getFullYear() === this.formatDate(this.editedMeeting.startDate).getFullYear() &&

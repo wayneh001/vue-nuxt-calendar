@@ -101,16 +101,20 @@ export default {
     },
   },
   methods: {
+    // 輸入跳轉指定日期或週別
     onInput(d) {
       this.$emit("input", d);
     },
+    // 月與週標籤切換
     onSwitchCheck: function (event) {
       this.status = event.target.id;
     },
+    // 計算並顯示日期標籤
     calculatePeriodLabel(v) {
       let n = v.substr(-2, 2);
       return n;
     },
+    // 取得週別數據
     getWeek(d) {
       let oneJan = new Date(d.getFullYear(), 0, 1); // first date of year.
       let numberOfDays = Math.floor((d - oneJan) / (24 * 60 * 60 * 1000));
@@ -118,10 +122,12 @@ export default {
       // console.log(w);
       return w;
     },
+    // 清除搜尋框
     reset() {
       this.keywords = "";
       this.search(this.keywords);
     },
+    // 搜尋事件
     search(k) {
       this.$emit("search", k);
     },

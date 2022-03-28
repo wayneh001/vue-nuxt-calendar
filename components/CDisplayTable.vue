@@ -53,6 +53,7 @@ export default {
   },
   mixins: [GeneralMathMixin],
   methods: {
+    // 依據時間獲取會議的表格樣式
     getBlockStyle(item) {
       let sh = this.numberized(item.startTime, 0, 2);
       let sm = this.numberized(item.startTime, 3, 2);

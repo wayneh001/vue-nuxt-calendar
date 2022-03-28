@@ -36,12 +36,14 @@ export default {
       item: {},
     };
   },
+  // 更新會議列表，後續 api 的串接點
   methods: {
     updateMeetingLists(meetings) {
       if (meetings !== undefined) {
         this.meetingLists = meetings;
       }
     },
+    // 月曆組件的點擊事件
     onClickEvent(item) {
       this.$refs.control.openEdit(item);
     },

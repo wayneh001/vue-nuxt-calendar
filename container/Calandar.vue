@@ -28,9 +28,11 @@ export default {
     },
   },
   methods: {
+    // 設定顯示日期
     setShowDate(d) {
       this.showDate = d;
     },
+    // 點擊事件
     onClickEvent(item) {
       this.$emit("clickEvent", item);
     }

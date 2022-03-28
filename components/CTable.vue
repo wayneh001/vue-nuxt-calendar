@@ -104,6 +104,7 @@ export default {
   },
   components: { CPagination },
   methods: {
+    // 會議列表依據已完成與未完成分類
     dataCategorized(list) {
       this.meetingsSort(list);
       let today = new Date();
@@ -122,35 +123,43 @@ export default {
         return finished;
       }
     },
+    // 已完成與未完成標籤切換
     onSwitchCheck: function (event) {
       this.status = event.target.id;
     },
+    // 計算總頁數
     countTotalPage(list) {
       this.totalPage =  Math.ceil(list.length / 10);
     },
+    // 當前頁碼頁面渲染
     pageRender(list) {
       let filterList = list.filter((item) => item.classes === "");
       let output = this.dataCategorized(filterList);
       return output.slice((this.currentPage - 1) * 10, this.currentPage * 10);
     },
+    // 編輯會議事件
     onEdit(item) {
       if (this.status === "upcoming") {
         this.$emit("open", item);
       }
     },
+    // 刪除會議事件
     onDelete(item) {
       if (this.status === "upcoming") {
         this.$emit("delete", item);
         this.meeting = item;
       }
     },
+    // 新增會議事件
     onAdd() {
       this.$emit("open");
     },
+    // 開啟刪除會議彈窗
     deleteMeeting() {
       console.log("會議已刪除");
       this.$refs.deleteModal.hideModal();
     },
+    // 頁碼切換處理
     pageChangeHandler(value) {
       this.currentPage = value;
     },

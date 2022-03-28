@@ -142,6 +142,7 @@ export default {
 		Props cannot default to computed/method returns, so create defaulted version of this
 		property and use it rather than the bare prop (Vue Issue #6013).
 		*/
+    //語言在地化
     displayLocale() {
       return this.locale || this.getDefaultBrowserLocale();
     },
@@ -150,6 +151,7 @@ export default {
 		ShowDate, but defaulted to today. Needed both for periodStart below and for the
 		"outside of month" class.
 		*/
+    // 預設展示時間
     defaultedShowDate() {
       return this.showDate || this.today();
     },
@@ -158,6 +160,7 @@ export default {
 		Given the showDate, defaulted to today, computes the beginning and end of the period
 		that the date falls within.
 		*/
+    // 計算畫面時間起始點
     periodStart() {
       return this.beginningOfPeriod(
         this.defaultedShowDate,
@@ -165,7 +168,7 @@ export default {
         this.startingDayOfWeek
       );
     },
-
+    // 計算畫面時間結束點
     periodEnd() {
       return this.addDays(
         this.incrementPeriod(
@@ -182,10 +185,11 @@ export default {
 		be the same as the intended period, since the period may not start and stop evenly
 		on the starting day of the week.
 		*/
+    // 展示畫面起始日
     displayFirstDate() {
       return this.beginningOfWeek(this.periodStart, this.startingDayOfWeek);
     },
-
+    // 展示畫面結束數
     displayLastDate() {
       return this.endOfWeek(this.periodEnd, this.startingDayOfWeek);
     },
@@ -194,6 +198,7 @@ export default {
 		Create an array of dates, where each date represents the beginning of a week that
 		should be rendered in the view for the current period.
 		*/
+    // 計算週別數陣列數
     weeksOfPeriod() {
       // Returns an array of object representing the date of the beginning of each week
       // included in the view.
@@ -206,12 +211,14 @@ export default {
     },
 
     // Cache the names based on current locale and format settings
+    // 展示月標籤名稱
     monthNames() {
       return this.getFormattedMonthNames(
         this.displayLocale,
         this.monthNameFormat
       );
     },
+    // 展示週標籤名稱
     weekdayNames() {
       return this.getFormattedWeekdayNames(
         this.displayLocale,
@@ -221,12 +228,14 @@ export default {
     },
 
     // Ensure all event properties have suitable default
+    // 格式化會議事件
     fixedEvents() {
       // console.log(this.events);
       return this.events.map(this.normalizeEvent);
     },
 
     // Creates the HTML to render the date range for the calendar header.
+    // 計算週期標籤
     periodLabel() {
       return this.formattedPeriod(
         this.periodStart,
@@ -235,7 +244,7 @@ export default {
         this.monthNames
       );
     },
-
+    // 傳入 Headr 組件之數據
     headerProps() {
       return {
         // Dates for UI navigation
@@ -266,23 +275,23 @@ export default {
     // ******************************
     // UI Events
     // ******************************
-
+    // 日期點擊事件
     onClickDay(day) {
       if (this.disablePast && this.isInPast(day)) return;
       if (this.disableFuture && this.isInFuture(day)) return;
       this.$emit("click-date", day);
     },
-
+    // 會議點擊事件
     onClickEvent(item) {
       if (item.classes !== "disabled" && item.title.includes(this.keywords)) {
         this.$emit("clickEvent", item);
       }
     },
-
+    // 當前日期變更
     onChangeDate(d) {
       this.$emit("show-date-change", d);
     },
-
+    // 當前週期變更
     onChangePeriod(p) {
       this.displayPeriodUom = p;
       this.onChangeDate();
@@ -297,6 +306,7 @@ export default {
 		number of the current display units. Returns null if said move would result in a
 		disallowed display period.
 		*/
+    // 計算因 Header 日期前後跳動操作後的新開始日與結束日
     getIncrementedPeriod(count) {
       const newStartDate = this.incrementPeriod(
         this.periodStart,
@@ -316,7 +326,7 @@ export default {
     // ******************************
     // Calendar Events
     // ******************************
-
+    // 篩選與排序當前應展示的會議事件
     findAndSortEventsInWeek(weekStart) {
       // Return a list of events that INCLUDE any day of a week starting on a
       // particular day. Sorted so the events that start earlier are always
@@ -338,12 +348,12 @@ export default {
       // console.log(events);
       return events;
     },
-
+    // 儲存 Header 傳來的關鍵字
     onInputKeywords(k) {
       this.keywords = k;
       console.log(this.keywords);
     },
-
+    //展示會議事件
     getWeekEvents(weekStart) {
       // Return a list of events that CONTAIN the week starting on a day.
       // Sorted so the events that start earlier are always shown first.
@@ -388,6 +398,7 @@ export default {
 		Creates the HTML to prefix the event title showing the event's start and/or
 		end time. Midnight is not displayed.
 		*/
+    // 格式化跨日期事件 ( 未使用 )
     getFormattedTimeRange(e) {
       const startTime = e.startTime;
       let endTime = e.endTime;
@@ -398,12 +409,12 @@ export default {
         (endTime !== "" ? `<span class="endTime">${endTime}</span>` : "")
       );
     },
-
+    // 取得會議事件標題
     getEventTitle(e) {
       if (this.displayPeriodUom === "week") return e.title;
       return this.getFormattedTimeRange(e) + " " + e.title;
     },
-
+    // 取得會議事件起始高度點
     getEventTop(e) {
       // Compute the top position of the event based on its assigned row within the given week.
       const r = e.eventRow;
@@ -411,19 +422,16 @@ export default {
       const b = this.eventBorderHeight;
       return this.displayPeriodUom === "month"
         ? `calc(${this.eventTop} + ${r}*${h} + ${r}*${b})`
-        : `calc(${this.cell}*${this.timeDiff(
-            "08:00",
-            e.startTime
-          )}px)`;
+        : `calc(${this.cell}*${this.timeDiff("08:00", e.startTime)}px)`;
     },
-
+    // 取得外框高度
     getClientHeight() {
       if (process.client) {
         this.cell = document.getElementById("weeks").clientHeight / 10;
         // console.log(this.cell);
       }
     },
-
+    // 計算會議時間差，並依據單元 ( cell ) 計算實際高度
     timeDiff(t1, t2) {
       let start = t1.split(":");
       let end = t2.split(":");
@@ -431,21 +439,15 @@ export default {
       let endTime = new Date(0, 0, 0, end[0], end[1], 0);
       return (endTime - startTime) / (60 * 60 * 1000);
     },
-
+    // 取得會議事件高度
     getEventHeight(e) {
       return this.displayPeriodUom === "month"
         ? "1.4em"
-        : `calc(${this.cell}*${this.timeDiff(
-            e.startTime,
-            e.endTime
-          )}px)`;
+        : `calc(${this.cell}*${this.timeDiff(e.startTime, e.endTime)}px)`;
     },
-
+    // 依據關鍵字隱藏無關會議事件
     filterEvents(e) {
-      if (
-        e.title.includes(this.keywords) ||
-        this.keywords === ""
-      ) {
+      if (e.title.includes(this.keywords) || this.keywords === "") {
         return "100%";
       } else {
         return "0";

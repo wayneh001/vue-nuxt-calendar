@@ -35,6 +35,7 @@
 export default {
   props: ["totalPage", "currentPage"],
   methods: {
+    // 換頁
     changePage(page) {
       this.$emit("page-change", page);
     },

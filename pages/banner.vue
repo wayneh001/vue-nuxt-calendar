@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import meetingData from "@/contents/json/data.json";
+import meetingData from "@/content/json/data.json";
 import CPlate from "@/components/CPlate";
 import CDisplayTable from "@/components/CDisplayTable";
 import GeneralMathMixin from "@/components/Methods/GeneralMathMixin";

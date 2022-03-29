@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import meetingData from "@/contents/json/data.json";
+import meetingData from "@/content/json/data.json";
 import Control from "@/container/Control";
 import Calandar from "@/container/Calandar";
 export default {

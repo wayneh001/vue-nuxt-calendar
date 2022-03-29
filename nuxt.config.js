@@ -1,10 +1,26 @@
 const routerBase =
   process.env.DEPLOY_ENV === 'GH_PAGES'
     ? {
-        router: {
-          base: '/<vue-nuxt-calendar>/'
-        }
+      router: {
+        routes: [
+          {
+            name: 'index',
+            path: '/',
+            component: 'pages/index.vue'
+          },
+          {
+            name: 'dashboard',
+            path: '/dashboard',
+            component: 'pages/dashboard.vue'
+          },
+          {
+            name: 'banner',
+            path: '/banner',
+            component: 'pages/banner.vue'
+          }
+        ]
       }
+    }
     : {}
 
 export default {
@@ -57,5 +73,9 @@ export default {
     // "axios"
   ],
 
-  build: {},
+  build: {
+    babel: {
+      compact: true,
+    },
+  },
 };

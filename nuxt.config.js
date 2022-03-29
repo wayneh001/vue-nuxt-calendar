@@ -1,4 +1,14 @@
+const routerBase =
+  process.env.DEPLOY_ENV === 'GH_PAGES'
+    ? {
+        router: {
+          base: '/<vue-nuxt-calendar>/'
+        }
+      }
+    : {}
+
 export default {
+  ...routerBase,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: "vue-nuxt-calendar",
@@ -46,9 +56,6 @@ export default {
     // },
     // "axios"
   ],
-  router: {
-    base: '/<vue-nuxt-calendar>/'
-  },
 
   build: {},
 };

@@ -46,6 +46,9 @@ export default {
     // },
     // "axios"
   ],
+  router: {
+    base: '/<vue-nuxt-calendar>/'
+  },
 
   build: {},
 };

@@ -48,16 +48,15 @@ export default {
   },
   methods: {
     // 開啟編輯
-    openEdit(item, motion) {
-      if (motion === "onTableClick") {
+    openEdit(item) {
+      if (this.isEdit === false) {
         this.isEdit = true;
         this.meeting = item;
-      } 
-      //   else {
-      //   this.$refs.cform.onCancel();
-      //   this.motion = motion;
-      //   this.tmpMeeting = item;
-      // }
+      } else {
+        this.tmpMeeting = item;
+        this.$refs.cform.onCancel();
+        
+      }
     },
     // 結束編輯
     closeEdit(item, motion, count) {
@@ -69,7 +68,11 @@ export default {
         if (count !== 0) {
           this.showDeleteModal("", "discard");
         } else {
-          this.isEdit = false;
+          if (this.tmpMeeting) {
+            this.meeting = {...this.tmpMeeting};
+          } else {
+            this.isEdit = false;
+          }
         }
       }
     },
@@ -176,10 +179,10 @@ export default {
     },
     // 捨棄未儲存內容 {
     onDiscard() {
-      if (this.motion === "onCalendarClick") {
-        this.meeting = this.tmpMeeting;
-      } else {
+      if (this.tmpMeeting === undefined) {
         this.isEdit = false;
+      } else {
+        this.meeting = this.tmpMeeting;
       }
     },
     // 上傳會議列表
@@ -223,8 +226,7 @@ export default {
   },
   mounted() {
     this.getIDPool();
-    // let date = new Date(2022,1,0)
-    // console.log(date.getDate());
+    // console.log(typeof tmpMeeting);
   },
 };
 </script>

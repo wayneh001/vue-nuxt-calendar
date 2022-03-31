@@ -294,7 +294,6 @@ export default {
       };
       let keys = [];
       for (let key in item) {
-        // console.log(key)
         if (item[key] === "" && dictionary[key]) {
           keys.push(`${dictionary[key]}`);
         }
@@ -356,7 +355,6 @@ export default {
             array.push(obj);
           } else {
             let i = array.findIndex(function (efi) {
-              console.log(efi);
               return efi.date === efe.startDate;
             });
             array[i].time += f(efe.startTime, efe.endTime);

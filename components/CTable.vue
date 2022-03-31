@@ -140,7 +140,7 @@ export default {
     // 編輯會議事件
     onEdit(item) {
       if (this.status === "upcoming") {
-        this.$emit("open", item, "onTableClick");
+        this.$emit("open", item);
       }
     },
     // 刪除會議事件
@@ -153,7 +153,7 @@ export default {
     },
     // 新增會議事件
     onAdd() {
-      this.$emit("open", '', "onTableClick");
+      this.$emit("open");
     },
     // 開啟完成刪除會議彈窗
     deleteMeeting() {

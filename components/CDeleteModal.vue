@@ -6,6 +6,7 @@
       hide-footer
       hide-header-close
       title="刪除會議"
+      v-if="type === 'delete'"
     >
       <div class="body" v-if="deleteable">
         <div class="mb-3">
@@ -55,6 +56,32 @@
         </button>
       </div>
     </b-modal>
+    <b-modal
+      header-class="bg-danger text-white"
+      ref="my-modal"
+      hide-footer
+      hide-header-close
+      title="捨棄未儲存內容"
+      v-else
+    >
+      <div class="body" v-if="deleteable">
+        <div class="mb-3">
+          尚有未儲存內容，確定離開？
+        </div>
+      </div>
+      <div class="footer mt-5 d-flex justify-content-end">
+        <button type="button" class="btn btn-light me-2" @click="hideModal">
+          取消
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          @click="discard"
+        >
+          確定
+        </button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -64,14 +91,16 @@ export default {
   data() {
     return {
       deleteable: true,
+      type: "",
       item: {},
       routineMeeting: "單次會議",
     };
   },
   mixins: [GeneralMathMixin],
   methods: {
-    showModal(item) {
+    showModal(item, type) {
       this.deleteable = this.check(item);
+      this.type = type;
       this.$refs["my-modal"].show();
       this.item = item;
     },
@@ -82,6 +111,10 @@ export default {
       if (this.deleteable === true) {
         this.$emit("confirm", item, routine);
       }
+      this.hideModal();
+    },
+    discard() {
+      this.$emit("discard");
       this.hideModal();
     },
     check(item) {

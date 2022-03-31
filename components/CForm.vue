@@ -165,7 +165,7 @@
           <button
             class="btn btn-light w-100"
             type="button"
-            @click.prevent="onCancel"
+            @click.prevent="onCancel()"
           >
             取消
           </button>
@@ -175,6 +175,7 @@
             class="btn btn-main w-100"
             type="submit"
             @click.prevent="onSave(editedMeeting)"
+            :disabled="dataChangeCount === 0"
           >
             儲存
           </button>
@@ -240,6 +241,8 @@ export default {
         "18:00",
       ],
       routine: ["非例行會議", "每日", "每週", "每月"],
+      invalidTime: [],
+      dataChangeCount: 0,
     };
   },
   props: {
@@ -274,7 +277,8 @@ export default {
     },
     // 取消編輯
     onCancel() {
-      this.$emit("close");
+      let motion = "cancel";
+      this.$emit("close", "", motion, this.dataChangeCount);
     },
     // 表單檢查，依序檢查 1. 有無未輸入欄位 2. 輸入欄位 ( 聯絡電話與電子信箱 ) 格式是否正確 3. 所選之日期、開始時間與結束時間是否與現有會議衝突
     onCheck(item) {
@@ -298,7 +302,7 @@ export default {
       if (keys.length === 0) {
         let formErr = this.onFormateCheck(item);
         if (formErr === "") {
-          formErr = this.onTimeCheck(item, this.meetings);
+          formErr = this.onTimeCheck(item);
           if (formErr === "") {
             return true;
           } else {
@@ -337,57 +341,60 @@ export default {
     getInvalidTime(list) {
       let today = this.getDateStr(this.today());
       let datePool = [];
-      let obj = {
-        date: "",
-        time: [],
-      };
       let array = [];
       let f = this.getTimeSequence;
       list.forEach(function (efe) {
-        if (efe.startDate > today) {
+        if (efe.startDate >= today) {
           if (!datePool.includes(efe.startDate)) {
+            let obj = {
+              date: "",
+              time: [],
+            };
             datePool.push(efe.startDate);
             obj.date = efe.startDate;
-            obj.time = f(efe.startTime, efe.endTime);
+            obj.time = [...f(efe.startTime, efe.endTime)];
             array.push(obj);
           } else {
-            let i = array.findIndex((efi) => efi.date === efe.startDate);
-            console.log(array[0].time, i);
+            let i = array.findIndex(function (efi) {
+              console.log(efi);
+              return efi.date === efe.startDate;
+            });
             array[i].time += f(efe.startTime, efe.endTime);
           }
         }
       });
-      return array;
+      this.invalidTime = array;
     },
     // 檢查時間，將所選開始日期、與佔用的時間點標籤區段是否與無法使用時間數據比對，確認時否有重疊
-    onTimeCheck(item, list) {
-      let itemSequence = this.getTimeSequence(item.startTime, item.endTime);
-      let invalidTime = this.getInvalidTime(list);
-      console.log(invalidTime);
-      if (invalidTime.filter((e) => e.date === item.startDate).length === 0) {
-        console.log("yes");
-        return "";
-      } else {
-        let results = [];
-        itemSequence.forEach(function (eseq) {
-          invalidTime.forEach(function (einv) {
-            let result = einv.time.indexOf(eseq);
-            results.push(result);
-          });
-          console.log(results);
-        });
-        if (results.filter((e) => e !== -1).length === 0) {
-          console.log("no");
+    onTimeCheck(item) {
+      if (item.startDate !== this.meeting.startDate || item.startTime !== this.meeting.startTime || item.endTime !== this.meeting.endTime) {
+        let itemSequence = this.getTimeSequence(item.startTime, item.endTime);
+        let invalidTime = this.invalidTime;
+        if (invalidTime.filter((e) => e.date === item.startDate).length === 0) {
           return "";
         } else {
-          return "會議時間衝突，該時段已有預約會議，請另外選擇時間";
+          let results = [];
+          itemSequence.forEach(function (eseq) {
+            invalidTime.forEach(function (einv) {
+              let result = einv.time.indexOf(eseq);
+              results.push(result);
+            });
+          });
+          if (results.filter((e) => e !== -1).length === 0) {
+            return "";
+          } else {
+            return "會議時間衝突，該時段已有預約會議，請另外選擇時間";
+          }
         }
+      } else {
+        return "";
       }
     },
     // 儲存事件
     onSave(item) {
+      let motion = "save";
       if (this.onCheck(item)) {
-        this.$emit("close", item);
+        this.$emit("close", item, motion);
       }
     },
     // 取得今年最後一天，作為預設的例行會議到期日
@@ -405,14 +412,17 @@ export default {
     // 無效化開始時間點標籤，依據所選日期與當前時間無效化已過去的時間點標籤
     startTimeSet(index) {
       if (
-        this.today().getFullYear() === this.formatDate(this.editedMeeting.startDate).getFullYear() &&
-        this.today().getMonth() === this.formatDate(this.editedMeeting.startDate).getMonth() &&
-        this.today().getDate() === this.formatDate(this.editedMeeting.startDate).getDate()
+        this.today().getFullYear() ===
+          this.formatDate(this.editedMeeting.startDate).getFullYear() &&
+        this.today().getMonth() ===
+          this.formatDate(this.editedMeeting.startDate).getMonth() &&
+        this.today().getDate() ===
+          this.formatDate(this.editedMeeting.startDate).getDate()
       ) {
         let key = this.time.findIndex(
-          (item) => item.substr(0, 2) === (this.today().getHours() + 2).toString()
+          (item) =>
+            item.substr(0, 2) === (this.today().getHours() + 2).toString()
         );
-        // console.log(key);
         if (index <= key) {
           return true;
         }
@@ -421,12 +431,16 @@ export default {
     // 無效化結束時間點標籤，依據所選日期、當前時間與已選之開始時間點標籤無效化結束時間點標籤
     endTimeSet(index) {
       if (
-        this.today().getFullYear() === this.formatDate(this.editedMeeting.startDate).getFullYear() &&
-        this.today().getMonth() === this.formatDate(this.editedMeeting.startDate).getMonth() &&
-        this.today().getDate() === this.formatDate(this.editedMeeting.startDate).getDate()
+        this.today().getFullYear() ===
+          this.formatDate(this.editedMeeting.startDate).getFullYear() &&
+        this.today().getMonth() ===
+          this.formatDate(this.editedMeeting.startDate).getMonth() &&
+        this.today().getDate() ===
+          this.formatDate(this.editedMeeting.startDate).getDate()
       ) {
         let key = this.time.findIndex(
-          (item) => item.substr(0, 2) === (this.today().getHours() + 2).toString()
+          (item) =>
+            item.substr(0, 2) === (this.today().getHours() + 2).toString()
         );
         let key2 = this.time.findIndex(
           (item) => item === this.editedMeeting.startTime
@@ -437,20 +451,35 @@ export default {
       }
     },
   },
+  watch: {
+    editedMeeting: {
+      handler: function (newValue) {
+        if (this.meeting !== undefined) {
+          this.dataChangeCount++;
+        } else {
+          let array = [];
+          for (let k in newValue) {
+            array.push(newValue[k]);
+          }
+          for (let i = 1; i < 10; i++) {
+            if (array[i] !== "") {
+              this.dataChangeCount++;
+              break;
+            } else {
+              this.dataChangeCount = 0;
+            }
+          }
+        }
+      },
+      deep: true,
+    },
+  },
   mounted() {
     if (this.editedMeeting.title !== "") {
       this.titleEdit = false;
     }
     this.getLastDay();
-    // this.getInvalidTime(this.meetings);
-    // let a = [1, 2, 3];
-    // let b = [2, 4, 5];
-    // let d = [];
-    // a.forEach(function (e) {
-    //   let c = b.indexOf(e);
-    //   d.push(c);
-    // });
-    // console.log(d);
+    this.getInvalidTime(this.meetings);
   },
 };
 </script>

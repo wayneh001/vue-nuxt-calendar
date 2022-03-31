@@ -107,7 +107,7 @@ export default {
     // 會議列表依據已完成與未完成分類
     dataCategorized(list) {
       this.meetingsSort(list);
-      let today = new Date();
+      let today = this.today()
       let upcoming = list.filter(function (item) {
         return (
           parseInt(item.startDate.substr(5, 2)) > today.getMonth() + 1 ||
@@ -140,23 +140,24 @@ export default {
     // 編輯會議事件
     onEdit(item) {
       if (this.status === "upcoming") {
-        this.$emit("open", item);
+        this.$emit("open", item, "onTableClick");
       }
     },
     // 刪除會議事件
     onDelete(item) {
       if (this.status === "upcoming") {
-        this.$emit("delete", item);
+        let type = 'delete';
+        this.$emit("delete", item, type);
         this.meeting = item;
       }
     },
     // 新增會議事件
     onAdd() {
-      this.$emit("open");
+      this.$emit("open", '', "onTableClick");
     },
-    // 開啟刪除會議彈窗
+    // 開啟完成刪除會議彈窗
     deleteMeeting() {
-      console.log("會議已刪除");
+      // console.log("會議已刪除");
       this.$refs.deleteModal.hideModal();
     },
     // 頁碼切換處理

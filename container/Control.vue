@@ -4,9 +4,15 @@
       <CTable :meetings="meetings" @open="openEdit" @delete="showDeleteModal" />
     </div>
     <div v-if="isEdit">
-      <CForm :meetings="meetings" :meeting="meeting" @close="closeEdit" />
+      <CForm
+        :meetings="meetings"
+        :meeting="meeting"
+        @close="closeEdit"
+        :key="onGetId(meeting)"
+        ref="cform"
+      />
     </div>
-    <CDeleteModal @confirm="onDelete" ref="deleteModal" />
+    <CDeleteModal @confirm="onDelete" @discard="onDiscard" ref="deleteModal" />
   </div>
 </template>
 
@@ -24,7 +30,9 @@ export default {
       isActive: true,
       meetings: this.meetingLists ? [...this.meetingLists] : [],
       meeting: {},
+      tmpMeeting: {},
       idPool: [],
+      motion: "",
     };
   },
   props: {
@@ -40,21 +48,34 @@ export default {
   },
   methods: {
     // 開啟編輯
-    openEdit(item) {
-      this.meeting = item;
-      this.isEdit = true;
+    openEdit(item, motion) {
+      if (motion === "onTableClick") {
+        this.isEdit = true;
+        this.meeting = item;
+      } 
+      //   else {
+      //   this.$refs.cform.onCancel();
+      //   this.motion = motion;
+      //   this.tmpMeeting = item;
+      // }
     },
     // 結束編輯
-    closeEdit(item) {
-      if (item != undefined) {
+    closeEdit(item, motion, count) {
+      if (motion === "save") {
         this.meeting = item;
         item.id === "" ? this.onCreate(item) : this.onUpdate(item);
+        this.isEdit = false;
+      } else {
+        if (count !== 0) {
+          this.showDeleteModal("", "discard");
+        } else {
+          this.isEdit = false;
+        }
       }
-      this.isEdit = false;
     },
     // 開啟刪除彈窗
-    showDeleteModal(item) {
-      this.$refs.deleteModal.showModal(item);
+    showDeleteModal(item, type) {
+      this.$refs.deleteModal.showModal(item, type);
     },
     // 更新會議
     onUpdate(item) {
@@ -153,6 +174,14 @@ export default {
         this.updateMeetings(this.meetings);
       }
     },
+    // 捨棄未儲存內容 {
+    onDiscard() {
+      if (this.motion === "onCalendarClick") {
+        this.meeting = this.tmpMeeting;
+      } else {
+        this.isEdit = false;
+      }
+    },
     // 上傳會議列表
     updateMeetings(item) {
       if (item.length > 1) {
@@ -175,6 +204,14 @@ export default {
         id = Math.floor(Math.random() * 1000000).toString();
       } while (pool.includes(id));
       return id;
+    },
+    // 取得會議 ID
+    onGetId(item) {
+      if (item) {
+        return item.id;
+      } else {
+        return "";
+      }
     },
   },
   computed: {},

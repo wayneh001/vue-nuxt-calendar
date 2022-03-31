@@ -45,7 +45,7 @@ export default {
     },
     // 月曆組件的點擊事件
     onClickEvent(item) {
-      this.$refs.control.openEdit(item);
+      this.$refs.control.openEdit(item, "onCalendarClick");
     },
   },
   watch: {

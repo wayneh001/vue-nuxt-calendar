@@ -107,11 +107,11 @@ export default {
     // 會議列表依據已完成與未完成分類
     dataCategorized(list) {
       this.meetingsSort(list);
-      let today = this.today()
+      let f = this.today();
       let upcoming = list.filter(function (item) {
         return (
-          parseInt(item.startDate.substr(5, 2)) > today.getMonth() + 1 ||
-          parseInt(item.startDate.substr(8, 2)) >= today.getDate()
+          parseInt(item.startDate.substr(5, 2)) >= f.getMonth() + 1 &&
+          parseInt(item.startDate.substr(8, 2)) >= f.getDate()
         );
       });
       let finished = list.filter((item) => !upcoming.includes(item));

@@ -68,6 +68,7 @@ export default {
         if (count !== 0) {
           this.showDeleteModal("", "discard");
         } else {
+          this.tmpMeeting = item;
           if (this.tmpMeeting) {
             this.meeting = {...this.tmpMeeting};
           } else {

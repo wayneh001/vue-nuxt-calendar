@@ -4,7 +4,7 @@
       class="p-3 mb-3 d-flex justify-content-between align-items-center bg-light"
     >
       <!-- 標題 -->
-      <h3 class="m-0">我的會議</h3>
+      <h3 class="m-0">會議列表</h3>
       <nuxt-link class="d-flex justify-content-end nav-link" to="/"
         >登出</nuxt-link
       >
@@ -15,25 +15,47 @@
       <p>本月 14 日會議室電腦系統升級，當日不開放會議預約。</p>
     </div>
     <!-- 切換標籤 -->
-    <div class="tools mb-3" @click.prevent="onSwitchCheck($event)">
+    <div class="tools mb-3" @click.prevent="mineCheck($event)">
       <a href="" style="width: 50%"
         ><div
-          id="finished"
+          id="mine"
           class="toggle px-5 py-2"
-          :class="{ toggleActive: !isActive }"
-          name="finished"
+          :class="{ toggleActive: isMine }"
+          name="upcoming"
         >
-          已結束會議
+          我的會議
         </div></a
       >
       <a href="" style="width: 50%"
         ><div
+          id="all"
+          class="toggle px-5 py-2"
+          :class="{ toggleActive: !isMine }"
+          name="finished"
+        >
+          所有會議
+        </div></a
+      >
+    </div>
+    <div class="tools mb-3" @click.prevent="ongoingCheck($event)">
+      <a href="" style="width: 50%"
+        ><div
           id="upcoming"
           class="toggle px-5 py-2"
-          :class="{ toggleActive: isActive }"
+          :class="{ toggleActive: isOngoing }"
           name="upcoming"
         >
           待進行會議
+        </div></a
+      >
+      <a href="" style="width: 50%"
+        ><div
+          id="finished"
+          class="toggle px-5 py-2"
+          :class="{ toggleActive: !isOngoing }"
+          name="finished"
+        >
+          已結束會議
         </div></a
       >
     </div>
@@ -52,7 +74,7 @@
           class="table-column"
           v-for="(item, index) in pageRender(this.meetings)"
           :key="index"
-          :class="{ disabled: status === 'finished' }"
+          :class="{ disabled: disabledTable(item) }"
         >
           <td scope="row">{{ item.startDate }}</td>
           <td>{{ item.startTime }} ~ {{ item.endTime }}</td>
@@ -61,7 +83,11 @@
             <a href="#" @click="onEdit(item)" :disabled="status === 'finished'"
               ><i class="fa fas fa-pencil me-2"></i
             ></a>
-            <a href="#" @click="onDelete(item)" :disabled="status === 'finished'"
+            <a
+              href="#"
+              @click="onDelete(item)"
+              :disabled="status === 'finished'"
+
               ><i class="fa fas fa-trash-can"></i
             ></a>
           </td>
@@ -88,11 +114,12 @@ import GeneralMathMixin from "@/components/Methods/GeneralMathMixin";
 export default {
   data() {
     return {
-      isActive: true,
+      isMine: true,
+      isOngoing: true,
+      belonging: "mine",
       status: "upcoming",
       currentPage: 1,
       totalPage: 1,
-      // editable1: true,
     };
   },
   mixins: [GeneralMathMixin],
@@ -101,20 +128,30 @@ export default {
       type: Array,
       reuqire: false,
     },
+    // searchObj: {
+    //   type: Object,
+    //   require: false,
+    // },
   },
   components: { CPagination },
   methods: {
-    // 會議列表依據已完成與未完成分類
+    // 會議列表依據我的、所有、已完成與未完成分類
     dataCategorized(list) {
       this.meetingsSort(list);
+      let filterList = [];
+      if (this.belonging === "mine") {
+        filterList = list.filter((item) => item.classes === "");
+      } else {
+        filterList = list;
+      }
       let f = this.today();
-      let upcoming = list.filter(function (item) {
+      let upcoming = filterList.filter(function (item) {
         return (
           parseInt(item.startDate.substr(5, 2)) >= f.getMonth() + 1 &&
           parseInt(item.startDate.substr(8, 2)) >= f.getDate()
         );
       });
-      let finished = list.filter((item) => !upcoming.includes(item));
+      let finished = filterList.filter((item) => !upcoming.includes(item));
       if (this.status === "upcoming") {
         this.countTotalPage(upcoming);
         return upcoming;
@@ -124,17 +161,41 @@ export default {
       }
     },
     // 已完成與未完成標籤切換
-    onSwitchCheck: function (event) {
+    mineCheck: function (event) {
+      this.belonging = event.target.id;
+    },
+    // 已完成與未完成標籤切換
+    ongoingCheck: function (event) {
       this.status = event.target.id;
+    },
+    // 列表可操作與否分類
+    disabledTable(item) {
+      if (this.status==="finished" || item.classes !== "") {
+        return true
+      }
+    },
+    // 依據關鍵字隱藏無關會議事件
+    filterEvents(item) {
+      // let s = this.getDateStr(this.searchObj.searchStart);
+      // let e = this.getDateStr(this.searchObj.searchEnd)
+      // if (item.title.includes(this.searchObj.keywords) || this.searchObj.keywords === "") {
+      //   if (item.startDate >= s && item.startDate <= e) {
+      //     return "block";
+      //   } else {
+      //     return "none"
+      //   }
+      // } else {
+      //   return "none";
+      // }
+      return "block";
     },
     // 計算總頁數
     countTotalPage(list) {
-      this.totalPage =  Math.ceil(list.length / 10);
+      this.totalPage = Math.ceil(list.length / 10);
     },
     // 當前頁碼頁面渲染
     pageRender(list) {
-      let filterList = list.filter((item) => item.classes === "");
-      let output = this.dataCategorized(filterList);
+      let output = this.dataCategorized(list);
       return output.slice((this.currentPage - 1) * 10, this.currentPage * 10);
     },
     // 編輯會議事件
@@ -146,7 +207,7 @@ export default {
     // 刪除會議事件
     onDelete(item) {
       if (this.status === "upcoming") {
-        let type = 'delete';
+        let type = "delete";
         this.$emit("delete", item, type);
         this.meeting = item;
       }
@@ -166,8 +227,11 @@ export default {
     },
   },
   watch: {
+    belonging: function () {
+      this.isMine = !this.isMine;
+    },
     status: function () {
-      this.isActive = !this.isActive;
+      this.isOngoing = !this.isOngoing;
     },
   },
 };

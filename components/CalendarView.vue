@@ -19,7 +19,7 @@
         :header-props="headerProps"
         @input="onChangeDate"
         @switch="onChangePeriod"
-        @search="onInputKeywords"
+        @search="onSearch"
       >
         <!-- <template slot="label">{{ periodLabel }}</template> -->
       </calendar-view-header>
@@ -109,6 +109,7 @@
 
 <script>
 import CalendarMathMixin from "@/components/Methods/CalendarMathMixin";
+import GeneralMathMixin from "@/components/Methods/GeneralMathMixin";
 import CalendarViewHeader from "@/components/CalendarViewHeader";
 export default {
   name: "CalendarView",
@@ -127,11 +128,15 @@ export default {
       eventTop: "1.4em",
       eventContentHeight: "1.4em",
       eventBorderHeight: "2px",
-      keywords: "",
+      // searchObj: {
+      //   keywords: "",
+      //   searchStart: "",
+      //   searchEnd: "",
+      // },
     };
   },
   components: { CalendarViewHeader },
-  mixins: [CalendarMathMixin],
+  mixins: [CalendarMathMixin, GeneralMathMixin],
   props: {
     showDate: { type: Date, default: () => undefined },
     locale: { type: String, default: () => undefined },
@@ -282,11 +287,14 @@ export default {
       this.$emit("click-date", day);
     },
     // 會議點擊事件
-    onClickEvent(item) {
-      if (item.classes !== "disabled" && item.title.includes(this.keywords)) {
-        this.$emit("clickEvent", item);
-      }
-    },
+    // onClickEvent(item) {
+    //   if (
+    //     item.classes !== "disabled" &&
+    //     item.title.includes(this.search.keywords)
+    //   ) {
+    //     this.$emit("clickEvent", item);
+    //   }
+    // },
     // 當前日期變更
     onChangeDate(d) {
       this.$emit("show-date-change", d);
@@ -348,10 +356,10 @@ export default {
       // console.log(events);
       return events;
     },
-    // 儲存 Header 傳來的關鍵字
-    onInputKeywords(k) {
-      this.keywords = k;
-      console.log(this.keywords);
+    // 儲存 Header 傳來的關鍵字與搜尋時間
+    onSearch(searchObj) {
+      this.$store.dispatch("onSearch", searchObj);
+      console.log(this.$store.getters.searchObj);
     },
     //展示會議事件
     getWeekEvents(weekStart) {
@@ -446,13 +454,16 @@ export default {
         : `calc(${this.cell}*${this.timeDiff(e.startTime, e.endTime)}px)`;
     },
     // 依據關鍵字隱藏無關會議事件
-    filterEvents(e) {
-      if (e.title.includes(this.keywords) || this.keywords === "") {
-        return "100%";
-      } else {
-        return "0";
-      }
-    },
+    // filterEvents(e) {
+    //   if (
+    //     e.title.includes(this.search.keywords) ||
+    //     this.search.keywords === ""
+    //   ) {
+    //     return "100%";
+    //   } else {
+    //     return "0";
+    //   }
+    // },
   },
 
   mounted() {

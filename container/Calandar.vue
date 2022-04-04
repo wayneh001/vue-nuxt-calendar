@@ -35,7 +35,7 @@ export default {
     // 點擊事件
     onClickEvent(item) {
       this.$emit("clickEvent", item);
-    }
+    },
   },
   updated() {
     // console.log('Calandar updated!!!');

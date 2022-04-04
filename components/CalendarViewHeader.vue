@@ -6,25 +6,30 @@
       <div class="tools">
         <input
           type="text"
-          class="form-control me-2"
+          class="form-control w-50 me-2"
           placeholder="請輸入關鍵字"
-          v-model="keywords"
+          v-model="searchObj.keywords"
         />
         <button
-          class="btn btn-secondary me-2"
+          class="btn btn-secondary w-25 me-2"
           type="button"
-          style="width: 6rem"
           @click="reset"
         >
           清除
         </button>
         <button
-          class="btn btn-main"
+          class="btn btn-main w-25 me-2"
           type="button"
-          style="width: 6rem"
-          @click="search(keywords)"
+
         >
           搜尋
+        </button>
+        <button
+          class="btn btn-main w-50"
+          type="button"
+          @click="onAdvanceSearch(searchObj)"
+        >
+          進階搜尋
         </button>
       </div>
       <div class="d-flex justify-content-between align-items-center">
@@ -41,8 +46,8 @@
           <div
             class="periodLabel d-flex justify-content-center align-items-center"
           >
-            <span class="text-start">{{ headerProps.periodLabel }}</span
-            ><input :type="status" class="label bg-light" v-model="newData" />
+            <span class="text-center">{{ headerProps.periodLabel }}</span
+            ><input :type="status" class="label bg-light" v-model="newDate" />
           </div>
         </div>
         <div
@@ -77,21 +82,33 @@
         >
       </div>
     </div>
+    <CAdvanceSearchModal
+      ref="Modal"
+      :searchObj="searchObj"
+      @search="search"
+    ></CAdvanceSearchModal>
   </div>
 </template>
 <script>
+import GeneralMathMixin from "@/components/Methods/GeneralMathMixin";
 import CalendarView from "@/components/CalendarView";
 import CalendarViewHeader from "@/components/CalendarViewHeader";
+import CAdvanceSearchModal from "~/components/CAdvanceSearchModal";
 export default {
   name: "CalendarViewHeader",
-  components: { CalendarView, CalendarViewHeader },
+  mixins: [GeneralMathMixin],
+  components: { CalendarView, CalendarViewHeader, CAdvanceSearchModal },
   data() {
     return {
       isActive: true,
       status: "month",
-      newData: "",
+      newDate: "",
       periodLabel: this.headerProps.periodLabel,
-      keywords: "",
+      searchObj: {
+        keywords: "",
+        searchStart: "",
+        searchEnd: "",
+      },
     };
   },
   props: {
@@ -124,12 +141,16 @@ export default {
     },
     // 清除搜尋框
     reset() {
-      this.keywords = "";
-      this.search(this.keywords);
+      this.searchObj.keywords = "";
+      this.search(this.searchObj);
     },
     // 搜尋事件
-    search(k) {
-      this.$emit("search", k);
+    search(searchObj) {
+      this.$emit("search", searchObj);
+    },
+    // 進階搜尋
+    onAdvanceSearch(searchObj) {
+      this.$refs.Modal.showModal(searchObj);
     },
   },
   watch: {
@@ -137,8 +158,9 @@ export default {
       this.isActive = !this.isActive;
       this.$emit("switch", newValue);
     },
-    newData: function (newValue) {
-      let y = this.headerProps.currentPeriod.getFullYear();
+    newDate: function (newValue) {
+      console.log(newValue);
+      let y = this.numberized(newValue, 0, 4);
       let m = 1;
       let w = 1;
       let d = this.headerProps.currentPeriod.getDate();
@@ -149,7 +171,6 @@ export default {
       } else {
         w = this.calculatePeriodLabel(newValue);
         let diff = w - this.getWeek(this.headerProps.currentPeriod);
-        console.log(diff);
         m = this.headerProps.currentPeriod.getMonth();
         date = new Date(y, m, d + diff * 7);
       }
@@ -159,7 +180,9 @@ export default {
   },
 
   mounted() {
-    // console.log(this.headerProps.currentPeriod);
+    this.searchObj.searchStart = this.headerProps.periodStart;
+    this.searchObj.searchEnd = this.headerProps.periodEnd;
+    // console.log(this.searchObj);
   },
 
   updated() {

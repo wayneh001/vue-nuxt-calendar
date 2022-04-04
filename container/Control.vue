@@ -1,7 +1,12 @@
 <template>
   <div>
     <div v-if="!isEdit">
-      <CTable :meetings="meetings" @open="openEdit" @delete="showDeleteModal" />
+      <CTable
+        :meetings="meetings"
+        @open="openEdit"
+        @delete="showDeleteModal"
+
+      />
     </div>
     <div v-if="isEdit">
       <CForm
@@ -33,6 +38,11 @@ export default {
       tmpMeeting: {},
       idPool: [],
       motion: "",
+      // searchObj: {
+      //   keywords: "",
+      //   searchStart: "",
+      //   searchEnd: "",
+      // },
     };
   },
   props: {
@@ -55,7 +65,6 @@ export default {
       } else {
         this.tmpMeeting = item;
         this.$refs.cform.onCancel();
-        
       }
     },
     // 結束編輯
@@ -70,7 +79,7 @@ export default {
         } else {
           this.tmpMeeting = item;
           if (this.tmpMeeting) {
-            this.meeting = {...this.tmpMeeting};
+            this.meeting = { ...this.tmpMeeting };
           } else {
             this.isEdit = false;
           }
@@ -218,7 +227,11 @@ export default {
       }
     },
   },
-  computed: {},
+  // computed: {
+  //   searchObj() {
+  //     return this.$store.state.searchObj;
+  //   },
+  // },
   watch: {
     meetingLists: function (newValue) {
       this.meetings = [...newValue];

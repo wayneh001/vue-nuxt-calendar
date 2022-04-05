@@ -128,11 +128,11 @@ export default {
       eventTop: "1.4em",
       eventContentHeight: "1.4em",
       eventBorderHeight: "2px",
-      // searchObj: {
-      //   keywords: "",
-      //   searchStart: "",
-      //   searchEnd: "",
-      // },
+      searchObj: {
+        keywords: "",
+        searchStart: "",
+        searchEnd: "",
+      },
     };
   },
   components: { CalendarViewHeader },
@@ -287,14 +287,14 @@ export default {
       this.$emit("click-date", day);
     },
     // 會議點擊事件
-    // onClickEvent(item) {
-    //   if (
-    //     item.classes !== "disabled" &&
-    //     item.title.includes(this.search.keywords)
-    //   ) {
-    //     this.$emit("clickEvent", item);
-    //   }
-    // },
+    onClickEvent(item) {
+      if (
+        item.classes !== "disabled" &&
+        item.title.includes(this.searchObj.keywords)
+      ) {
+        this.$emit("clickEvent", item);
+      }
+    },
     // 當前日期變更
     onChangeDate(d) {
       this.$emit("show-date-change", d);
@@ -358,8 +358,9 @@ export default {
     },
     // 儲存 Header 傳來的關鍵字與搜尋時間
     onSearch(searchObj) {
-      this.$store.dispatch("onSearch", searchObj);
-      console.log(this.$store.getters.searchObj);
+      this.searchObj = searchObj;
+      this.$store.commit("onSearch", searchObj);
+      // console.log(this.$store.getters.searchObj);
     },
     //展示會議事件
     getWeekEvents(weekStart) {
@@ -454,28 +455,28 @@ export default {
         : `calc(${this.cell}*${this.timeDiff(e.startTime, e.endTime)}px)`;
     },
     // 依據關鍵字隱藏無關會議事件
-    // filterEvents(e) {
-    //   if (
-    //     e.title.includes(this.search.keywords) ||
-    //     this.search.keywords === ""
-    //   ) {
-    //     return "100%";
-    //   } else {
-    //     return "0";
-    //   }
-    // },
+    filterEvents(e) {
+      if (this.searchObj.keywords === "") {
+        return "100%";
+      } else {
+        if (e.title.includes(this.searchObj.keywords)) {
+          if (
+            this.searchObj.searchStart <= this.getDateStr(e.startDate) &&
+            this.getDateStr(e.startDate) <= this.searchObj.searchEnd
+          ) {
+            return "100%";
+          } else {
+            return "0";
+          }
+        } else {
+          return "0";
+        }
+      }
+    },
   },
-
   mounted() {
     this.getClientHeight();
   },
-
-  // watch: {
-  //   displayPeriodUom: function () {
-  //     this.getClientHeight();
-  //     console.log(this.weekdaysHeight);
-  //   },
-  // },
 };
 </script>
 <!--

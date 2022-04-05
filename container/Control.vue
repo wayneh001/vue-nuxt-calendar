@@ -1,12 +1,7 @@
 <template>
   <div>
     <div v-if="!isEdit">
-      <CTable
-        :meetings="meetings"
-        @open="openEdit"
-        @delete="showDeleteModal"
-
-      />
+      <CTable :meetings="meetings" @open="openEdit" @delete="showDeleteModal" />
     </div>
     <div v-if="isEdit">
       <CForm
@@ -15,6 +10,7 @@
         @close="closeEdit"
         :key="onGetId(meeting)"
         ref="cform"
+        class="animate__animated animate__fadeIn"
       />
     </div>
     <CDeleteModal @confirm="onDelete" @discard="onDiscard" ref="deleteModal" />
@@ -26,6 +22,7 @@ import CTable from "@/components/CTable";
 import CForm from "@/components/CForm";
 import CDeleteModal from "@/components/CDeleteModal";
 import GeneralMathMixin from "@/components/Methods/GeneralMathMixin";
+import 'animate.css';
 export default {
   name: "Index",
   mixins: [GeneralMathMixin],
@@ -38,11 +35,7 @@ export default {
       tmpMeeting: {},
       idPool: [],
       motion: "",
-      // searchObj: {
-      //   keywords: "",
-      //   searchStart: "",
-      //   searchEnd: "",
-      // },
+      animateActive: false,
     };
   },
   props: {
@@ -63,6 +56,7 @@ export default {
         this.isEdit = true;
         this.meeting = item;
       } else {
+        // 必定為日曆事件點擊觸發
         this.tmpMeeting = item;
         this.$refs.cform.onCancel();
       }
@@ -77,9 +71,9 @@ export default {
         if (count !== 0) {
           this.showDeleteModal("", "discard");
         } else {
-          this.tmpMeeting = item;
-          if (this.tmpMeeting) {
+          if (this.tmpMeeting.id) {
             this.meeting = { ...this.tmpMeeting };
+            this.tmpMeeting = {};
           } else {
             this.isEdit = false;
           }
@@ -227,11 +221,6 @@ export default {
       }
     },
   },
-  // computed: {
-  //   searchObj() {
-  //     return this.$store.state.searchObj;
-  //   },
-  // },
   watch: {
     meetingLists: function (newValue) {
       this.meetings = [...newValue];
@@ -240,7 +229,12 @@ export default {
   },
   mounted() {
     this.getIDPool();
-    // console.log(typeof tmpMeeting);
   },
 };
 </script>
+<style>
+  .rim {
+    background-color: #686ce5;
+    /* opacity: 50%; */
+  }
+</style>

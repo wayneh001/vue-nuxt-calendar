@@ -20,7 +20,7 @@
         <button
           class="btn btn-main w-25 me-2"
           type="button"
-
+          @click="search"
         >
           搜尋
         </button>
@@ -159,7 +159,6 @@ export default {
       this.$emit("switch", newValue);
     },
     newDate: function (newValue) {
-      console.log(newValue);
       let y = this.numberized(newValue, 0, 4);
       let m = 1;
       let w = 1;
@@ -174,19 +173,14 @@ export default {
         m = this.headerProps.currentPeriod.getMonth();
         date = new Date(y, m, d + diff * 7);
       }
-      console.log(date);
       this.onInput(date);
     },
   },
 
   mounted() {
-    this.searchObj.searchStart = this.headerProps.periodStart;
-    this.searchObj.searchEnd = this.headerProps.periodEnd;
+    this.searchObj.searchStart = this.getDateStr(this.headerProps.periodStart);
+    this.searchObj.searchEnd = this.getDateStr(this.headerProps.periodEnd);
     // console.log(this.searchObj);
-  },
-
-  updated() {
-    // console.log(this.headerProps.currentPeriod, this.headerProps.currentPeriod.getDate());
   },
 };
 </script>

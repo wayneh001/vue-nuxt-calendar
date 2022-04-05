@@ -1,7 +1,14 @@
 <template>
   <div class="container py-5">
     <div
-      class="p-3 mb-3 d-flex justify-content-between align-items-center bg-light"
+      class="
+        p-3
+        mb-3
+        d-flex
+        justify-content-between
+        align-items-center
+        bg-light
+      "
     >
       <!-- 標題 -->
       <h3 class="m-0">會議列表</h3>
@@ -75,6 +82,7 @@
           v-for="(item, index) in pageRender(this.meetings)"
           :key="index"
           :class="{ disabled: disabledTable(item) }"
+          :style="{ display: filterEvents(item) }"
         >
           <td scope="row">{{ item.startDate }}</td>
           <td>{{ item.startTime }} ~ {{ item.endTime }}</td>
@@ -87,7 +95,6 @@
               href="#"
               @click="onDelete(item)"
               :disabled="status === 'finished'"
-
               ><i class="fa fas fa-trash-can"></i
             ></a>
           </td>
@@ -118,6 +125,7 @@ export default {
       isOngoing: true,
       belonging: "mine",
       status: "upcoming",
+      tmpList: [],
       currentPage: 1,
       totalPage: 1,
     };
@@ -137,7 +145,7 @@ export default {
   methods: {
     // 會議列表依據我的、所有、已完成與未完成分類
     dataCategorized(list) {
-      this.meetingsSort(list);
+      // this.meetingsSort(list);
       let filterList = [];
       if (this.belonging === "mine") {
         filterList = list.filter((item) => item.classes === "");
@@ -160,7 +168,7 @@ export default {
         return finished;
       }
     },
-    // 已完成與未完成標籤切換
+    // 我的與所有標籤切換
     mineCheck: function (event) {
       this.belonging = event.target.id;
     },
@@ -170,24 +178,29 @@ export default {
     },
     // 列表可操作與否分類
     disabledTable(item) {
-      if (this.status==="finished" || item.classes !== "") {
-        return true
+      if (this.status === "finished" || item.classes !== "") {
+        return true;
       }
     },
     // 依據關鍵字隱藏無關會議事件
     filterEvents(item) {
-      // let s = this.getDateStr(this.searchObj.searchStart);
-      // let e = this.getDateStr(this.searchObj.searchEnd)
-      // if (item.title.includes(this.searchObj.keywords) || this.searchObj.keywords === "") {
-      //   if (item.startDate >= s && item.startDate <= e) {
-      //     return "block";
-      //   } else {
-      //     return "none"
-      //   }
-      // } else {
-      //   return "none";
-      // }
-      return "block";
+      let searchObj = this.$store.getters.searchObj;
+      if (searchObj.keywords === undefined) {
+        return "";
+      } else {
+        if (item.title.includes(searchObj.keywords)) {
+          if (
+            searchObj.searchStart <= item.startDate &&
+            item.startDate <= searchObj.searchEnd
+          ) {
+            return "";
+          } else {
+            return "none";
+          }
+        } else {
+          return "none";
+        }
+      }
     },
     // 計算總頁數
     countTotalPage(list) {

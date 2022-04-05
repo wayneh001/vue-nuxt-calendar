@@ -30,20 +30,30 @@
                 v-model="user.password"
               />
             </div>
-            <div class="col-2">
-              <div class="d-flex justify-content-center align-items-center bg-light text-center h-100">5736</div>
-              <!-- <recaptcha
-                @error="onError"
-                @success="onSuccess"
-                @expired="onExpired"
-              /> -->
+            <div class="coderight col-2">
+              <SIdentify
+                :identifyCode="identifyCode"
+                :contentWidth="75"
+              ></SIdentify>
             </div>
+            <!-- <div class="col-2">
+              <div class="d-flex justify-content-center align-items-center bg-light text-center h-100">5736</div>
+            </div> -->
             <div class="col-2">
               <div
-                class="d-flex justify-content-between align-items-center text-center h-100"
+                class="
+                  d-flex
+                  justify-content-between
+                  align-items-center
+                  text-center
+                  h-100
+                "
               >
-                <a href="#"><i class="fa fas fa-arrow-rotate-right"></i></a
-                ><a href="#"><i class="fa fas fa-microphone"></i></a>
+                <a href="#" @click="refreshCode()"
+                  ><i class="fa fas fa-arrow-rotate-right"></i></a
+                ><a href="#" @click="speak()"
+                  ><i class="fa fas fa-microphone"></i
+                ></a>
               </div>
             </div>
           </div>
@@ -71,6 +81,7 @@
   </div>
 </template>
 <script>
+import SIdentify from "@/components/Identify";
 export default {
   name: "LoginPage",
   data() {
@@ -79,9 +90,28 @@ export default {
         username: "",
         password: "",
       },
+      identifyCode: "",
+      identifyCodes: "0123456789",
     };
   },
+  components: {
+    SIdentify,
+  },
   methods: {
+    randomNum(min, max) {
+      return Math.floor(Math.random() * (max - min) + min);
+    },
+    refreshCode() {
+      this.identifyCode = "";
+      this.makeCode(this.identifyCodes, 4);
+    },
+    makeCode(o, l) {
+      for (let i = 0; i < l; i++) {
+        this.identifyCode +=
+          this.identifyCodes[this.randomNum(0, this.identifyCodes.length)];
+      }
+      console.log(this.identifyCode);
+    },
     // onError(error) {
     //   console.log("Error happened:", error);
     // },
@@ -115,6 +145,14 @@ export default {
     onCancel() {
       console.log("yes");
     },
+    speak() {
+      let msg = new SpeechSynthesisUtterance();
+      msg.text = this.identifyCode;
+      window.speechSynthesis.speak(msg);
+    },
+  },
+  mounted() {
+    this.makeCode(this.identifyCodes, 4);
   },
 };
 </script>

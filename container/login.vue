@@ -24,10 +24,10 @@
           <div class="row mb-3">
             <div class="col-8">
               <input
-                type="password"
+                type="text"
                 class="form-control"
                 placeholder="請輸入驗證碼"
-                v-model="user.password"
+                v-model="identify"
               />
             </div>
             <div class="coderight col-2">
@@ -36,18 +36,9 @@
                 :contentWidth="75"
               ></SIdentify>
             </div>
-            <!-- <div class="col-2">
-              <div class="d-flex justify-content-center align-items-center bg-light text-center h-100">5736</div>
-            </div> -->
             <div class="col-2">
               <div
-                class="
-                  d-flex
-                  justify-content-between
-                  align-items-center
-                  text-center
-                  h-100
-                "
+                class="d-flex justify-content-between align-items-center text-center h-100"
               >
                 <a href="#" @click="refreshCode()"
                   ><i class="fa fas fa-arrow-rotate-right"></i></a
@@ -78,10 +69,12 @@
         </form>
       </div>
     </div>
+    <CAlertModal ref="alertModal">{{ errorMsg }}</CAlertModal>
   </div>
 </template>
 <script>
 import SIdentify from "@/components/Identify";
+import CAlertModal from "@/components/CAlertModal";
 export default {
   name: "LoginPage",
   data() {
@@ -90,12 +83,19 @@ export default {
         username: "",
         password: "",
       },
+      default: {
+        username: "admin",
+        password: "admin8899",
+      },
+      identify: "",
       identifyCode: "",
       identifyCodes: "0123456789",
+      errorMsg: "",
     };
   },
   components: {
     SIdentify,
+    CAlertModal,
   },
   methods: {
     randomNum(min, max) {
@@ -112,35 +112,23 @@ export default {
       }
       console.log(this.identifyCode);
     },
-    // onError(error) {
-    //   console.log("Error happened:", error);
-    // },
-    // async onSubmit() {
-    //   try {
-    //     const token = await this.$recaptcha.getResponse();
-    //     const response = await fetch("/api/check-token", {
-    //       method: "POST",
-    //       body: JSON.stringify({
-    //         token,
-    //         email: this.username,
-    //         password: this.password,
-    //       }),
-    //     }).then((res) => res.json());
-    //     console.log("Server Response: ", response);
-    //     await this.$recaptcha.reset();
-    //
-    //   } catch (error) {
-    //     console.log("Login error:", error);
-    //   }
-    // },
-    // onSuccess(token) {
-    //   console.log("Succeeded:", token);
-    // },
-    // onExpired() {
-    //   console.log("Expired");
-    // },
     onSubmit() {
-      this.$router.push("/dashboard");
+      if (this.identify !== this.identifyCode) {
+        this.errorMsg = "驗證碼輸入錯誤";
+        this.$refs.alertModal.showModal();
+        this.refreshCode();
+      } else {
+        if (
+          this.user.username === this.default.username &&
+          this.user.password === this.default.password
+        ) {
+          this.$router.push("/dashboard");
+        } else {
+          this.errorMsg = "帳號或密碼錯誤！";
+          this.$refs.alertModal.showModal();
+          this.refreshCode();
+        }
+      }
     },
     onCancel() {
       console.log("yes");

@@ -9,29 +9,39 @@
     >
       <div class="body">
         <div class="row">
-          <div class="col-12">
+          <div class="col-7">
             <i class="fa fas fa-image"></i>
             <label class="form-label mb-1">當前底圖</label>
-          </div>
-          <div class="col-7">
             <div id="currentImage" class="currentImg">
-              <!-- <img class="img-fluid" :src="currentImage" /> -->
-              <img class="img-fluid" :src="require(`../static/image/${currentImage}.jpg`)" />
+              <img
+                class="img-fluid"
+                :src="require(`../static/image/${currentImage}.jpg`)"
+              />
             </div>
           </div>
           <div class="col-5">
+            <div class="mb-1">拖曳圖片至選框，或點擊上傳圖片</div>
             <div
-              id="dragImage"
               class="dragImage d-flex justify-content-center align-items-center mb-4"
+              ref="selectFrame"
+              @drop.prevent="onDrop($event)"
+              @dragover.prevent="dragover = true"
+              @dragenter.prevent="dragover = true"
+              @dragleave.prevent="dragover = false"
             >
               <div>
                 <div class="d-flex justify-content-center mb-2">
                   <i class="fa fas fa-cloud-arrow-up fs-1"></i>
                 </div>
-                <div>拖曳圖片至此，或點擊上傳圖片</div>
+                <div>{{ fileName }}</div>
               </div>
             </div>
-            <input class="form-control" type="file" />
+            <input
+              class="form-control"
+              type="file"
+              @input="handleFiles"
+              accept="image/*"
+            />
           </div>
           <div class="col-12 mt-4">
             <client-only>
@@ -62,13 +72,19 @@
         </button>
       </div>
     </b-modal>
+    <CAlertModal ref="alertModal" title="上傳失敗">{{ errorMsg }}</CAlertModal>
   </div>
 </template>
 
 <script>
+import CAlertModal from "@/components/CAlertModal";
 export default {
   data() {
     return {
+      dragover: false,
+      uploadedFiles: [],
+      uploadedImages: [],
+      fileName: "未選擇任何檔案",
       stockImages: [
         {
           name: "BG01",
@@ -97,6 +113,7 @@ export default {
         },
       ],
       currentImage: this.image,
+      errorMsg: "",
     };
   },
   props: {
@@ -112,13 +129,59 @@ export default {
     setImage(item) {
       this.currentImage = item.name;
     },
-    confirm(iamge) {
-      this.$emit("setImage", iamge);
+    confirm(image) {
+      this.$emit("setImage", image);
       this.hideModal();
     },
-  },
-  mounted() {
-    // console.log(this.stockImages);
+    handleFiles(event) {
+      // console.log(event);
+      let file = event.target.files[0];
+      let data = {};
+      this.encode(file)
+      this.upload(data);
+    },
+    onDrop(e) {
+      // console.log(e);
+      this.dragover = false;
+      if (e.dataTransfer.files.length > 1) {
+        this.errorMsg = "請勿拖曳超過一個檔案。";
+        this.$refs.alertModal.showModal();
+      } else {
+        let file = e.dataTransfer.files[0];
+        if (this.check(file.type) === "pass") {
+          this.encode(file)
+          this.upload(data);
+        }
+      }
+    },
+    upload(file) {
+      this.uploadedFiles.push(file);
+      console.log(this.uploadedFiles);
+    },
+    check(type) {
+      if (!type.includes("image")) {
+        this.errorMsg = "請上傳圖片格式檔案，如 .jpg 或 .png 等。";
+        this.$refs.alertModal.showModal();
+      } else {
+        return "pass";
+      }
+    },
+    encode(file) {
+      return new Promise((resolve, reject) => {
+        // 建立FileReader物件
+        let reader = new FileReader();
+        // 註冊onload事件，取得result則resolve (會是一個Base64字串)
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+        // 註冊onerror事件，若發生error則reject
+        reader.onerror = () => {
+          reject(reader.error);
+        };
+        // 讀取檔案
+        reader.readAsDataURL(file);
+      });
+    },
   },
 };
 </script>
@@ -130,7 +193,7 @@ export default {
 .dragImage {
   width: 100%;
   height: auto;
-  aspect-ratio: 3/2;
+  aspect-ratio: 5/4;
   background-color: #fff;
   border: 2px dashed #ddd;
 }
@@ -143,7 +206,7 @@ export default {
 }
 
 .fa-cloud-arrow-up {
-  background-color: #fff!important;
+  background-color: #fff !important;
   color: #686ce5;
 }
 </style>

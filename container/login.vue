@@ -69,7 +69,7 @@
         </form>
       </div>
     </div>
-    <CAlertModal ref="alertModal">{{ errorMsg }}</CAlertModal>
+    <CAlertModal ref="alertModal" title="登入失敗">{{ errorMsg }}</CAlertModal>
   </div>
 </template>
 <script>

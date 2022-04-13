@@ -5,7 +5,7 @@
       ref="my-modal"
       hide-footer
       hide-header-close
-      title="登入失敗"
+      :title="title"
     >
       <div class="body">
         <div class="mb-3">
@@ -25,9 +25,10 @@
 export default {
   data() {
     return {
-      msg: ""
+      msg: "",
     };
   },
+  props: { title: "" },
   methods: {
     showModal() {
       this.$refs["my-modal"].show();

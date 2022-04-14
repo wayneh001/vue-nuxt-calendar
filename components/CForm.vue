@@ -193,6 +193,7 @@
 <script>
 import CInput from "~/components/CInput";
 import CModal from "~/components/CModal";
+import CCheckModal from "~/components/CCheckModal";
 import GeneralMathMixin from "@/components/Methods/GeneralMathMixin";
 export default {
   mixins: [GeneralMathMixin],
@@ -260,7 +261,7 @@ export default {
       require: false,
     },
   },
-  component: { CInput, CModal },
+  components: { CInput, CModal, CCheckModal },
   methods: {
     // 開啟編輯標題
     onTitleEdit() {
@@ -278,7 +279,7 @@ export default {
     },
     // 設定背景圖彈窗
     onSetImage(iamge) {
-      this.editedMeeting.image = {...iamge};
+      this.editedMeeting.image = { ...iamge };
       // console.log(this.editedMeeting.image.name);
     },
     // 取消編輯
@@ -371,7 +372,11 @@ export default {
     },
     // 檢查時間，將所選開始日期、與佔用的時間點標籤區段是否與無法使用時間數據比對，確認時否有重疊
     onTimeCheck(item) {
-      if (item.startDate !== this.meeting.startDate || item.startTime !== this.meeting.startTime || item.endTime !== this.meeting.endTime) {
+      if (
+        item.startDate !== this.meeting.startDate ||
+        item.startTime !== this.meeting.startTime ||
+        item.endTime !== this.meeting.endTime
+      ) {
         let itemSequence = this.getTimeSequence(item.startTime, item.endTime);
         let invalidTime = this.invalidTime;
         if (invalidTime.filter((e) => e.date === item.startDate).length === 0) {
@@ -415,6 +420,9 @@ export default {
     },
     // 無效化開始時間點標籤，依據所選日期與當前時間無效化已過去的時間點標籤
     startTimeSet(index) {
+      let key = this.time.findIndex(
+        (item) => item.substr(0, 2) === (this.today().getHours() + 2).toString()
+      );
       if (
         this.today().getFullYear() ===
           this.formatDate(this.editedMeeting.startDate).getFullYear() &&
@@ -423,10 +431,6 @@ export default {
         this.today().getDate() ===
           this.formatDate(this.editedMeeting.startDate).getDate()
       ) {
-        let key = this.time.findIndex(
-          (item) =>
-            item.substr(0, 2) === (this.today().getHours() + 2).toString()
-        );
         if (index <= key) {
           return true;
         }
@@ -434,6 +438,12 @@ export default {
     },
     // 無效化結束時間點標籤，依據所選日期、當前時間與已選之開始時間點標籤無效化結束時間點標籤
     endTimeSet(index) {
+      let key = this.time.findIndex(
+        (item) => item.substr(0, 2) === (this.today().getHours() + 2).toString()
+      );
+      let key2 = this.time.findIndex(
+        (item) => item === this.editedMeeting.startTime
+      );
       if (
         this.today().getFullYear() ===
           this.formatDate(this.editedMeeting.startDate).getFullYear() &&
@@ -442,16 +452,12 @@ export default {
         this.today().getDate() ===
           this.formatDate(this.editedMeeting.startDate).getDate()
       ) {
-        let key = this.time.findIndex(
-          (item) =>
-            item.substr(0, 2) === (this.today().getHours() + 2).toString()
-        );
-        let key2 = this.time.findIndex(
-          (item) => item === this.editedMeeting.startTime
-        );
         if (index <= key || index <= key2 - 1) {
           return true;
         }
+      }
+      if (index <= key2 - 1) {
+        return true;
       }
     },
   },

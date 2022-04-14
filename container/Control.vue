@@ -71,7 +71,7 @@ export default {
         if (count !== 0) {
           this.showDeleteModal("", "discard");
         } else {
-          if (this.tmpMeeting.id) {
+          if (this.tmpMeeting.id !== undefined) {
             this.meeting = { ...this.tmpMeeting };
             this.tmpMeeting = {};
           } else {
@@ -183,7 +183,7 @@ export default {
     },
     // 捨棄未儲存內容 {
     onDiscard() {
-      if (this.tmpMeeting === undefined) {
+      if (this.tmpMeeting.id === undefined) {
         this.isEdit = false;
       } else {
         this.meeting = this.tmpMeeting;

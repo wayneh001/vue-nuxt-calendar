@@ -114,15 +114,6 @@ export default {
     setImage(item) {
       this.currentImage = item;
     },
-    readFile(files) {
-      let reader = new FileReader();
-      reader.onload = function (e) {
-        files.forEach(function(file) {
-          this.encode(file);
-        })
-      };
-      reader.readAsDataURL(files);
-    },
     confirm(image) {
       this.$emit("setImage", image);
       this.hideModal();

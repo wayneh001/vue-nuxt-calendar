@@ -184,7 +184,7 @@
     </form>
     <CModal
       ref="Modal"
-      :image="editedMeeting.background"
+      :image="editedMeeting.image"
       @setImage="onSetImage"
     ></CModal>
     <CCheckModal ref="checkModal" />
@@ -213,7 +213,12 @@ export default {
             endTime: "",
             routine: "非例行會議",
             routineEndDate: "",
-            background: "BG00",
+            image: {
+              id: "",
+              name: "",
+              altName: "",
+              dataUrl: "",
+            },
             classes: "",
           },
       titleEdit: true,
@@ -273,7 +278,8 @@ export default {
     },
     // 設定背景圖彈窗
     onSetImage(iamge) {
-      this.editedMeeting.background = iamge;
+      this.editedMeeting.image = {...iamge};
+      // console.log(this.editedMeeting.image.name);
     },
     // 取消編輯
     onCancel() {

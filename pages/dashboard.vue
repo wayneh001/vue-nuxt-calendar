@@ -20,21 +20,22 @@
 </template>
 <script>
 import meetingData from "@/content/json/data.json";
+import imagesData from "@/content/json/stockImages.json";
 import Control from "@/container/Control";
 import Calandar from "@/container/Calandar";
 export default {
   asyncData({ params }) {
-    return { meetingData };
-  },
-  components: {
-    Control,
-    Calandar,
+    return { meetingData, imagesData };
   },
   data() {
     return {
       meetingLists: [],
       item: {},
     };
+  },
+  components: {
+    Control,
+    Calandar,
   },
   // 更新會議列表，後續 api 的串接點
   methods: {
@@ -55,6 +56,8 @@ export default {
   },
   mounted() {
     this.meetingLists = this.meetingData;
+    this.$store.commit("fetchStockImages", imagesData);
+    // console.log(this.stockImages)
     // alert("公告：本月 14 日會議室電腦系統升級，當日不開放會議預約。");
   },
 };

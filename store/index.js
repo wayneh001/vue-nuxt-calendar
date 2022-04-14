@@ -5,6 +5,7 @@ const createStore = () => {
     state: {
       meetingEvent: {},
       searchObj: {},
+      stockImages: [],
     },
     actions: {
       onClickEvent(vuexContext, meeting) {
@@ -13,6 +14,12 @@ const createStore = () => {
       onSearch(vuexContext, obj) {
         vuexContext.commit("onSearch", obj);
       },
+      fetchStockImages(vuexContext, array) {
+        vuexContext.commit("fetchStockImages", array);
+      },
+      storeStockImage(vuexContext, obj) {
+        vuexContext.commit("storeStockImage", obj);
+      }
     },
     mutations: {
       onClickEvent(state, meeting) {
@@ -21,6 +28,12 @@ const createStore = () => {
       onSearch(state, obj) {
         state.searchObj = obj;
       },
+      fetchStockImages(state, array) {
+        state.stockImages = array;
+      },
+      storeStockImage(state, obj) {
+        state.stockImages.push(obj);
+      },
     },
     getters: {
       clickEvent(state) {
@@ -28,6 +41,9 @@ const createStore = () => {
       },
       searchObj(state) {
         return state.searchObj;
+      },
+      stockImages(state) {
+        return state.stockImages;
       },
     },
   });

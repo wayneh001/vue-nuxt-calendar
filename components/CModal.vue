@@ -13,16 +13,19 @@
             <i class="fa fas fa-image"></i>
             <label class="form-label mb-1">當前底圖</label>
             <div id="currentImage" class="currentImg">
-              <img
-                class="img-fluid"
-                :src="require(`../static/image/${currentImage}.jpg`)"
-              />
+              <img class="img-fluid" :src="currentImage.dataUrl" />
             </div>
           </div>
           <div class="col-5">
             <div class="mb-1">拖曳圖片至選框，或點擊上傳圖片</div>
             <div
-              class="dragImage d-flex justify-content-center align-items-center mb-4"
+              class="
+                dragImage
+                d-flex
+                justify-content-center
+                align-items-center
+                mb-4
+              "
               ref="selectFrame"
               @drop.prevent="onDrop($event)"
               @dragover.prevent="dragover = true"
@@ -43,20 +46,30 @@
               accept="image/*"
             />
           </div>
-          <div class="col-12 mt-4">
+          <div class="row d-flex justify-content-start mt-4">
+            <div
+              class="stockImage col-3"
+              v-for="(item, index) in fetchImages()"
+              :key="index"
+              @click="setImage(item)"
+            >
+              <img class="img-fluid" :src="item.dataUrl" alt="image" />
+            </div>
+          </div>
+          <!-- <div class="col-12 mt-4">
             <client-only>
               <carousel items="5" nav="true">
                 <div
                   class="stockImage"
-                  v-for="(item, index) in stockImages"
+                  v-for="(item, index) in fetchImages()"
                   :key="index"
                   @click="setImage(item)"
                 >
-                  <img class="img-fluid" :src="item.src" alt="image" />
+                  <img class="img-fluid" :src="item.dataUrl" alt="image" />
                 </div>
               </carousel>
             </client-only>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="footer mt-5 d-flex justify-content-end">
@@ -82,43 +95,15 @@ export default {
   data() {
     return {
       dragover: false,
-      uploadedFiles: [],
-      uploadedImages: [],
       fileName: "未選擇任何檔案",
-      stockImages: [
-        {
-          name: "BG01",
-          src: require("../static/image/BG01.jpg"),
-          editable: false,
-        },
-        {
-          name: "BG02",
-          src: require("../static/image/BG02.jpg"),
-          editable: false,
-        },
-        {
-          name: "BG03",
-          src: require("../static/image/BG03.jpg"),
-          editable: false,
-        },
-        {
-          name: "BG04",
-          src: require("../static/image/BG04.jpg"),
-          editable: false,
-        },
-        {
-          name: "BG05",
-          src: require("../static/image/BG05.jpg"),
-          editable: false,
-        },
-      ],
       currentImage: this.image,
       errorMsg: "",
     };
   },
   props: {
-    image: "",
+    image: {},
   },
+  components: { CAlertModal },
   methods: {
     showModal() {
       this.$refs["my-modal"].show();
@@ -127,7 +112,16 @@ export default {
       this.$refs["my-modal"].hide();
     },
     setImage(item) {
-      this.currentImage = item.name;
+      this.currentImage = item;
+    },
+    readFile(files) {
+      let reader = new FileReader();
+      reader.onload = function (e) {
+        files.forEach(function(file) {
+          this.encode(file);
+        })
+      };
+      reader.readAsDataURL(files);
     },
     confirm(image) {
       this.$emit("setImage", image);
@@ -136,9 +130,12 @@ export default {
     handleFiles(event) {
       // console.log(event);
       let file = event.target.files[0];
-      let data = {};
-      this.encode(file)
-      this.upload(data);
+      // console.log(this.encode(file));
+      this.upload(this.encode(file));
+    },
+    fetchImages() {
+      let stockImages = this.$store.getters.stockImages;
+      return stockImages;
     },
     onDrop(e) {
       // console.log(e);
@@ -149,14 +146,13 @@ export default {
       } else {
         let file = e.dataTransfer.files[0];
         if (this.check(file.type) === "pass") {
-          this.encode(file)
-          this.upload(data);
+          this.encode(file);
+          this.upload(this.encode(file));
         }
       }
     },
     upload(file) {
-      this.uploadedFiles.push(file);
-      console.log(this.uploadedFiles);
+      this.$store.commit("storeStockImage", file);
     },
     check(type) {
       if (!type.includes("image")) {
@@ -167,21 +163,23 @@ export default {
       }
     },
     encode(file) {
-      return new Promise((resolve, reject) => {
-        // 建立FileReader物件
-        let reader = new FileReader();
-        // 註冊onload事件，取得result則resolve (會是一個Base64字串)
-        reader.onload = () => {
-          resolve(reader.result);
-        };
-        // 註冊onerror事件，若發生error則reject
-        reader.onerror = () => {
-          reject(reader.error);
-        };
-        // 讀取檔案
-        reader.readAsDataURL(file);
-      });
+      let dataUrl;
+      let image = {
+        id: "",
+        name: file.name,
+        altName: null,
+      };
+      let reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function (e) {
+        dataUrl = e.target.result;
+        image.dataUrl = dataUrl;
+      };
+      return image;
     },
+  },
+  mounted() {
+    // this.fetchImages();
   },
 };
 </script>
@@ -200,7 +198,7 @@ export default {
 
 .stockImage {
   cursor: pointer;
-  width: 12rem;
+  width: 8rem;
   height: auto;
   aspect-ratio: 4/3;
 }

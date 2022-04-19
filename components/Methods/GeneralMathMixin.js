@@ -2,7 +2,7 @@ export default {
   methods: {
     // 返回今日
     today() {
-      let now = new Date("2022-03-10 09:00:00");
+      let now = new Date();
       return now;
     },
     // 將字串日期格式化為物件日期

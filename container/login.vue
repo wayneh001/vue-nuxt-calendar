@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <div class="d-flex justify-content-center align-items-center vh-100">
-      <div class="shadow p-5 mb-5 bg-body rounded w-25">
+      <div class="shadow p-5 mb-5 bg-body rounded w-30">
         <h3 class="text-center mb-5">一樓會議室預約</h3>
         <form>
           <div class="mb-3">
@@ -33,7 +33,6 @@
             <div class="coderight col-2">
               <SIdentify
                 :identifyCode="identifyCode"
-                :contentWidth="75"
               ></SIdentify>
             </div>
             <div class="col-2">
@@ -144,3 +143,8 @@ export default {
   },
 };
 </script>
+<style>
+.w-30 {
+  width: 30%;
+}
+</style>

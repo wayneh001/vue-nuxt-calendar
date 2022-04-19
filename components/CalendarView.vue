@@ -302,7 +302,7 @@ export default {
     // 當前週期變更
     onChangePeriod(p) {
       this.displayPeriodUom = p;
-      this.onChangeDate();
+      // this.onChangeDate();
     },
 
     // ******************************
